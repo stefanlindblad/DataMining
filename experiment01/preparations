@@ -296,3 +296,99 @@ Pandas
     >>> dataframe.to_csv('filedestination.csv')
 
 
+
+Matplotlib
+
+1) Wie erzeugt man mit Matplotlib einen Plot, wie er in Abbildung 4 dargestellt ist? ( Sinus function - dashed line)
+
+    >>> import matplotlib.pyplot as plt         # importiert matplotli.pyplot
+
+    >>> x = numpy.arange(0, 7,0.1)              # setzt Intervall für x von 0 bis 7 in 0.1 Schritten
+
+    >>> plt.plot(x, numpy.sin(x),'ro' )         # zeichnet den Sinus von x in roten (r) punkte (o)
+    >>> plt.axis([0,7,-1,1])                    # Die y-Achse geht von -1 bis 1, die x-Achse von 0 bis 7
+    >>> plt.title('Sinusfunktion')              
+    >>> plt.ylabel('sin(x)')
+    >>> plt.xlabel('x')
+    >>> plt.grid(True)                          # zeichnet ein Raster
+    >>> plt.show()                              # zeigt das Fenster mit dem erzeugten Plot
+
+2) Wie kann man mehrere Graphen in einen Plot eintragen?
+
+    Zeichnet zwei Graphen untereinander (in zwei verschiedene Koordinatensysteme):
+    
+        (... wie oben ...)
+        >>> plt.figure(1)
+
+        >>> plt.subplot(2,1,1)                    # oberes Koordinatensystem  (Erklärung des Parameters: siehe unten)
+        >>> plt.plot(x, np.sin(x),'ro')
+
+        >>> plt.subplot(2,1,2)                    # unteres Koordinatensystem
+        >>> plt.plot(x,'b')
+        (... wie oben...)
+
+        # die Parameter der subplot-Funktion enthalten folgende Informationen: 
+        #
+        # die ersten zwei Ziffern beschreiben die Größe des Grids in dem sich der Subplot befindet (im Beispiel 2x1), die letzte Ziffer beschreibt, an welcher Stelle in diesem Grid sich 
+        # der subplot befindet (der obere Subplot an Stelle 1, der untere an Stelle 2) .
+
+
+    Zeichnet zwei Graphen in ein Koordinatensystem: 
+        Einfach die plot-Funktion mehrmal mit unterschiedlichen parametern aufrufen.
+        
+        (... wie oben ...)
+
+        >>> plt.plot(x, np.sin(x),'ro')
+        >>> plt.plot(x,'b')
+
+        (... wie oben ...)
+
+        ODER: wie oben, nur in das selbe Koordinatensystem
+
+        (... wie oben ...)
+        >>> plt.subplot(2,1,2)                    # unteres Koordinatensystem im 2x2 Grid
+        >>> plt.plot(x, np.sin(x),'ro')
+
+        >>> plt.subplot(2,1,2)                    # ebenfalls unteres Koordinatensystem im 2x2 Grid
+        >>> plt.plot(x,'b')
+        (... wie oben...)
+
+3) Wie erzeugt man mit Matplotlib ein Bild, das 12 Subplots in 3 Zeilen und 4 Spalten geordnet, enthält.
+
+        >>> plt.figure(1)
+        >>> plt.subplot(3, 4, 1)
+        >>> plt.subplot(3, 4, 2)
+        >>> plt.subplot(3, 4, 3)
+        >>> plt.subplot(3, 4, 4)
+        >>> plt.subplot(3, 4, 5)
+        >>> plt.subplot(3, 4, 6)
+        >>> plt.subplot(3, 4, 7)
+        >>> plt.subplot(3, 4, 8)
+        >>> plt.subplot(3, 4, 9)
+        >>> plt.subplot(3, 4, 10)
+        >>> plt.subplot(3, 4, 11)
+        >>> plt.subplot(3, 4, 12)
+        >>> plt.show()
+
+4) Wie erzeugt man mit Matplotlib ein Histogramm?
+
+        >>> mu, sigma = 100, 0.01
+        >>> x = mu + sigma * np.random.randn(5000)          # erstellt numpy.array mit normalverteilten werten
+
+        # the histogram of the data
+        >>> plt.hist(x, 100,facecolor='r')                  # zeichnet ein Histogram mit den Werten von x in 100 rotenBalken
+
+        >>> plt.show()                                      # zeigt das Fenster mit dem erzeugten Plot
+
+5) Wie erzeugt man mit Matplotlib einen Boxplot?
+
+    >>> boxplot( data, notch = 0, sym = '+', vert = 0, whis = 0.75 )
+    parameter:
+        data:               Daten, die angezeigt werden sollen
+        notch:              Einkerbung am Meridian (default: false)
+        sym:                Symbol für Ausreißer (default 'b+')
+        vert:               Ausrichtung, 0 = horizontal, 1 = vertikal (default 1)
+        whis:               Länge der Whisker (default 1.5)
+        positions:          horizontale Position der Boxen (default 1)
+        widths:             Breite der Boxen (default 0.5)
+
