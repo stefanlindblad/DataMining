@@ -415,18 +415,13 @@ Scikit Learn
             sklearn.svm.libsvm.predict()
 
 2)  Mit welchem Leistungsmaß kann die Qualität eines Regressionsmodells bewertet werden? 
-        
-        >>>>>>>>>>>> 
-        (Ich bin mir nicht sicher, ob mit Leistungsmaß die Performance gemeint ist. Habe Prof. Maucher deswegen angeschrieben)
-        <<<<<<<<<<<<
-
-        Leistungsmaß = Performance ????
-        --> Mean Square Error (MSE) oder Mean Absolute Difference (MAD)
+        Leistungsmaß = Mittel zur Bestimmung der Qualität (der Güte) eines gelernten Modells.
+        --> Mean Square Error (MSE) oder Mean Absolute Difference (MAD) zwischen Vorhersage und Sollausgabe der Testdaten
     Wie wird dieses Leistungsmaß mit Sklearn berechnet?
         bsp: metrics.mean_squared_error(predictedOutput,targets)
 
 3)  Mit welchem Leistungsmaß kann die Qualität eines Klassifikationsmodells bewertet werden? 
-        Leistungsmaß = Performance ????
+        Leistungsmaß = Mittel zur Bestimmung der Qualität (der Güte) eines gelernten Modells.
         --> Confusion matrix oder Classification report
     Wie wird dieses Leistungsmaß mit Sklearn berechnet?
         metrics.confusion_matrix(expected, predicted)
