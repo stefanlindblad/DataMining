@@ -163,8 +163,136 @@ Numpy
 
 10) Wie legt man eine flache Kopie, wie eine tiefe Kopie eines Arrays an?
     
+    >>> a = array( [ (1,4,9), (16,25,36) ] )
+
     Flache Kopie:
     >>> c = a.view()
 
     Tiefe Kopie: 
     >>> d = a.copy() 
+
+
+Pandas
+
+1) Wie wird ein Numpy-Array in einen Pandas-Dataframe geschrieben? Wie legt man dabei die Spaltenbezeichnungen und einen Index an?
+
+    >>> a = arange(24).reshape(6,4)                                                 # legt ein Numpy-Array der Größe 6x4 an und füllt es mit den Zahlen von 0 bis 23
+    >>> a
+    [[ 0  1  2  3]
+     [ 4  5  6  7]
+     [ 8  9 10 11]
+     [12 13 14 15]
+     [16 17 18 19]
+     [20 21 22 23]]
+    >>> dates = pandas.date_range('20130101',periods=6)                             # Legt eine Pandas-Series an, welche die Daten vom 2013-01-01 bis zum 2013-01-06 enthält.
+
+    >>> dataframe = pandas.DataFrame( a , index=dates , columns=list('ABCD') )      # Legt ein Pandas-Dataframe an, dass die Series 'dates' als Index und A, B, C und D als 
+                                                                                    # Spaltenbezeicnung erhält. Dem Dataframe wird das Array 'a' als Daten übergeben. 
+    >>> dataframe
+                 A   B   C   D
+    2013-01-01   0   1   2   3
+    2013-01-02   4   5   6   7
+    2013-01-03   8   9  10  11
+    2013-01-04  12  13  14  15
+    2013-01-05  16  17  18  19
+    2013-01-06  20  21  22  23
+    [6 rows x 4 columns]
+
+2) Wie kann auf einzelne Spalten, wie auf einzelne Zeilen eines Pandas Dataframes zugegriffen werden?
+    
+    >>> dataframe['A']                                                              # Printed nur die Indizes und die selektierte Spalte 'A' des Dataframes.
+    2013-01-01     0                                                                # Äquivalent kann auch dataframe.A verwendet werden.
+    2013-01-02     4                                                                # Der Rückgabewert ist eine Pandas-Series.
+    2013-01-03     8
+    2013-01-04    12
+    2013-01-05    16
+    2013-01-06    20
+    Freq: D, Name: A, dtype: int32
+
+    >>> dataframe[1:2]                                                              # Gibt die Zeile mit dem numerischen Index 1 zurück.          
+                A  B  C  D                                                          # Der Rückgabewert ist ein Pandas-Dataframe.
+    2013-01-02  4  5  6  7
+    [1 rows x 4 columns]
+
+    >>> dataframe['20130102':'20130104']                                            # Gibt die Zeilen mit den Indizes zwischen 2013-01-02 und 2013-01-04 zurück
+                 A   B   C   D                                                      # Der Rückgabewert ist ein Pandas-Dataframe
+    2013-01-02   4   5   6   7
+    2013-01-03   8   9  10  11
+    2013-01-04  12  13  14  15
+
+    [3 rows x 4 columns]
+
+    >>> dataframe.loc[dates[0]]                                                     # Gibt die Zeile mit dem numerischen Index 0 zurück
+    A    0                                                                          # Der Rückgabewert ist eine Panda-Series.
+    B    1
+    C    2
+    D    3
+    Name: 2013-01-01 00:00:00, dtype: int32
+
+3) Wie können Pandas Dataframes sortiert werden?
+
+    >>> dataframe.sort_index(axis = 0, ascending = False)                           # Sortiert nach Indizebezeichnung (axis = 0) absteigend
+                 A   B   C   D
+    2013-01-06  20  21  22  23
+    2013-01-05  16  17  18  19
+    2013-01-04  12  13  14  15
+    2013-01-03   8   9  10  11
+    2013-01-02   4   5   6   7
+    2013-01-01   0   1   2   3
+
+    [6 rows x 4 columns]
+
+    >>> dataframe.sort_index(axis = 1, ascending = False)                           # Sortiert nach Spaltenbezeichnung (axis = 1) absteigend
+                 D   C   B   A
+    2013-01-01   3   2   1   0
+    2013-01-02   7   6   5   4
+    2013-01-03  11  10   9   8
+    2013-01-04  15  14  13  12
+    2013-01-05  19  18  17  16
+    2013-01-06  23  22  21  20
+
+    [6 rows x 4 columns]
+
+    >>> dataframe.sort(columns='C', ascending=False)                                # Sortiert nach den Values in Spalte C absteigend
+                 A   B   C   D                                                      # (Macht in diesem Fall nicht viel Sinn, da das Dataframe mit einer kontinuierlichen numerischen reihe 
+    2013-01-06  20  21  22  23                                                      # gefüllt ist...)
+    2013-01-05  16  17  18  19
+    2013-01-04  12  13  14  15
+    2013-01-03   8   9  10  11
+    2013-01-02   4   5   6   7
+    2013-01-01   0   1   2   3
+
+    [6 rows x 4 columns]
+
+4) Wie kann zu einem bestehenden Dataframe eine neue Spalte hinzugefügt werden?
+
+    >>> newCol = pandas.Series([1,2,3,4,5,6],index=pandas.date_range('20130102',periods=6))         # Erstellt neues Dataframe mit den Daten von 2013-01-02 bis 2013-01-07 als Indizes
+    >>> newCol
+    2013-01-02    1
+    2013-01-03    2
+    2013-01-04    3
+    2013-01-05    4
+    2013-01-06    5
+    2013-01-07    6
+    Freq: D, dtype: int64
+
+    >>> dataframe['newColumn'] = newCol                                                             # Fügt dem alten Dataframe eine neue Spalte 'newColumn' hinzu.
+                 A   B   C   D  newColumn                                                           # Da die Spalte keinen Value für den Index 2013-01-01 besitzt, wird hier NaN angegeben
+    2013-01-01   0   1   2   3        NaN                                                           # Der letzte Value beim Index 2013-01-07, den nur die neue Spalte besitzt wird 
+    2013-01-02   4   5   6   7          1                                                           # abgeschnitten
+    2013-01-03   8   9  10  11          2
+    2013-01-04  12  13  14  15          3
+    2013-01-05  16  17  18  19          4
+    2013-01-06  20  21  22  23          5
+
+    [6 rows x 5 columns]
+
+5) Wie werden Daten aus einem .csv File in einen Pandas Dataframe geschrieben?
+
+    >>> pandas.read_csv('filename.csv')
+
+6) Wie wird ein Pandas Dataframe in einem .csv File abgelegt?
+
+    >>> dataframe.to_csv('filedestination.csv')
+
+
