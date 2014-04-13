@@ -392,3 +392,49 @@ Matplotlib
         positions:          horizontale Position der Boxen (default 1)
         widths:             Breite der Boxen (default 0.5)
 
+
+
+Scipy
+
+1) Geben Sie kurz die Schritte an, die für die Durchführung eines hierarchischen Clustering mit Scipy notwendig sind.
+
+    - Daten in ein numpy Array schreiben
+    - berechnen der Distanz zwischen allen Einträgen (scipy.spatial.distance), dabei können verschiedene Distanzen berechnet werden (bsp.: euclidean, hamming,...)
+    - dann erstellt man die Linkage Matrix um die Distanzen der Einträge miteinander zu Clustern zu verknüpfen
+    - nun wird der ursprüngliche Datensatz entsprechend der Linkage Matrix sortiert
+    - die Cluster können nun auf unterschiedliche art und weise dargestellt werden (bsp. Heatmap, Dendrogramm)
+
+
+
+Scikit Learn
+
+1) Sklearn stellt u.a. eine umfassende Bibliothek von Klassen für das überwachte Lernen bereit. 
+        Mit welchem Methodenaufruf werden diese Kassen trainiert? 
+            sklearn.svm.libsvm.fit()
+        Mit welchem Methodenaufruf können die trainierten Modelle auf neue Eingabedaten angewandt werden um den entsprechenden Ausgabewert zu berechnen?
+            sklearn.svm.libsvm.predict()
+
+2)  Mit welchem Leistungsmaß kann die Qualität eines Regressionsmodells bewertet werden? 
+        
+        >>>>>>>>>>>> 
+        (Ich bin mir nicht sicher, ob mit Leistungsmaß die Performance gemeint ist. Habe Prof. Maucher deswegen angeschrieben)
+        <<<<<<<<<<<<
+
+        Leistungsmaß = Performance ????
+        --> Mean Square Error (MSE) oder Mean Absolute Difference (MAD)
+    Wie wird dieses Leistungsmaß mit Sklearn berechnet?
+        bsp: metrics.mean_squared_error(predictedOutput,targets)
+
+3)  Mit welchem Leistungsmaß kann die Qualität eines Klassifikationsmodells bewertet werden? 
+        Leistungsmaß = Performance ????
+        --> Confusion matrix oder Classification report
+    Wie wird dieses Leistungsmaß mit Sklearn berechnet?
+        metrics.confusion_matrix(expected, predicted)
+        metrics.classification_report(expected, predicted)
+
+4) Was versteht man unter x-facher Kreuzvalidierung und wie wird diese mit Sklearn durchgeführt?
+    Falls zu wenig Daten zur Verfügung stehen um kann dies durch die x-fache Kreuzvalidierung ausgeglichen werden.
+    Hierbei werden die Daten in x Partitionen unterteilt, die jeweils disjunkt sind (typischerweise liegt x zwischen 4 und 10)
+    Dann wird in x Iterationen ein Datensatz als Testdatensatz und alle weiteren als Trainingsdatensätze verwendet, sodass jeder Datensatz einmal fürs Testen genutzt wurde.
+    Die Performance ergibt sich aus dem Durchschnitt aller Durchläufe.
+    In Sklearn werden Test und Training in die Funktion cros_val_score gekapselt. Als Parameter müssen der entsprechende Lernalgorithmus, die Anzahl der Partitionen und eine Funktion zur Berechnung der Performance (beispielsweise MSE (mean square error)) angegeben werden.
