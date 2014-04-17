@@ -2,21 +2,20 @@
 import pandas
 from numpy import *
 import matplotlib.pyplot as plt
-
+from googlemaps import GoogleMaps
 
 energy = pandas.read_csv('../resources/EnergyMix.csv')
+gmaps = GoogleMaps(api_key = 'AIzaSyDgR1sE91D1Tbl6FCKs5bU61IZhtzCM3nA')
 
+latList = []
+lonList = []
 
-print
-print energy.Oil
-plt.bar(range(65), energy.Oil, color='r')
-plt.bar(range(65), energy.Gas, color='b')
-plt.bar(range(65), energy.Coal, color='g')
-plt.xticks(range(65), energy.Country, rotation='vertical')
-#plt.axis([0, 65, 0, 850])
-plt.title('Oil in Country')
-plt.ylabel('Oil in CO2 Eq')
-plt.xlabel('Country')
-plt.grid(True)                          # zeichnet ein Raster
+for country in energy.Country:
+    lat, lon = gmaps.address_to_latlng(country)
+    latList.append(lat)
+    lonList.append(lon)
 
-plt.show()
+energy['lat'] = pandas.Series(latList)
+energy['lon'] = pandas.Series(lonList)
+
+energy.to_csv('EnegryMixGeo.csv');
