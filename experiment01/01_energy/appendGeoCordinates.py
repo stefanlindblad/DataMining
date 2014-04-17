@@ -1,6 +1,5 @@
 import pandas
 from numpy import *
-import matplotlib.pyplot as plt
 from googlemaps import GoogleMaps
 
 energy = pandas.read_csv('../resources/EnergyMix.csv')
