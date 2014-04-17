@@ -1,3 +1,10 @@
 .idea
 plygrnd/
 ~*
+*.out
+*.aux
+*.bcf
+*.log
+*.toc
+*.run.xml
+*.synctex.gz
