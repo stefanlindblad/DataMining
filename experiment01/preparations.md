@@ -409,15 +409,13 @@ Einfach die plot-Funktion mehrmal mit unterschiedlichen parametern aufrufen.
 
 - Daten in ein NumPy Array schreiben
 
-- berechnen der Distanz zwischen allen Einträgen (scipy.spatial.distance), dabei können verschiedene Distanzen berechnet werden (bsp.: euclidean, hamming,...)
+- berechnen der Distanz zwischen allen Einträgen (`scipy.spatial.distance`), dabei können verschiedene Distanzen berechnet werden (bsp.: `euclidean`, `hamming`,...)
 
 - dann erstellt man die Linkage Matrix um die Distanzen der Einträge miteinander zu Clustern zu verknüpfen
 
 - nun wird der ursprüngliche Datensatz entsprechend der Linkage Matrix sortiert
 
 - die Cluster können nun auf unterschiedliche art und weise dargestellt werden (bsp. Heatmap, Dendrogramm)
-
-
 
 ##Scikit Learn
 
