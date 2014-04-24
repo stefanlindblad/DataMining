@@ -6,12 +6,11 @@ from numpy import *
 import matplotlib.pyplot as plt
 
 NUM_CLUSTER = 4
-NUM_ENEGRYFORMS = 5
+ENERGY_FORMS = ['Oil', 'Gas', 'Coal', 'Nuclear', 'Hydro']
+NUM_ENEGRYFORMS = len(ENERGY_FORMS)
 
-energyInfo = pandas.read_csv('../resources/EnergyMix.csv')
-reducedEnergyInfo = energyInfo.drop("Country", 1)
-reducedEnergyInfo = reducedEnergyInfo.drop("Total2009", 1)
-reducedEnergyInfo = reducedEnergyInfo.drop("CO2Emm", 1)
+energyInfo = pandas.read_csv('../resources/EnergyMixGeo.csv')
+reducedEnergyInfo = energyInfo[ENERGY_FORMS]
 
 preprocessedEnergyInfo = preprocessing.scale(reducedEnergyInfo, with_mean = False)
 
@@ -50,5 +49,6 @@ for clusterIndex in range(NUM_CLUSTER):
 
 plt.show()
 
+energyInfo['clusterIndex'] = pandas.Series(coutryToClusterLinkage)
 
-
+energyInfo.to_csv('EnegryMixGeo.csv');
