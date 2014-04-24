@@ -16,7 +16,7 @@ preprocessedEnergyInfo = preprocessing.scale(reducedEnergyInfo, with_mean = Fals
 
 relativeEnergyConsumption = spatial.distance.pdist(preprocessedEnergyInfo, metric = 'correlation')
 
-linkageMatrix = cluster.hierarchy.linkage(relativeEnergyConsumption)
+linkageMatrix = cluster.hierarchy.linkage(relativeEnergyConsumption, method='average')
 cluster.hierarchy.dendrogram(linkageMatrix, orientation = 'left', labels = energyInfo.Country.values)
 
 coutryToClusterLinkage = cluster.hierarchy.fcluster(linkageMatrix, NUM_CLUSTER, criterion='maxclust')
