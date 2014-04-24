@@ -6,6 +6,7 @@ from numpy import *
 import matplotlib.pyplot as plt
 
 NUM_CLUSTER = 4
+NUM_ENEGRYFORMS = 5
 
 energyInfo = pandas.read_csv('../resources/EnergyMix.csv')
 reducedEnergyInfo = energyInfo.drop("Country", 1)
@@ -19,29 +20,33 @@ relativeEnergyConsumption = spatial.distance.pdist(preprocessedEnergyInfo, metri
 linkageMatrix = cluster.hierarchy.linkage(relativeEnergyConsumption)
 cluster.hierarchy.dendrogram(linkageMatrix, orientation = 'left', labels = energyInfo.Country.values)
 
-clustlabels = cluster.hierarchy.fcluster(linkageMatrix, NUM_CLUSTER, criterion='maxclust')
-clustlabels -= 1
+coutryToClusterLinkage = cluster.hierarchy.fcluster(linkageMatrix, NUM_CLUSTER, criterion='maxclust')
+coutryToClusterLinkage -= 1
 
 plt.figure(1)
-for cl in range(NUM_CLUSTER):
-    print '-'*10 + 'Cluster ' + str(cl) + '-'*10
-    ind=find(clustlabels==cl)
+for clusterIndex in range(NUM_CLUSTER):
+    print '-'*10 + 'Cluster ' + str(clusterIndex) + '-'*10
+    ind=find(coutryToClusterLinkage==clusterIndex)
     for a in ind:
         print energyInfo.Country.values[a]
 
+sum = zeros((NUM_CLUSTER,NUM_ENEGRYFORMS))
+
 plt.figure(2)
+for countryIndex, clusterIndex in enumerate(coutryToClusterLinkage):
+    plt.subplot(NUM_CLUSTER, 1, clusterIndex + 1)
+    plt.plot(reducedEnergyInfo.values[countryIndex,:])
+    plt.title('Cluster ' + str(clusterIndex))
+    plt.xticks(range(NUM_ENEGRYFORMS), reducedEnergyInfo.columns.values)
+    for energyIndex in range(NUM_ENEGRYFORMS):
+        sum[clusterIndex, energyIndex] += reducedEnergyInfo.values[countryIndex,energyIndex]
 
-
-for index, cl in enumerate(clustlabels):
-    plt.subplot(NUM_CLUSTER, 1, cl)
-    plt.plot(reducedEnergyInfo.values[index,:])
-
-for cl in range(NUM_CLUSTER):
-    plt.subplot(NUM_CLUSTER, 1, cl)
-    plt.title('Cluster ' + str(cl))
-    plt.xticks(range(5), reducedEnergyInfo.columns.values)
-
-
+plt.figure(3)
+for clusterIndex in range(NUM_CLUSTER):
+    plt.subplot(NUM_CLUSTER, 1, clusterIndex + 1)
+    plt.plot(sum[clusterIndex, :])
+    plt.title('Cluster ' + str(clusterIndex))
+    plt.xticks(range(NUM_ENEGRYFORMS), reducedEnergyInfo.columns.values)
 
 plt.show()
 
