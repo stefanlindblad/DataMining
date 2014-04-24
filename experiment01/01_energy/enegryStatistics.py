@@ -1,13 +1,15 @@
 import pandas
-from numpy import *
 import matplotlib.pyplot as plt
 
-energyInfo = pandas.read_csv('../resources/EnergyMix.csv')
+ENERGYFORMS = ['Oil', 'Gas', 'Coal', 'Nuclear', 'Hydro']
+NUM_ENEGRYFORMS = len(ENERGYFORMS)
+
+energyInfo = pandas.read_csv('../resources/EnergyMixGeo.csv')
 print energyInfo.describe()
 
-reducedEnergyInfo = energyInfo.drop("Total2009", 1)
-reducedEnergyInfo = reducedEnergyInfo.drop("CO2Emm", 1)
+reducedEnergyInfo = energyInfo[ENERGYFORMS]
 
 plt.figure(1)
-reducedEnergyInfo.boxplot()
+plt.boxplot(reducedEnergyInfo.values, sym='')
+#reducedEnergyInfo.boxplot(sym='')
 plt.show()

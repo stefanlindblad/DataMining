@@ -1,14 +1,12 @@
 import pandas
-from pylab import find
 from sklearn import manifold
-from numpy import *
 import matplotlib.pyplot as plt
 
-ENERGY_FORMS = ['Oil', 'Gas', 'Coal', 'Nuclear', 'Hydro']
-NUM_ENEGRYFORMS = len(ENERGY_FORMS)
+ENERGYFORMS = ['Oil', 'Gas', 'Coal', 'Nuclear', 'Hydro']
+NUM_ENEGRYFORMS = len(ENERGYFORMS)
 
 energyInfo = pandas.read_csv('../resources/EnergyMixGeo.csv')
-reducedEnergyInfo = energyInfo[ENERGY_FORMS]
+reducedEnergyInfo = energyInfo[ENERGYFORMS]
 
 isomap = manifold.Isomap(n_neighbors=NUM_ENEGRYFORMS, n_components=2, eigen_solver='auto')
 

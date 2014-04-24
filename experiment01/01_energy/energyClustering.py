@@ -6,11 +6,11 @@ from numpy import *
 import matplotlib.pyplot as plt
 
 NUM_CLUSTER = 4
-ENERGY_FORMS = ['Oil', 'Gas', 'Coal', 'Nuclear', 'Hydro']
-NUM_ENEGRYFORMS = len(ENERGY_FORMS)
+ENERGYFORMS = ['Oil', 'Gas', 'Coal', 'Nuclear', 'Hydro']
+NUM_ENEGRYFORMS = len(ENERGYFORMS)
 
 energyInfo = pandas.read_csv('../resources/EnergyMixGeo.csv')
-reducedEnergyInfo = energyInfo[ENERGY_FORMS]
+reducedEnergyInfo = energyInfo[ENERGYFORMS]
 
 preprocessedEnergyInfo = preprocessing.scale(reducedEnergyInfo, with_mean = False)
 
@@ -29,7 +29,7 @@ for clusterIndex in range(NUM_CLUSTER):
     for a in ind:
         print energyInfo.Country.values[a]
 
-sum = zeros((NUM_CLUSTER,NUM_ENEGRYFORMS))
+sum = zeros((NUM_CLUSTER, NUM_ENEGRYFORMS))
 
 plt.figure(2)
 for countryIndex, clusterIndex in enumerate(coutryToClusterLinkage):
