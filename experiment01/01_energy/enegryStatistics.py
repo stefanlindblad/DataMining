@@ -11,5 +11,4 @@ reducedEnergyInfo = energyInfo[ENERGYFORMS]
 
 plt.figure(1)
 plt.boxplot(reducedEnergyInfo.values, sym='')
-#reducedEnergyInfo.boxplot(sym='')
 plt.show()
