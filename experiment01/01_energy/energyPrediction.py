@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 NUM_CLUSTER = 4
 ENERGYFORMS = ['Oil', 'Gas', 'Coal', 'Nuclear', 'Hydro']
 TARGET = ['CO2Emm']
-NUM_ENEGRYFORMS = len(ENERGYFORMS)
+NUM_ENERGYFORMS = len(ENERGYFORMS)
 
 def crossValidateRegression(X, y, C, epsilon):
     svr = svm.SVR(kernel='linear', C=C, epsilon=epsilon)
@@ -16,7 +16,7 @@ def crossValidateRegression(X, y, C, epsilon):
     predictedTargetInfo = svr.predict(X)
     return predictedTargetInfo
 
-def mae(actual, predicted):
+def getMae(actual, predicted):
     return sum(abs(actual - predicted))/len(actual)
 
 def plot(actual, predicted, C, epsilon, mae, colors=['g', 'r']):
@@ -40,15 +40,23 @@ reducedEnergyInfo = energyInfo[ENERGYFORMS]
 targetInfo = energyInfo[TARGET].values[:,0]
 NUM_COUNTRYS = len(reducedEnergyInfo.values)
 
+NUM_ITERATIONS = 4
+C=[float(10)**-x for x in range(NUM_ITERATIONS)]
+epsilon=[float(10)**-x for x in range(1,NUM_ITERATIONS+1)]
 
-C=0.001
-epsilon=0.1
-predictedTargetInfo = crossValidateRegression(reducedEnergyInfo, targetInfo, C, epsilon)
+for i in range(NUM_ITERATIONS):
+    predictedTargetInfo = crossValidateRegression(reducedEnergyInfo, targetInfo, C[i], epsilon[i])
+    mae = getMae(targetInfo, predictedTargetInfo)
+    print "\nMean Absolute Error: " + str(mae) + ", C = " + str(C[i]) + ", epsilon = " + str(epsilon[i])
 
+#plot(targetInfo, predictedTargetInfo, C, epsilon, mae)
 
-mae = mae(targetInfo, predictedTargetInfo)
-print "\nMean Absolute Error: " + str(mae)
+#print getInfo(targetInfo, predictedTargetInfo, energyInfo.Country.values)
 
-plot(targetInfo, predictedTargetInfo, C, epsilon, mae)
-
-print getInfo(targetInfo, predictedTargetInfo, energyInfo.Country.values)
+#Mean Absolute Error: 0.119938469138, C = 1, epsilon = 0.01
+#Mean Absolute Error: 0.119995514827, C = 1, epsilon = 0.001
+#Mean Absolute Error: 0.119986240023, C = 1, epsilon = 0.0001
+#Mean Absolute Error: 0.124915412379, C = 1.0, epsilon = 0.1
+#Mean Absolute Error: 0.119776387503, C = 0.1, epsilon = 0.01
+#Mean Absolute Error: 0.11925998931, C = 0.01, epsilon = 0.001
+#Mean Absolute Error: 64.9026381798, C = 0.001, epsilon = 0.0001

@@ -16,4 +16,4 @@ for country in energy.Country:
 energy['lat'] = pandas.Series(latList)
 energy['lon'] = pandas.Series(lonList)
 
-energy.to_csv('EnegryMixGeo.csv');
+energy.to_csv('EnergyMixGeo.csv');

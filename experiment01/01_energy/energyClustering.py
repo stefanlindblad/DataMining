@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 
 NUM_CLUSTER = 4
 ENERGYFORMS = ['Oil', 'Gas', 'Coal', 'Nuclear', 'Hydro']
-NUM_ENEGRYFORMS = len(ENERGYFORMS)
+NUM_ENERGYFORMS = len(ENERGYFORMS)
 
 energyInfo = pandas.read_csv('../resources/EnergyMixGeo.csv')
 reducedEnergyInfo = energyInfo[ENERGYFORMS]
@@ -29,15 +29,15 @@ for clusterIndex in range(NUM_CLUSTER):
     for a in ind:
         print energyInfo.Country.values[a]
 
-sum = zeros((NUM_CLUSTER, NUM_ENEGRYFORMS))
+sum = zeros((NUM_CLUSTER, NUM_ENERGYFORMS))
 
 plt.figure(2)
 for countryIndex, clusterIndex in enumerate(coutryToClusterLinkage):
     plt.subplot(NUM_CLUSTER, 1, clusterIndex + 1)
     plt.plot(reducedEnergyInfo.values[countryIndex,:])
     plt.title('Cluster ' + str(clusterIndex))
-    plt.xticks(range(NUM_ENEGRYFORMS), reducedEnergyInfo.columns.values)
-    for energyIndex in range(NUM_ENEGRYFORMS):
+    plt.xticks(range(NUM_ENERGYFORMS), reducedEnergyInfo.columns.values)
+    for energyIndex in range(NUM_ENERGYFORMS):
         sum[clusterIndex, energyIndex] += reducedEnergyInfo.values[countryIndex,energyIndex]
 
 plt.figure(3)
@@ -45,10 +45,10 @@ for clusterIndex in range(NUM_CLUSTER):
     plt.subplot(NUM_CLUSTER, 1, clusterIndex + 1)
     plt.plot(sum[clusterIndex, :])
     plt.title('Cluster ' + str(clusterIndex))
-    plt.xticks(range(NUM_ENEGRYFORMS), reducedEnergyInfo.columns.values)
+    plt.xticks(range(NUM_ENERGYFORMS), reducedEnergyInfo.columns.values)
 
 plt.show()
 
 energyInfo['clusterIndex'] = pandas.Series(coutryToClusterLinkage)
 
-energyInfo.to_csv('EnegryMixGeo.csv');
+energyInfo.to_csv('EnergyMixGeo.csv');
