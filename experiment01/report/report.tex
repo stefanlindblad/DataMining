@@ -73,7 +73,7 @@
 \subsection*{Einlesen der Daten, Hinzuf\"ugen der GPS Koordinaten, Abspeichern in neuer Datei}
 Bei der Umsetzung der Aufgaben haben wir mit verschiedenen Darstellungsformen der Daten experimentiert. Im ersten Plot fallen vor allem die Vielverbraucher einzelner Energieformen auf. Beim zweiten Plot k\"onnen die verschiedenen Energiemixe pro Land direkt miteinander verglichen werden, da sie alle im selben Ma\ss stab nebeneinander dargestellt werden.
 
-\subparagraph{Frage: Ausgehend von der implementierten Visualisierung des Energieverbrauchs der L\"ander: Nennen Sie die 3 Ihrer Meinung nach interessantesten Beobachtungen.}
+\subparagraph{ Ausgehend von der implementierten Visualisierung des Energieverbrauchs der L\"ander: Nennen Sie die 3 Ihrer Meinung nach interessantesten Beobachtungen.}
 
 \begin{enumerate}
 \item Durch die wenigen Industriel\"ander mit signifikant h\"oherem Energieverbrauch, wie China oder die USA, wird der Plot so verzerrt, dass die L\"ander mit durchschnittlichem Verbrauch im Plot so gestaucht werden, dass sie kaum zu erkennen sind. Dies k\"onnte behoben werden, wenn die Daten mit den Einwohnerzahlen aller L\"ander normalisiert werden w\"urden. So k\"onnte der Pro-Kopf-Verbrauch berechnet werden, was einen besseren Vergleich der einzelnen L\"ander bietet.
@@ -103,11 +103,23 @@ Zus\"atzlich w\"aren noch andere Normalisierungsfaktoren interessant:
 \subsection*{Statistik der Daten}
 
 
-\subparagraph{Frage: Erkl\"aren Sie s\"amtliche Elemente eines Boxplot (allgemein). }
+\subparagraph{Erkl\"aren Sie s\"amtliche Elemente eines Boxplot (allgemein). }
 \begin{figure}[!h]
 \centering
-\includegraphics[width=\textwidth]{Plots/Elements_of_a_boxplot.svg}
+\includegraphics[width=0.7\textwidth]{Plots/2000px-Elements_of_a_boxplot.png}
 \end{figure}
+\begin{itemize}
+\item Ausrei\ss er (\grqq Outliers\grqq ), in Python mit 'sym' zu setzen. \\
+Daten die au\ss erhalb der Whisker liegen und somit als Ausrei\ss er deklariert werden.
+\item Whisker, L\"ange in Python mit 'whis' zu setzen.\\
+Standartm\"a\ss ig die 1,5-fache L\"ange des entsprechenden Quartils. 
+\item Quartil\\
+Die Quartile sind Bestandteile der Box, welche 50 \% aller Daten enth\"alt. Dabei enth\"alt das obere Quartil, die 25\%, die \"uber dem Median, das untere Quartil, die 25\%, die unter dem Median liegen.
+\item Median\\
+Der mittlere Wert (nicht Mittelwert oder Durchschnitt), der aus dem gesamten Datensatz ermittelt wird. Er teilt den Boxplot in zwei H\"alften, die wiederum jeweils in Whisker und Quartil unterteilt werden.
+\end{itemize}
+
+\subparagraph{Diskutieren Sie die im Boxplot angezeigte Statistik der Energieverbrauchdaten.}
 
 
 \subparagraph{Abgabe: Relevante Dateien}
