@@ -160,7 +160,7 @@ Bei der Pearson-\"Ahnlichkeit wird zus\"atzlich die Durchschnittsl\"ange miteinb
 \item Cluster 3 verzeichnet im Gegensatz zu allen anderen Clustern einen relativ hohen Wasserkraftanteil. 
 \end{itemize}
 
-Fasst man den gesamten Energieverbrauch jedes jeweiligen Clusters zusammen (\lstinline{individual_clusters_total.pdf}), erkennt man, dass die Charakteristik des Gesamtverbrauchs eines Clusters sehr stark von einzelnen L\"andern abh\"angt. So diktieren China und die USA den Gesamtverbrauch in ihrem Cluster. Gleichzeitig zeigt sich allerdings auch die Tendenz des gesamten Clusters. 
+Fasst man den gesamten Energieverbrauch jedes jeweiligen Clusters zusammen\\ (\lstinline{individual_clusters_total.pdf}), erkennt man, dass die Charakteristik des Gesamtverbrauchs eines Clusters sehr stark von einzelnen L\"andern abh\"angt. So diktieren China und die USA den Gesamtverbrauch in ihrem Cluster. Gleichzeitig zeigt sich allerdings auch die Tendenz des gesamten Clusters. 
 
 \subparagraph{Abgabe: Relevante Dateien}
 \begin{itemize}
@@ -168,7 +168,24 @@ Fasst man den gesamten Energieverbrauch jedes jeweiligen Clusters zusammen (\lst
 \item \lstinline{dendrogram.pdf}, \lstinline{individual_clusters.pdf} und \lstinline{individual_clusters_total.pdf}\\- Ausgabe des Skripts \lstinline{energyClustering.py}
 \end{itemize}
 
-\section*{Dimensionalitätsreduktion}
+\subsection*{Dimensionalit\"atsreduktion}
+
+\subsection*{Welches Land ist nach dieser Darstellung Deutschland am \"ahnlichsten?}
+\textbf{Antwort:} S\"udkorea
+\subsection*{Warum entspricht die hier dargestellte \"Ahnlichkeit nicht der im oben erzeugten Dendrogram?}
+\begin{enumerate}
+\item Da wir die Darstellung selbst optisch interpretiert und die Distanz zwischen den Punkten als \"Ahnlichkeitsma\ss verwendet haben, haben wir die \"Ahnlichkeit nach der euklidischen Metrik bestimmt. 
+\item Auch im Dendrogramm waren sich Deutschland und S\"udkorea relativ \"ahnlich. Durch die Reduktion der Dimensionen von f\"unf auf zwei gehen zwangsweise Informationen verloren. 
+\end{enumerate}
+
+\subparagraph{Abgabe: Relevante Dateien}
+\begin{itemize}
+\item \lstinline{energyReduceDim.py} - Implementierung Aufgabe 2.2.2: 1) - 3)
+\item \lstinline{energyReduceDim_total.pdf}- Ausgabe des Skripts \lstinline{energyReduceDim.py}
+\item \lstinline{energyReduceDim_section.pdf}- Ausschnitt aus \lstinline{energyReduceDim_total.pdf}
+\end{itemize}
+
+\section*{\"Uberwachtes Lernen: Sch\"atzung der CO\textsubscript{2}-Emmission}
 
 
 \end{document}
