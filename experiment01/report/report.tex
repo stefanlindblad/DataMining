@@ -206,4 +206,64 @@ Nuklear & 34.572086
 \end{itemize}
 
 
+\subsection*{Regression mit Epsilon-SVR}
+\subparagraph{Optimieren Sie die SVR-Parameter C und Epsilon so dass der Score in der Kreuzvalidierung minimal
+wird. Welche Werte f\"ur C und Epsilon liefern das beste Ergebnis?}
+
+Die besten Ergebnisse erhielten wir f\"ur C = 0.01 und $\varepsilon$ = 0.001
+
+\subparagraph{F\"ur das SVR-Objekt k\"onnen die Koeffzienten der linearen Abbildung, welche durch die trainierte
+SVR realisiert wird, ausgegeben werden: \lstinline{meineSVR.coef\_}. Notieren Sie diese Koeffzienten f\"ur die
+beste SVR.}
+
+\begin{center}
+\begin{tabular}{c c c c c}
+\"Ol & Gas & Kohle & Nuklear & Hydro\\
+$-3.0690410$ & $-2.3485549$ & $-3.9608432$ & $4.1970815e-04$ & $4.1138445e-04$
+\end{tabular}
+\end{center}
+ 
+\subparagraph{Welchen Aufschluss geben diese Koeffzienten \"uber den Einfluss der einzelnen Eingangsmerkmale
+auf das Ausgangsmerkmal?}
+
+Die Koeffizienten geben an, wie sehr die entsprechende Energieform Einfluss auf die CO\textsubscript{2}-Emmission hat. \"Ol, Kohle und Gas haben demnach einen sehr viel gr\"o\ss eren Einfluss als Energie aus Atom- und Wasserkraft. 
+
+
+\subparagraph{Wie gro{\ss} ist die mittlere absolute Differenz zwischen Soll- und Ist-Ausgabe f\"ur die beste SVR?
+Diskutieren Sie dieses Ergebnis.}
+
+F\"ur die optimierten Parameter C = 0.01 und $\varepsilon$ = 0.001 ergibt sich ein Mean Absolute Error (MAE) von 0.119259989310.
+
+\begin{center}
+\begin{tabular}{l l r}
+ C & $\varepsilon$ & MAE\\ 
+\hline \\
+ 1 & 0.01 & 0.119938469138\\
+ 1& 0.001 & 0.119995514827\\
+ 1& 0.0001 & 0.119986240023 \\
+ 1& 0.1 & 0.124915412379\\
+ 0.1& 0.01 & 0.119776387503\\
+ 0.01& 0.001 & 0.119259989310\\
+ 0.001& 0.0001 & 64.902638179800\\
+\end{tabular}
+\end{center}
+
+Der erhaltene Wert f\"ur den MAE ist f\"ur realistische Daten viel zu klein, was ein eindeutiger Hinweis darauf ist, dass die verwendeten Ausgangsdaten selbst mit einem \"ahnlichen Algorithmus berechnet wurden. 
+Im Diagramm (\lstinline{energyPrediction.pdf}) kann deshalb zwischen vorhergesagter und tats\"achlicher Ausgabe nicht unterschieden werden, da beide Kurven genau \"ubereinander liegen. 
+
+\subparagraph{Abgabe: Relevante Dateien}
+\begin{itemize}
+\item \lstinline{energyPrediction.py} - Implementierung Aufgabe 2.3.2: 1) - 7)
+\item \lstinline{energyPrediction.pdf} - Ausgabe des Skripts \lstinline{energyPrediction.py}
+\end{itemize}
+
+\section*{Visualisierung des Clusterings in Google Maps}
+
+\subparagraph{Abgabe: Relevante Dateien}
+\begin{itemize}
+\item \lstinline{cluster2GoogleMaps.py} - Implementierung Aufgabe 2.4
+\item \lstinline{clusterMap.html} - Ausgabe des Skripts \lstinline{cluster2GoogleMaps.py}
+\end{itemize}
+
+
 \end{document}
