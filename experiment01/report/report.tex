@@ -102,11 +102,10 @@ Zus\"atzlich w\"aren noch andere Normalisierungsfaktoren interessant:
 
 \subsection*{Statistik der Daten}
 
-
 \subparagraph{Erkl\"aren Sie s\"amtliche Elemente eines Boxplot (allgemein). }
 \begin{figure}[!h]
 \centering
-\includegraphics[width=0.7\textwidth]{Plots/2000px-Elements_of_a_boxplot.png}
+\includegraphics[width=0.7\textwidth]{Plots/Elements_of_a_boxplot.pdf}
 \end{figure}
 \begin{itemize}
 \item Ausrei\ss er (\grqq Outliers\grqq ), in Python mit 'sym' zu setzen. \\
@@ -120,11 +119,16 @@ Der mittlere Wert (nicht Mittelwert oder Durchschnitt), der aus dem gesamten Dat
 \end{itemize}
 
 \subparagraph{Diskutieren Sie die im Boxplot angezeigte Statistik der Energieverbrauchdaten.}
-
+\begin{itemize}
+\item Durch den signifikant h\"oheren Verbrauch von China und den USA wird beim Anzeigen der Ausrei\ss er der restliche Boxplot soweit gestaucht, dass vern\"unftigen Daten mehr abgelesen werden k\"onnen. 
+Um die Verteilung innerhalb der verschiedenen Boxplots besser vergleichen zu k\"onnen, entschlossen wir uns au\ss erdem jede Energieform in einem einzelnen Subplot darzustellen. 
+\item Im Gesamtplot lassen sich die einzelnen Energieformen gut miteinander vergleichen, in den einzelnen Plots k\"onnen die Verteilungen innerhalb der Plots besser dargestellt werden.  
+\item Beim Boxplot der nuklearen Energieform f\"allt auf, dass der Median samt unterem Quartil und unterem Whisker auf 0 liegt. Dies liegt daran, dass weniger als die H\"alfte aller L\"ander nukleare Energie verwenden. 
+\item Im Gesamtplot kann man erkennen, dass \"Ol die einzige Energieform ist, deren unterer Whisker nicht auf 0 liegt. Also verwendet jedes in Betracht gezogene Land \"Ol. Jede andere Energieform wird von mindestens einem Land nicht verwendet. 
+\end{itemize}
 
 \subparagraph{Abgabe: Relevante Dateien}
 \begin{itemize}
-\item
 \end{itemize}
 
 
