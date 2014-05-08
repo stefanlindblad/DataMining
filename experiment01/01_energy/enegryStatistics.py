@@ -22,7 +22,7 @@ for energyForm in reducedEnergyInfo:
 	plt.boxplot(energyInfo[energyForm].values, sym='')
 	plt.grid(True)
 
-plt.figure("Energyconsumption Energyconsumption by energyform in one plot")
+plt.figure("Energyconsumption by energyform in one plot")
 plt.boxplot(reducedEnergyInfo.values, sym='')
 plt.xticks(range(1, NUM_ENERGYFORMS+1), ENERGYFORMS)
 plt.show()
