@@ -16,13 +16,14 @@ preprocessedEnergyInfo = preprocessing.scale(reducedEnergyInfo, with_mean = Fals
 
 relativeEnergyConsumption = spatial.distance.pdist(preprocessedEnergyInfo, metric = 'correlation')
 
+plt.figure("dendrogram")
 linkageMatrix = cluster.hierarchy.linkage(relativeEnergyConsumption, method='average')
 cluster.hierarchy.dendrogram(linkageMatrix, orientation = 'left', labels = energyInfo.Country.values)
 
 coutryToClusterLinkage = cluster.hierarchy.fcluster(linkageMatrix, NUM_CLUSTER, criterion='maxclust')
 coutryToClusterLinkage -= 1
 
-plt.figure(1)
+
 for clusterIndex in range(NUM_CLUSTER):
     print '-'*10 + 'Cluster ' + str(clusterIndex) + '-'*10
     ind=find(coutryToClusterLinkage==clusterIndex)
@@ -31,7 +32,7 @@ for clusterIndex in range(NUM_CLUSTER):
 
 sum = zeros((NUM_CLUSTER, NUM_ENERGYFORMS))
 
-plt.figure(2)
+plt.figure("individual_clusters")
 for countryIndex, clusterIndex in enumerate(coutryToClusterLinkage):
     plt.subplot(NUM_CLUSTER, 1, clusterIndex + 1)
     plt.plot(reducedEnergyInfo.values[countryIndex,:])
@@ -40,7 +41,7 @@ for countryIndex, clusterIndex in enumerate(coutryToClusterLinkage):
     for energyIndex in range(NUM_ENERGYFORMS):
         sum[clusterIndex, energyIndex] += reducedEnergyInfo.values[countryIndex,energyIndex]
 
-plt.figure(3)
+plt.figure("individual_clusters_total")
 for clusterIndex in range(NUM_CLUSTER):
     plt.subplot(NUM_CLUSTER, 1, clusterIndex + 1)
     plt.plot(sum[clusterIndex, :])

@@ -138,12 +138,37 @@ Um die Verteilung innerhalb der verschiedenen Boxplots besser vergleichen zu k\"
 
 \subsection*{Hierarchisches Clustering}
 \subparagraph{Was wird beim Standardisieren gemacht? Welcher Effekt k\"onnte ohne Standardisieren beim Clustering eintreten (insbesondere wenn die euklidische Metrik verwendet wird)?}
+Ohne Standardisieren ist die \"Ahnlichkeit des Gesamtverbrauchs ausschlaggebender als die \"Ahnlichkeit des Energiemixes. So werden eher L\"ander mit niedrigem Gesamtverbrauch gruppiert, als sie anhand ihres Energiemixes zu clustern. Dies kommt daher, dass die euklidische Metrik die geometrische Distanz zwischen zwei Punkten im Mehrdimensionalen Raum ber\"ucksichtigt. Zeigen zwei Vektoren in dieselbe Richtung, sind sich demnach vom Energiemix sehr \"ahnlich, haben aber unterschiedliche L\"angen, also einen unterschiedlich hohen Energieverbrauch, dann haben sie auch eine hohe euklidische Distanz und werden nicht demselben Cluster zugeordnet.
+Durch das Standardisieren werden die L\"angen der Vektoren normiert und so ein Vergleich erst m\"oglich.
 
-\textbf{Antwort:}
+\subparagraph{Erk\"aren Sie die beim hierarchischen Clustering einstellbaren Parameter \lstinline{linkage-method} und \lstinline{metric}. Welche Metrik ist Ihrer Meinung nach f\"ur diese Anwendung geeignet? Warum?}
+
+\"Uber die \lstinline{linkage-method} wird festgelegt, wie die Cluster hierarchisch angeordnet werden. Dabei kann zwischen verschiedenen Methoden gew\"ahlt werden: Beispielsweise kann die mittlere (average), die kleinste (single) oder die gr\"o\ss te (complete) Distanz zweier Punkte aus beiden Clustern, oder die Distanz der beiden Clusterschwerpunkte (weighted), gemessen werden. 
+Die \lstinline{metric}  bestimmt die \"Ahnlichkeit zwischen zwei Punkten. Hierbei kann zwischen verschiedenen Metriken gew\"ahlt werden, wobei in unserem Fall \"Ahnlichkeitsma\ss e f\"ur boolsche Werte vernachl\"assigt werden k\"onnen. 
+Die \"Ahnlichkeit kann \"uber die euklidische Distanz gemessen werden, allerdings wird hier nur die geometrische Distanz gewertet und nicht die Richtung. Weiterhin kann Cosinus-Distanz angewandt werden, bei der die Richtung der Vektoren mehr ins Gewicht f\"allt als die L\"ange. 
+Bei der Pearson-\"Ahnlichkeit wird zus\"atzlich die Durchschnittsl\"ange miteinbezogen und mit der tats\"achlichen L\"ange verrechnet. Dadurch erweist sich dieser Algorithmus als am besten geeignet. 
+
 
 \subparagraph{Welches Land ist bez\"uglich des Verbrauchs der hier betrachteten Energiequellen Deutschland am \"ahnlichsten, wenn f\"ur die linkage-method \lstinline{average} und die Metrik \lstinline{correlation} konfiguriert wird?}
-
 \textbf{Antwort:} Belgien
+
+\subparagraph{Charakterisieren Sie die 4 Cluster. Was ist typisch f\"ur die jeweiligen Cluster?}
+\begin{itemize}
+\item Cluster 0 ist einigerma\ss en gleichverteilt, wobei Wasserkraft den geringsten Anteil ausmacht. Im Vergleich zu den anderen Clustern ist der Anteil an aus Atomkraft gewonnener Energie sehr hoch. 
+\item Cluster 1 zeichnet einen gro\ss en Verbrauch an fossilen Brennstoffen aus.
+\item Cluster 2 ist das kleinste Cluster und unterscheidet sich vor allem durch seinen hohen Kohleverbrauch von den anderen Clustern.
+\item Cluster 3 verzeichnet im Gegensatz zu allen anderen Clustern einen relativ hohen Wasserkraftanteil. 
+\end{itemize}
+
+Fasst man den gesamten Energieverbrauch jedes jeweiligen Clusters zusammen (\lstinline{individual_clusters_total.pdf}), erkennt man, dass die Charakteristik des Gesamtverbrauchs eines Clusters sehr stark von einzelnen L\"andern abh\"angt. So diktieren China und die USA den Gesamtverbrauch in ihrem Cluster. Gleichzeitig zeigt sich allerdings auch die Tendenz des gesamten Clusters. 
+
+\subparagraph{Abgabe: Relevante Dateien}
+\begin{itemize}
+\item \lstinline{energyClustering.py} \\- Implementierung Aufgabe 2.2.1: 1) - 5)
+\item \lstinline{dendrogram.pdf}, \lstinline{individual_clusters.pdf} und \lstinline{individual_clusters_total.pdf}\\- Ausgabe des Skripts \lstinline{energyClustering.py}
+\end{itemize}
+
+\section*{Dimensionalitätsreduktion}
 
 
 \end{document}
