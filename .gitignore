@@ -8,3 +8,4 @@ plygrnd/
 *.toc
 *.run.xml
 *.synctex.gz
+experiment01/report/*.pdf
