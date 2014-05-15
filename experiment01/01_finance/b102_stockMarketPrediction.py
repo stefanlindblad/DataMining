@@ -20,25 +20,21 @@ def getModel(delay, dataFrame ):
     frame = frame.T
     return frame, series;
 
-
-
 # reading in the csv file into a pandas dataframe
 dataFrame = pd.DataFrame().from_csv("effectiveRates.csv")
 
 # plotting the courses from sony, canon, cisco, hewlett-packard and yahoo
-#plt.plot(dataFrame.index, dataFrame["SNE"], "bo-", color="c", ms=2, label="Sony")
-#plt.plot(dataFrame.index, dataFrame["CAJ"], "bo-", color="m", ms=2, label="Canon")
-#plt.plot(dataFrame.index, dataFrame["CSCO"], "bo-", color="r", ms=2, label="Cisco")
-#plt.plot(dataFrame.index, dataFrame["HPQ"], "bo-", color="g", ms=2, label="Hewlett-Packard")
-#plt.plot(dataFrame.index, dataFrame["YHOO"], "bo-", color="b", ms=2, label="Yahoo")
-
+plt.figure("compartment of different companies")
+plt.plot(dataFrame.index, dataFrame["SNE"], "bo-", color="c", ms=2, label="Sony")
+plt.plot(dataFrame.index, dataFrame["CAJ"], "bo-", color="m", ms=2, label="Canon")
+plt.plot(dataFrame.index, dataFrame["CSCO"], "bo-", color="r", ms=2, label="Cisco")
+plt.plot(dataFrame.index, dataFrame["HPQ"], "bo-", color="g", ms=2, label="Hewlett-Packard")
+plt.plot(dataFrame.index, dataFrame["YHOO"], "bo-", color="b", ms=2, label="Yahoo")
 plt.legend(bbox_to_anchor=(1.05, 1), loc=2)
-
-
 plt.ylabel("prices")
 plt.xlabel("time")
 plt.grid()
-#plt.show()
+plt.show()
 
 TRAININGS_TIME = 650
 PREDICTION_TIME = 30
@@ -58,29 +54,16 @@ predictedValues = svr.predict(trainData)
 for i in range(1, PREDICTION_TIME):
     predictedTarget = svr.predict(dataToPredict[i:i+1])
     array.append(predictedTarget[0])
-    #print predictedTarget
-    #print dataToPredict[i:i+1]
 
     for y in range(1, TIME_DELAY+1):
         dataToPredict.loc[i+y+649, "T-"+str(y)] = predictedTarget[0]
 
-
-print len(array)
-
 plt.figure("Yahoo Stock Prediction")
-
 plt.plot(dataFrame.index, dataFrame["YHOO"], "b", color="b", ms=2, label="real")
 plt.plot(dataFrame.index[23:673], predictedValues, "bo-", color="g", ms=2, label="predict")
 plt.plot(dataFrame.index[673:702], array, "bo-", color="r", ms=2, label="forecast")
 plt.legend(bbox_to_anchor=(1.05, 1), loc=2)
-
 plt.ylabel("prices")
 plt.xlabel("time")
-#plt.grid()
+plt.grid()
 plt.show()
-
-
-
-
-
-
