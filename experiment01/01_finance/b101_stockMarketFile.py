@@ -1,9 +1,9 @@
 # -*- coding:utf8 -*-
+# author: Stefan Seibert
+# File for task 3.1.1
+
 import urllib2
-#import h5py
-import numpy as np
 import pandas as pd
-#from matplotlib import pyplot as plt
 
 symbol_dict = {
         'TOT'  : 'Total',
