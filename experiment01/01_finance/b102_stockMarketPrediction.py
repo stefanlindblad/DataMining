@@ -40,10 +40,10 @@ plt.xlabel("time")
 plt.grid()
 
 # Script Variables, change them for different behaviour
-TRAININGS_TIME = 100
-PREDICTION_TIME = 200
-TIME_DELAY = 25
-C_VALUE = 5
+TRAININGS_TIME = 650
+PREDICTION_TIME = 30
+TIME_DELAY = 24
+C_VALUE = 500
 EPSILON_VALUE = 0.6
 
 # getting model and target
