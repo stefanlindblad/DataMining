@@ -6,19 +6,23 @@ import pandas as pd
 from matplotlib import pyplot as plt
 from sklearn import svm
 
-def getMae(actual, predicted):
+pd.set_option('display.max_columns', None)
+pd.set_option('display.max_rows', None)
+
+def getmae(actual, predicted):
     return sum(abs(actual - predicted))/len(actual)
 
-def getModel(delay, dataFrame ):
-    columnNames = ["T-" + str(r) for r in range(delay,0,-1)]
-    frame = pd.DataFrame( columns = columnNames).T
-    series = pd.Series()
-    for startvalue in range(0, len(dataFrame.index)-delay-1):
-        array = dataFrame[startvalue : startvalue + delay].values
-        frame[startvalue] = array
-        series.set_value(startvalue, dataFrame[startvalue + delay])
-    frame = frame.T
-    return frame, series;
+def getmodel(daysUsedForEstimation, dataframe):
+    columnnames = ["T-" + str(r) for r in range(daysUsedForEstimation, 0, -1)] #excluding the zero
+    model = pd.DataFrame(columns=columnnames).T # having a list of days with values before the actual day, for everyday
+    target = pd.Series() #a list of the values that the value really has normally
+
+    for currentCalculatedDay in range(0, len(dataframe.index)-daysUsedForEstimation):
+        model[currentCalculatedDay] = dataframe[currentCalculatedDay: currentCalculatedDay + daysUsedForEstimation].values
+        target.set_value(currentCalculatedDay, dataframe[currentCalculatedDay + daysUsedForEstimation])
+
+    model = model.T
+    return model, target;
 
 # reading in the csv file into a pandas dataframe
 dataFrame = pd.DataFrame().from_csv("effectiveRates.csv")
@@ -34,34 +38,46 @@ plt.legend(bbox_to_anchor=(1.05, 1), loc=2)
 plt.ylabel("prices")
 plt.xlabel("time")
 plt.grid()
-plt.show()
 
-TRAININGS_TIME = 650
-PREDICTION_TIME = 30
-TIME_DELAY = 24
+# Script Variables, change them for different behaviour
+TRAININGS_TIME = 100
+PREDICTION_TIME = 200
+TIME_DELAY = 25
+C_VALUE = 5
+EPSILON_VALUE = 0.6
 
-model, target = getModel(TIME_DELAY, dataFrame["YHOO"])
-trainData = model[:TRAININGS_TIME]
-trainDataTargets = target[:TRAININGS_TIME]
-dataToPredict = model[TRAININGS_TIME:TRAININGS_TIME+PREDICTION_TIME]
+# getting model and target
+model, target = getmodel(TIME_DELAY, dataFrame["YHOO"])
 
-svr = svm.SVR(kernel="rbf", C=500, epsilon=.6)
+# defining the learning period
+trainData = model[:TRAININGS_TIME+1]
+trainDataTargets = target[:TRAININGS_TIME+1]
+predictionData = model[TRAININGS_TIME+1:TRAININGS_TIME+PREDICTION_TIME+1]
+
+# fitting the SVR to our data
+svr = svm.SVR(kernel="rbf", C=C_VALUE, epsilon=EPSILON_VALUE)
 svr.fit(trainData, trainDataTargets)
 
-array = []
+forecastValues = []
 predictedValues = svr.predict(trainData)
 
-for i in range(1, PREDICTION_TIME):
-    predictedTarget = svr.predict(dataToPredict[i:i+1])
-    array.append(predictedTarget[0])
+for i in range(0, PREDICTION_TIME):
+    forecastValue = svr.predict(predictionData[i:i+1])
+    forecastValue = forecastValue[0]
+    forecastValues.append(forecastValue)
 
     for y in range(1, TIME_DELAY+1):
-        dataToPredict.loc[i+y+649, "T-"+str(y)] = predictedTarget[0]
+        predictionData.loc[i+y+TRAININGS_TIME, "T-"+str(y)] = forecastValue
+
+forecastValues = pd.Series(forecastValues, index = dataFrame["YHOO"][TRAININGS_TIME+TIME_DELAY+1:TRAININGS_TIME+TIME_DELAY+PREDICTION_TIME+1].index)
+
+mae = getmae(dataFrame["YHOO"][TRAININGS_TIME+TIME_DELAY+1:TRAININGS_TIME+TIME_DELAY+PREDICTION_TIME+1], forecastValues)
+print "Mean Absolute Error: " + str(mae) + ", C = " + str(C_VALUE) + ", epsilon = " + str(EPSILON_VALUE)
 
 plt.figure("Yahoo Stock Prediction")
 plt.plot(dataFrame.index, dataFrame["YHOO"], "b", color="b", ms=2, label="real")
-plt.plot(dataFrame.index[23:673], predictedValues, "bo-", color="g", ms=2, label="predict")
-plt.plot(dataFrame.index[673:702], array, "bo-", color="r", ms=2, label="forecast")
+plt.plot(dataFrame.index[TIME_DELAY:TRAININGS_TIME+TIME_DELAY+1], predictedValues, "bo-", color="g", ms=2, label="predict")
+plt.plot(dataFrame.index[TRAININGS_TIME+TIME_DELAY+1:TRAININGS_TIME+TIME_DELAY+PREDICTION_TIME+1], forecastValues, "bo-", color="r", ms=2, label="forecast")
 plt.legend(bbox_to_anchor=(1.05, 1), loc=2)
 plt.ylabel("prices")
 plt.xlabel("time")
