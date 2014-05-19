@@ -1,0 +1,19 @@
+1. Überlegen Sie sich genau, wie die Datenvektoren des Vorhersagezeitraums (also die Vektoren, die der
+Methode prediction() des trainierten SVR-Modells übergeben werden), aufgebaut werden müssen.
+
+
+2. Für welche Werte von
+
+• Time Delay
+• SVR-Parameter C
+• SVR-Parameter epsilon
+
+erreichen Sie die beste Vorhersage? Wie groß ist in diesem Fall der MAE? Erzeugen Sie für diese
+optimierten Werte den Plot des tatsächlichen und des geschätzten Kursverlaufs und speichern Sie
+diese Grak unter dem Namen stockpredict.png.
+
+Hohe Epsilon:
+Fast keine Ausschläge der Werte nur noch geringste Veränderungen
+
+Niedrige Epsilon:
+Enorme Ausschläge und Wertdifferenzen zu jedem neuen Tag
