@@ -319,4 +319,183 @@ Im Diagramm (\lstinline{energyPrediction.}) kann deshalb zwischen vorhergesagter
 \end{itemize}
 
 
+\part*{Vorhersage und Clustering auf Finanzdaten}
+
+\section*{Vorhersage des Aktienkurses}
+
+\subsection*{Datenbeschaffung}
+In der Implementierung von b101\_stockMarketFile.py wie sie im Ergebnis vorliegt wurden die Werte von Kraft Foods (KFT) und News Corporation (NWS) nicht verwendet, da diese  nicht verfügbar waren und durch einen 404-Not Found Error zum Programmabbruch führten. \newline In der im Fragment bereits vorhandenen Schleife wurde f\"ur jedes Symbol eine Pandas Serie angelegt, die \"uber die Datumsangaben der Werte indiziert wird. Diese wurde anschließend als neue Spalte in ein Pandas Dataframe gespeichert, welches anschließend auch über den Funktionsaufruf to\_csv als csv gespeichert werden kann. 
+
+\subparagraph{Abgabe: Relevante Dateien}
+\begin{itemize}
+\item \lstinline{b101_stockMarketFile.py} - Implementierung Aufgabe 3.1.1
+\item \lstinline{effectiveRates.csv} - In 3.1.1 gespeicherte Daten 
+\end{itemize}
+
+\subsection*{Kursvorhersage mit SVR}
+
+\subparagraph{1. Einlesen der Datei effectiveRates.csv}
+Dies geschieht einfach über den Funktionsaufruf from\_csv.
+Erfolgt dieser Aufruf auf einem leeren Pandas Dataframe liegen anschließend
+die Daten wieder im Speicher vor.
+
+\subparagraph{2. Graphische Anzeige von 5 Aktienkursen Ihrer Wahl}
+Es wurden 5 Technologie Unternehmen ausgesucht zum Vergleich. Sony, Canon, Cisco, 
+Hewlett-Packard und Yahoo. Allen gemein ist bei größerer Betrachtung ein Aufwärtstrend, 
+mehr oder weniger  stark bis zum Anfang 2010, dann sind sinkende Kurse bis Herbst 2010 zu beobachten 
+worauf die Kurse zum Teil relativ unterschiedlich verlaufen. Sony und HP stürzen 2011 stark ab, die 
+anderen Unternehmen können von lokalen Ausbrüchen abgesehen ihren Kurs in etwa halten.
+\newline
+\includegraphics[width=\textwidth]{Plots/stockCompartment.pdf}
+
+\subparagraph{3. Festlegen des Unternehmens}
+Wie vorgeschlagen wurde Yahoo (YHOO) für die Kursvorhersage ausgewählt.
+
+\subparagraph{4. Umwandlung der seriellen Daten in eine zyklische Form}
+Das geforderte Umwandeln der seriellen Daten in eine zyklische Form wurde
+durch eine getmodel Methode implementiert, der als Parameter der Time-Delay und
+die seriellen Daten übergeben werden können. Als Rückgabewert liefert diese
+daraufhin die zyklischen Daten in einem Pandas Dataframe und die Zieltage
+in einer Pandas Serie.
+Als Spaltenindex dienen hier ebenfalls die im Beispiel verwendeten Tage 
+vor dem Zieltag, also bei 24 Lerntagen, sind die Spalten T-24 bis T-1.
+T-Class entspräche dann den Zieltagen in der Pandas Serie.
+
+\subparagraph{5. Festlegen von Trainingszeitraum und Vorhersagezeitraum}
+Alle Parameter, inklusive Trainingszeitraum und Vorhersagezeitraum werden an
+einer zentralen Stelle des Skripts eingestellt, so dass eine Änderung der
+Parameter leicht möglich ist. Es wurden folgende Variablen definiert:
+
+\begin{enumerate}
+\item TRAININGS\_TIME - Der Trainingszeitraum
+\item PREDICTION\_TIME - Der Der Vorhersagezeitraum
+\item TIME\_DELAY - Der Time-Delay für die zyklischen Daten
+\item C\_VALUE - Der C-Parameter für die SVR
+\item EPSILON\_VALUE - Der Epsilon-Parameter für die SVR
+\end{enumerate}
+
+\subparagraph{6. Anlegen der SVR und Vorhersagenberechnung}
+Die SVR wurde durch den Funktionsaufruf svm.SVR angelegt.
+Anschließend wurde die fit Methode aufgerufen um die SVR mit den Trainingsdaten zu trainieren.
+
+Im zweiten Schritt wurde die SVR angewiesen eine Vorhersage mit den Trainingsdaten auszuführen,
+um diese zum Vergleich mit in die Plotausgabe einfließen lassen zu können.
+Danach wurden die echten Vorhersagewerte berechnet und diese in eine Pandas Serie überführt.
+
+\subparagraph{7. Berechnung und Vergleich des MAE}
+Der Mean Absolute Error wird durch die bereits in Versuchsteil 1 verwendete getmae$\left(\right)$ Methode berechnet.
+In der folgenden Tabelle werden die MAE Werte für verschiedene Parameterkonfigurationen aufgelistet
+
+\begin{center}
+\begin{tabular}{l l l r}
+ C & $\varepsilon$ & Time Delay & MAE\\ 
+\hline \\
+ 500 & 0.6 & 24 & 0.312024245957\\
+ 50 & 0.6 & 24 & 0.312024245957\\
+ 5 & 0.6 & 24 & 0.305131498375\\
+ .5 & 0.6 & 24 & 0.223760696196\\
+ .05 & 0.6 & 24 & 0.341643714938\\
+ \hline \\
+ .5 & 0.006 & 24 & 0.206443426583\\
+ .5 & 0.06 & 24 & 0.206312883609\\
+ .5 & 6 & 24 & 0.648\\
+ \hline \\
+ .5 & 0.06 & 3 & 0.248084638701\\
+ .5 & 0.06 & 6 & 0.247563624714\\
+ .5 & 0.06 & 12 & 0.258172037051\\
+ .5 & 0.06 & 24 & 0.206312883609\\
+ .5 & 0.06 & 48 & 0.262666322932\\
+\end{tabular}
+\end{center}
+
+\subparagraph{8. Darstellung der Kurswerte im zeitlichen Verlauf}
+\includegraphics[width=\textwidth]{Plots/stockPredict.pdf}
+
+\subsection*{Beantwortung der Fragen zu Kapitel 3.1 und Relevante Dateien}
+
+\subparagraph*{Überlegung zum notwendigen Aufbau der Datenvektoren des Vorhersagezeitraums}
+\textbf{Antwort:} Die Vorhersage sollte immer nur für einen Tag durchgeführt werden, da hier
+die präzisesten Ergebnisse möglich sind. Anschließend wird der vorhergesagt Wert in die Datenvektoren
+übernommen, wodurch für den nächsten Tag die Datenvektoren bei einem Time-Delay von 24, die Datenvektoren
+aus 23 bekannten Werten und 1 vorhergesagten Wert entsprechen. Selbes Verfahren wird immer weiter fortgeschrieben,
+bis nach 24 Tagen die Vorhersagewerte nur noch auf Basis ebenfalls vorhergesagter Werte berechnet werden können.
+\newpage
+\subparagraph*{Für welche Werte von Time Delay, C und Epsilon wird die beste Vorhersage erreicht?}
+\textbf{Antwort:} Für die Beantwortung dieser Frage kann man sich am MAE und der zugehörigen Tabelle aus Aufgabe 8 dieses
+Kapitels orientieren. Die besten Werte erreicht man bei einem möglichst niedrigen MAE, hier wurde ein Minimum von 0.206312883609
+bei folgenden Werten gefunden: Time Delay = 24, C = 0.5, Epsilon = 0.06.
+
+Interessant ist hierbei dass auch ein sehr niedriger Time Delay von 3 bereits relativ gute Vorhersagen bringt.
+Ein sehr hohes Epsilon sorgt für derart starkes Glätten der Vorhersagewerte dass keinerlei Wertveränderungen
+mehr sichtbar sind. Ein sehr hoher C Wert dagegen sorgt für zu starke Ausschläge in den Kursvorhersagen.
+Allgemein scheint der MAE verhältnismäßig niedrig für eine Vorhersage zu sein. Die Eingabedaten wurden jedoch
+überprüft und sind korrekt. 
+
+\subparagraph{Abgabe: Relevante Dateien}
+\begin{itemize}
+\item \lstinline{b102_stockMarketPrediction.py} - Implementierung aller Aufgaben aus 3.1.2
+\item \lstinline{stockPredict.pdf}- Der Plot mit den berechneten Vorhersagewerten bei minimalem MAE
+\end{itemize}
+
+\section*{Clustering der Aktienkursverläufe}
+Aufgrund der zwei nicht verfügbaren Aktienkurse reduziert sich die Menge der betrachteten Firmen auf 59.
+
+\subparagraph{1. Berechnung der Differenz}
+Für die Differenzberechnung wurde ein Pandas Dataframe angelegt, dessen Spalten den Firmensymbolen
+entsprechen. Jede Reihe wiederum entspricht einem Datum und der Wert der Differenz aus Open und Close.
+
+\subparagraph{2. Berechnung der Ähnlichkeitsmatrix}
+Die Ähnlichkeitsmatrix wird durch die gegebene Funktion corrcoef$\left(\right)$ berechnet. Zu beachten war hier
+dass der Funktion in unserem Fall die transponierte Ähnlichkeitsmatrix übergeben werden mußte, da sonst die
+Relationen zwischen den Tagen und nicht den Unternehmen zurückgeliefert wurde.
+
+\subparagraph{3. Berechnung der AffinityPropagation}
+Im dritten Schritt wurde ein entsprechend vorgegebenes AffinityPropagation Objekt mit dem Parameter "precomputed"
+erzeugt, um somit die Matrix übergeben zu können, ansonsten würde diese vom Objekt selbst berechnet.
+Anschließend wurde die Anzahl der gefundenen Cluster abgefragt.
+
+\subparagraph{4. Plot der zusammengehörenden Kurse}
+Die AffinityPropagation Klasse liefert eine Liste von 59 Werten, wobei jeder Wert der Clusternummer
+eines jeden Unternehmens steht. Über diese konnte iteriert werden um das Unternehmen dem entsprechenden
+Plot zuzuweisen und diese gemeinsam anzeigen zu können. 
+
+\subparagraph{Auszugsweise Darstellung des Clusters 10}
+\includegraphics[width=\textwidth]{Plots/stockCluster10.pdf}
+
+\subparagraph*{Analyse der Clusterzuweisungen}
+\textbf{Antwort:} 
+Die Cluster wurden zuerst auf Zugehörigkeit zu Branchen untersucht:
+
+\begin{enumerate}
+\item Cluster 0 umfasst die Lebensmittelfirmen Coca-Cola und Pepsi sowie Kellogs.
+\item Cluster 1 fasst die beiden Drogerieketten Walgreen und CVS zusammen. 
+\item Cluster 2 beinhaltet die drei großen Konzerne Apple, Amazon und Yahoo.
+\item Cluster 3 fasst drei Pharmaziekonzerne zusammen. 
+\item Cluster 4 wird aus drei Multimediakonzernen gebildet.
+\item Cluster 5 besteht ausschließlich aus Energiekonzernen.
+\item Cluster 6 ist ein Mix aus Produzenten aus Motorfabriken, Konsumgüterherstellern und Büroartikelproduzenten.
+\item Cluster 7 beinhaltet die Hersteller von Drogerieartikeln und Pflegeprodukten.
+\item Cluster 8 ist ein Mix aus Banken, Warenhausketten und Fahrzeugherstellern.
+\item Cluster 9 ist das Cluster der IT Technologiekonzerne wie IBM, Cisco, SAP, etc.
+\item Cluster 10 beinhaltet Konzerne die unter anderem in der Rüstungsindustrie aktiv sind.
+\end{enumerate}
+
+Insgesamt ergibt sich ein relativ gutes Clustering nach Branche, allein aufgrund
+der gemeinsamen Kursschwankungen innerhalb der Branchen. Cluster 6 und 8 enthalten jedoch
+verschiedene Märkte, was vermutlich an deren nicht branchenüblichen Kursverläufen liegt. 
+Wenn die Kurswerte zusätzlich direkt verglichen werden, fällt auf dass in den Clustern die immer
+nur eine Branche enthalten oft ähnliche Kursverläufe sichtbar sind, nicht absolut jedoch relativ
+bezogen auf ähnliche lokale Maxima und Minima im zeitlichen Verlauf. 
+Die Kurswerte im Cluster 8 sind größtenteils gleichbleibend auf einem sehr niedrigen Niveau,
+jedoch finden sich hier auch Unternehmen mit Ausreißern. Hier ist nicht ersichtlich wie eine
+Zuordnung zum Cluster erfolgt.
+Eine ähnliche Situation zeigt sich in Cluster 6. Insgesamt ist der größere Teil der Kurse
+ähnlich in seinem Verlauf, jedoch sind Ähnlichkeiten nicht direkt für das gesamte Cluster
+erkennbar sondern immer nur zwischen mehreren Einträgen.
+
+\subparagraph{Abgabe: Relevante Dateien}
+\begin{itemize}
+\item \lstinline{b103_stockMarketClustering.py} - Implementierung aller Aufgaben aus 3.2
+\end{itemize}
+
 \end{document}

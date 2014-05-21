@@ -43,8 +43,8 @@ plt.grid()
 TRAININGS_TIME = 650
 PREDICTION_TIME = 30
 TIME_DELAY = 24
-C_VALUE = 500
-EPSILON_VALUE = 0.6
+C_VALUE = 0.0005
+EPSILON_VALUE = 0.06
 
 # getting model and target
 model, target = getmodel(TIME_DELAY, dataFrame["YHOO"])
@@ -72,7 +72,7 @@ for i in range(0, PREDICTION_TIME):
 forecastValues = pd.Series(forecastValues, index = dataFrame["YHOO"][TRAININGS_TIME+TIME_DELAY+1:TRAININGS_TIME+TIME_DELAY+PREDICTION_TIME+1].index)
 
 mae = getmae(dataFrame["YHOO"][TRAININGS_TIME+TIME_DELAY+1:TRAININGS_TIME+TIME_DELAY+PREDICTION_TIME+1], forecastValues)
-print "Mean Absolute Error: " + str(mae) + ", C = " + str(C_VALUE) + ", epsilon = " + str(EPSILON_VALUE)
+print "Mean Absolute Error: " + str(mae) + ", C = " + str(C_VALUE) + ", epsilon = " + str(EPSILON_VALUE) + ", delay = " + str(TIME_DELAY)
 
 plt.figure("Yahoo Stock Prediction")
 plt.plot(dataFrame.index, dataFrame["YHOO"], "b", color="b", ms=2, label="real")
