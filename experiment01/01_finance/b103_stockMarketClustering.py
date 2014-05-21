@@ -7,11 +7,10 @@ from matplotlib import finance
 import numpy as np
 import pandas as pd
 from matplotlib import pyplot as plt
-
 from sklearn import cluster
-from sklearn import metrics
 
-# Choose a time period reasonnably calm (not too long ago so that we get
+
+# Choose a time period reasonable calm (not too long ago so that we get
 # high-tech firms, and before the 2008 crash)
 d1 = datetime.datetime(2003, 01, 01)
 d2 = datetime.datetime(2008, 01, 01)
