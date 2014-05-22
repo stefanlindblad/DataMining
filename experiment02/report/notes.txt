@@ -3,4 +3,11 @@
 	Wenn dieser Parameter auf True gesetzt ist, wird dafür gesorgt, dass die Ähnlichkeit normalisiert wird. 
 	Damit wird dafür gesorgt, dass sich zwei Personen nicht unähnlicher sind nur weil sie viele Filme bewertet haben. In diesem Fall würden ohne Normierung zwei Personen als ähnlicher eingestuft, die einen Film mit einer gewissen Differenz gewertet haben, als zwei Personen die zwei Filme mit jeweils derselben Differenz gewertet haben. 
 
-2.2.2 
+2.2.3
+
+	Die Pearson-Ähnlichkeit eignet sich für persönliche Wertungen besser, da Nutzer unterschiedliche Wertungsgewohnheiten haben. So bewerten einige Nutzer Filme allgemein schlechter, andere geben kontrastreichere Bewertungen für gute und schlechte Filme ab. Die Pearson-Ähnlichkeit gleicht diese persönlichen Preferenzen aus.
+
+2.3.1
+	
+	Beim Testen unserer Funktionen stellten wir fest, dass die Funktion sim_pearson nicht funktioniert, wenn eine Person nur einen Film gesehen hat, da hier die Standartabweichung berechnet wird und dies für nur einen Wert immer 0 liefert. So werden alle Korrelationen mit 0 angegeben. 
+	Hierfür bietet sich dann die Funktion sim_euclid an.
