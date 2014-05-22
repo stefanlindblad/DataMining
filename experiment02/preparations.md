@@ -39,6 +39,8 @@ Im Gegensatz zum UCF, bei dem für jeden Nutzer der jeweils ähnlichste Nutzer e
 	`0.00893991525484`
 
 **In welchen Fällen sind die Cosinus- und Pearson-Ähnlichkeit der euklidischen Ähnlichkeit vorzuziehen?**
+Wenn das Nicht-Vorhandensein eines Merkmals nichts über die Ähnlichkeit aussagt und nur das Vorhandensein eines Merkmals ausschlaggebend ist.
+Beispielsweise sagt ein von zwei Nutzern nicht gekauftes Item nichts über deren Ähnlichkeit zueinander aus.
 
 **Wie wird in Python ein doppelt verschachteltes Dictionary angelegt und wie greift man auf dessen Elemente zu?**
 
