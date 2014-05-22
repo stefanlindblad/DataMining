@@ -56,5 +56,5 @@ In der API gibt es eine Funktion artist.get_top_albums. Hier werden die TopAlbum
 ```
 #artist = network.get_artist("System of a Down")
 #for album in artist.get_top_albums():
-#    print(album[0])
+#    print(alb um[0])
 ```

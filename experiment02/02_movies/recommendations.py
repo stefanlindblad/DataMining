@@ -16,7 +16,7 @@ critics={'Lisa Rose': {'Lady in the Water': 2.5, 'Snakes on a Plane': 3.5,
  'You, Me and Dupree': 2.0}, 
 'Jack Matthews': {'Lady in the Water': 3.0, 'Snakes on a Plane': 4.0,
  'The Night Listener': 3.0, 'Superman Returns': 5.0, 'You, Me and Dupree': 3.5},
-'Toby': {'Snakes on a Plane':4.5,'You, Me and Dupree':1.0,'Superman Returns':4.0}
+'Toby Segaran': {'Snakes on a Plane':4.5,'You, Me and Dupree':1.0,'Superman Returns':4.0}
 }
 
 import matplotlib.pyplot as plt
@@ -24,6 +24,7 @@ import matplotlib.pyplot as plt
 from math import sqrt
 import numpy as np
 import scipy.spatial.distance as sci
+import operator
 
 
 def sim_euclid(prefs,person1,person2,normed=False):
@@ -101,5 +102,18 @@ def sim_RusselRao(prefs,person1,person2,normed=True):
   else:
       return commons*1.0/len(prefs[person1])  
       
-  
 
+def topMatches(prefs, person, similarity):
+
+    sim = {}
+    list = []
+    for candidate in prefs:
+        if candidate == person:
+            continue
+        sim[candidate] = similarity(prefs, person, candidate)
+
+    return sorted(sim.iteritems(), key=operator.itemgetter(1), reverse=True)
+
+def getRecommendations(prefs, person, similarity):
+    #still under development
+    pass
