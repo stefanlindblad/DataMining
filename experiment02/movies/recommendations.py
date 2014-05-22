@@ -160,6 +160,30 @@ def getRecommendations(prefs, person, similarity):
     print list
 
 
+def createLastfmUserDict(userNames):
+
+    NUMBER_OF_BANDS = 5
+    allBands = {}
+    userDict = {}
+
+    # adding all bands from the users to the allBand dictionary
+    for user in userNames:
+        topBands = user.get_top_artists()[0:NUMBER_OF_BANDS]
+        for band in topBands:
+            allBands[str(band.item)] = 0 #item is the name
+
+    # creating the dictionary with 0/1 bands for every user
+    for user in userNames:
+        topBands = user.get_top_artists()[0:NUMBER_OF_BANDS]
+        userDict[str(user)] = allBands.copy()
+        for band in allBands:
+            for topBand in topBands:
+                if str(band) == str(topBand.item):
+                    userDict[str(user)][band] = 1
+
+    return userDict
+
+
 def topMatches(prefs, person, similarity):
 
     sim = {}
