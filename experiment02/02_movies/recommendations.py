@@ -3,9 +3,9 @@
 critics={'Lisa Rose': {'Lady in the Water': 2.5, 'Snakes on a Plane': 3.5,
  'Just My Luck': 3.0, 'Superman Returns': 3.5, 'You, Me and Dupree': 2.5, 
  'The Night Listener': 3.0},
-'Gene Seymour': {'Lady in the Water': 3.0, 'Snakes on a Plane': 3.5, 
- 'Just My Luck': 1.5, 'Superman Returns': 5.0, 'The Night Listener': 3.0, 
- 'You, Me and Dupree': 3.5}, 
+'Gene Seymour': {'Lady in the Water': 3.0, 'Snakes on a Plane': 3.5,
+ 'Just My Luck': 1.5, 'Superman Returns': 5.0, 'The Night Listener': 3.0,
+ 'You, Me and Dupree': 3.5},
 'Michael Phillips': {'Lady in the Water': 2.5, 'Snakes on a Plane': 3.0,
  'Superman Returns': 3.5, 'The Night Listener': 4.0},
 'Claudia Puig': {'Snakes on a Plane': 3.5, 'Just My Luck': 3.0,
@@ -115,5 +115,48 @@ def topMatches(prefs, person, similarity):
     return sorted(sim.iteritems(), key=operator.itemgetter(1), reverse=True)
 
 def getRecommendations(prefs, person, similarity):
-    #still under development
-    pass
+
+    # compute correlations 
+    sim = {}
+    for candidate in prefs:
+        if candidate == person:
+            continue
+        sim[candidate] = similarity(prefs, person, candidate)
+
+
+    kSums = {}
+    notSeenMovies = {}
+    for candidate in prefs:
+        # don't compare a person with itself
+        if candidate == person:
+            continue
+        # if the correlation is negative the persons are too different.
+        if sim[candidate] < 0:
+            continue
+        # for every movie the candidate has seen...
+        for movie in prefs[candidate]:
+            # ... check if the person hasn't seen it, too.
+            if movie not in prefs[person]:
+                # check if the not yet seen movie is already in the notSeenMovies list.
+                # if not add it to notSeenMovies and kSums with value 0
+                if movie not in notSeenMovies:
+                    notSeenMovies[movie] = 0
+                    kSums[movie] = 0
+                # add the correlation of the candidate to the kSum of the current movie.
+                kSums[movie] += sim[candidate]
+                # add the recommendation of the candidate times the correlation to the sum of the current movie
+                notSeenMovies[movie] += sim[candidate] * prefs[candidate][movie]
+
+    # devide the sum of the movie by the kSum of the movie
+    for movie in notSeenMovies:
+        notSeenMovies[movie] = notSeenMovies[movie]/kSums[movie]
+
+    # switch keys and values in the dictionary
+    notSeenMovies = {y:x for x,y in notSeenMovies.iteritems()}
+
+    # sort dictionary into list by descending keys (recommendation score)
+    list =  sorted(notSeenMovies.iteritems(), key=lambda t: t[0], reverse=True)
+
+    print list
+
+
