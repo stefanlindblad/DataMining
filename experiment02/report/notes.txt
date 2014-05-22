@@ -11,3 +11,12 @@
 	
 	Beim Testen unserer Funktionen stellten wir fest, dass die Funktion sim_pearson nicht funktioniert, wenn eine Person nur einen Film gesehen hat, da hier die Standartabweichung berechnet wird und dies für nur einen Wert immer 0 liefert. So werden alle Korrelationen mit 0 angegeben. 
 	Hierfür bietet sich dann die Funktion sim_euclid an.
+
+2.1.1-4
+
+	- unicode konvertierung der Bandnamen (--> keine doppeltnennungen) - könnte zu darstellungsproblemen bei unicode-zeichen kommen.
+	- copy vs. deep-copy (allBands)
+	- nur weil jemand in den top 20 fans einer band ist heißt das nicht, das diese band in seiner top 10 sein muss.
+
+
+
