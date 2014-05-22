@@ -1,0 +1,6 @@
+2.2.1 Welche Bedeutung hat der Übergabeparameter normed in der Funktion sim_euclid?
+
+	Wenn dieser Parameter auf True gesetzt ist, wird dafür gesorgt, dass die Ähnlichkeit normalisiert wird. 
+	Damit wird dafür gesorgt, dass sich zwei Personen nicht unähnlicher sind nur weil sie viele Filme bewertet haben. In diesem Fall würden ohne Normierung zwei Personen als ähnlicher eingestuft, die einen Film mit einer gewissen Differenz gewertet haben, als zwei Personen die zwei Filme mit jeweils derselben Differenz gewertet haben. 
+
+2.2.2 
