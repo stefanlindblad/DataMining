@@ -43,7 +43,7 @@ plt.grid()
 TRAININGS_TIME = 650
 PREDICTION_TIME = 30
 TIME_DELAY = 24
-C_VALUE = 0.0005
+C_VALUE = 0.5
 EPSILON_VALUE = 0.06
 
 # getting model and target
@@ -65,6 +65,7 @@ for i in range(0, PREDICTION_TIME):
     forecastValue = svr.predict(predictionData[i:i+1])
     forecastValue = forecastValue[0]
     forecastValues.append(forecastValue)
+    pd.set_option('mode.chained_assignment', 'warn')
 
     for y in range(1, TIME_DELAY+1):
         predictionData.loc[i+y+TRAININGS_TIME, "T-"+str(y)] = forecastValue

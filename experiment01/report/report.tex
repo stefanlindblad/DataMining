@@ -345,8 +345,11 @@ Hewlett-Packard und Yahoo. Allen gemein ist bei größerer Betrachtung ein Aufw�
 mehr oder weniger  stark bis zum Anfang 2010, dann sind sinkende Kurse bis Herbst 2010 zu beobachten 
 worauf die Kurse zum Teil relativ unterschiedlich verlaufen. Sony und HP stürzen 2011 stark ab, die 
 anderen Unternehmen können von lokalen Ausbrüchen abgesehen ihren Kurs in etwa halten.
-\newline
+\begin{figure}[!h]
 \includegraphics[width=\textwidth]{Plots/stockCompartment.pdf}
+\caption{\lstinline{stockCompartment.pdf}: \\Ausgabe des Scripts \lstinline{stockMarketPrediction.py}}
+\end{figure}
+
 
 \subparagraph{3. Festlegen des Unternehmens}
 Wie vorgeschlagen wurde Yahoo (YHOO) für die Kursvorhersage ausgewählt.
@@ -408,9 +411,10 @@ In der folgenden Tabelle werden die MAE Werte für verschiedene Parameterkonfigu
 \end{tabular}
 \end{center}
 
-\subparagraph{8. Darstellung der Kurswerte im zeitlichen Verlauf}
-\includegraphics[width=\textwidth]{Plots/stockPredict.pdf}
-
+\begin{figure}[!h]
+    \includegraphics[width=\textwidth]{Plots/stockPredict.pdf}
+    \caption{\lstinline{stockPredict.pdf}: \\ Darstellung der Kurswerte im zeitlichen Verlauf}
+\end{figure}
 \subsection*{Beantwortung der Fragen zu Kapitel 3.1 und Relevante Dateien}
 
 \subparagraph*{Überlegung zum notwendigen Aufbau der Datenvektoren des Vorhersagezeitraums}
@@ -459,8 +463,10 @@ Die AffinityPropagation Klasse liefert eine Liste von 59 Werten, wobei jeder Wer
 eines jeden Unternehmens steht. Über diese konnte iteriert werden um das Unternehmen dem entsprechenden
 Plot zuzuweisen und diese gemeinsam anzeigen zu können. 
 
-\subparagraph{Auszugsweise Darstellung des Clusters 10}
-\includegraphics[width=\textwidth]{Plots/stockCluster10.pdf}
+\begin{figure}[!h]
+    \includegraphics[width=\textwidth]{Plots/stockCluster10.pdf}
+    \caption{Auszugsweise Darstellung des Clusters 10}
+\end{figure}
 
 \subparagraph*{Analyse der Clusterzuweisungen}
 \textbf{Antwort:} 
