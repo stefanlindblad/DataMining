@@ -19,12 +19,12 @@ critics={'Lisa Rose': {'Lady in the Water': 2.5, 'Snakes on a Plane': 3.5,
 'Toby Segaran': {'Snakes on a Plane':4.5,'You, Me and Dupree':1.0,'Superman Returns':4.0}
 }
 
-import matplotlib.pyplot as plt
-
 from math import sqrt
 import numpy as np
-import scipy.spatial.distance as sci
 import operator
+
+def sim_euclid_normed(prefs, person1, person2):
+    return sim_euclid(prefs, person1, person2, True)
 
 
 def sim_euclid(prefs,person1,person2,normed=False):
@@ -123,9 +123,8 @@ def getRecommendations(prefs, person, similarity):
             continue
         sim[candidate] = similarity(prefs, person, candidate)
 
-
     kSums = {}
-    notSeenMovies = {}
+    unknownMedia = {}
     for candidate in prefs:
         # don't compare a person with itself
         if candidate == person:
@@ -133,36 +132,36 @@ def getRecommendations(prefs, person, similarity):
         # if the correlation is negative the persons are too different.
         if sim[candidate] < 0:
             continue
-        # for every movie the candidate has seen...
-        for movie in prefs[candidate]:
-            # ... check if the person hasn't seen it, too.
-            if movie not in prefs[person]:
-                # check if the not yet seen movie is already in the notSeenMovies list.
-                # if not add it to notSeenMovies and kSums with value 0
-                if movie not in notSeenMovies:
-                    notSeenMovies[movie] = 0
-                    kSums[movie] = 0
-                # add the correlation of the candidate to the kSum of the current movie.
-                kSums[movie] += sim[candidate]
-                # add the recommendation of the candidate times the correlation to the sum of the current movie
-                notSeenMovies[movie] += sim[candidate] * prefs[candidate][movie]
+        # for every media the candidate already knows
+        for media in prefs[candidate]:
+            # ... check if the person doesn't know it, too.
+            if media not in prefs[person] or prefs[person][media] == 0:
+                # check if the not yet seen media is already in the unknownMedia list.
+                # if not add it to unknownMedia and kSums with value 0
+                if media not in unknownMedia:
+                    unknownMedia[media] = 0
+                    kSums[media] = 0
+                # add the correlation of the candidate to the kSum of the current media.
+                kSums[media] += sim[candidate]
+                # add the recommendation of the candidate times the correlation to the sum of the current media
+                unknownMedia[media] += sim[candidate] * prefs[candidate][media]
 
-    # devide the sum of the movie by the kSum of the movie
-    for movie in notSeenMovies:
-        notSeenMovies[movie] = notSeenMovies[movie]/kSums[movie]
+    # divide the sum of the media by the kSum of the media
+    for media in unknownMedia:
+        unknownMedia[media] = unknownMedia[media]/kSums[media]
 
     # switch keys and values in the dictionary
-    notSeenMovies = {y:x for x,y in notSeenMovies.iteritems()}
+    # unknownMedia = {y:x for x,y in unknownMedia.iteritems()}
 
     # sort dictionary into list by descending keys (recommendation score)
-    list =  sorted(notSeenMovies.iteritems(), key=lambda t: t[0], reverse=True)
+    list = sorted(unknownMedia.iteritems(), key=lambda t: t[1], reverse=True)
 
-    print list
+    return list
 
 
 def createLastfmUserDict(userNames):
 
-    NUMBER_OF_BANDS = 5
+    NUMBER_OF_BANDS = 20
     allBands = {}
     userDict = {}
 
@@ -195,17 +194,13 @@ def topMatches(prefs, person, similarity):
 
     return sorted(sim.iteritems(), key=operator.itemgetter(1), reverse=True)
 
-def getRecommendations(prefs, person, similarity):
-    #still under development
-    pass
-
-
 def getAllProducts(prefs):
     products = []
     for person in prefs:
         for product in prefs[person]:
             if product not in products: products.append(product)
     return products
+
 
 def transposeMatrix(prefs):
     products = getAllProducts(prefs)
