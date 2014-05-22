@@ -51,6 +51,8 @@ def sim_euclid(prefs,person1,person2,normed=False):
      sum_of_squares= 1.0/len(si)*sum_of_squares
   return 1/(1+sum_of_squares)
 
+def sim_euclid_normed(prefs, p1, p2):
+    return sim_euclid(prefs, p1, p2, True)
 
 def sim_pearson(prefs,p1,p2):
   '''
@@ -100,6 +102,3 @@ def sim_RusselRao(prefs,person1,person2,normed=True):
       return commons
   else:
       return commons*1.0/len(prefs[person1])  
-      
-  
-

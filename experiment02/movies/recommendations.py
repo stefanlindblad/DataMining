@@ -160,3 +160,64 @@ def getRecommendations(prefs, person, similarity):
     print list
 
 
+def topMatches(prefs, person, similarity):
+
+    sim = {}
+    list = []
+    for candidate in prefs:
+        if candidate == person:
+            continue
+        sim[candidate] = similarity(prefs, person, candidate)
+
+    return sorted(sim.iteritems(), key=operator.itemgetter(1), reverse=True)
+
+def getRecommendations(prefs, person, similarity):
+    #still under development
+    pass
+
+
+def getAllProducts(prefs):
+    products = []
+    for person in prefs:
+        for product in prefs[person]:
+            if product not in products: products.append(product)
+    return products
+
+def transposeMatrix(prefs):
+    products = getAllProducts(prefs)
+    transCritics = {}
+    for product in products:
+        for person in prefs:
+            if product in prefs[person]:
+                if product not in transCritics:
+                    transCritics[product] = {}
+                transCritics[product][person] = prefs[person][product]
+    return transCritics
+
+
+def calculateSimilarItems(prefs, similarity):
+    similarity_matrix = {}
+    for pref in prefs: similarity_matrix[pref] = dict(topMatches(prefs, pref, similarity))
+    return similarity_matrix
+
+
+def getRecommendedItems(prefs, name, similar_items):
+    rated_items = prefs[name]
+    unrated_items = []
+    recommendations = {}
+    transCritics = transposeMatrix(prefs)
+
+    for item in transCritics:
+        if item not in rated_items: unrated_items.append(item)
+
+    for unrated_item in unrated_items:
+        sum_similarity = 0.0
+        item_rated_similarity = 0.0
+        for rated_item in rated_items:
+            similarity = similar_items[rated_item][unrated_item]
+            if similarity > 0.0:
+                sum_similarity += similarity
+                item_rated_similarity += similarity * prefs[name][rated_item]
+        if sum_similarity > 0.0:
+            recommendations[unrated_item] = item_rated_similarity / sum_similarity
+    return sorted(recommendations.iteritems(), key=operator.itemgetter(1), reverse=True)
