@@ -51,4 +51,8 @@ c
 ```
 
 **Wie können mit Hilfe der last.fm-API pylast.py alle Alben einer Band bestimmt werden?**
-In der API gibt es eine Funktion Artist.getTopAlbums. Hier werden die TopAlbums des Artists nach Popularität sortiert angegeben. 
+In der API gibt es eine Funktion artist.get_top_albums. Hier werden die TopAlbums des Artists nach Popularität sortiert angegeben.
+
+#artist = network.get_artist("System of a Down")
+#for album in artist.get_top_albums():
+#    print(album[0])
