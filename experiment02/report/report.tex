@@ -65,444 +65,108 @@
 \maketitle
 \newpage
 
-\part*{bla}
+\part*{ Durchf\"uhrung 1: Fiktive Filmbewertung}
 
-\section*{bla}
-\subsection*{bla}
+\section*{\"Ahnlichkeitsbestimmung}
+\subparagraph{Bedeutung des \"Ubergabeparameters \lstinline{normed} in der Funktion \lstinline{sim_euclid}:}
 
-Bei der Umsetzung der Aufgaben haben wir mit verschiedenen Darstellungsformen der Daten experimentiert. Im ersten Plot fallen vor allem die Vielverbraucher einzelner Energieformen auf. Beim zweiten Plot k\"onnen die verschiedenen Energiemixe pro Land direkt miteinander verglichen werden, da sie alle im selben Ma\ss stab nebeneinander dargestellt werden.
+Wenn der Parameter \lstinline{normed} auf \lstinline{True} gesetzt ist, wird daf\"ur gesorgt, dass die \"Ahnlichkeit normalisiert wird. 
+Ohne die Normalisierung w\"urden zwei Personen sich immer un\"ahnlicher mit einer steigenden Anzahl an Filmen, die beide bewertet haben, da die Differenzen zwischen den Bewertungen einfach nur zusammengez\"ahlt werden. 
+Durch die Normalisierung wird dies behoben. 
 
-\subparagraph{ Ausgehend von der implementierten Visualisierung des Energieverbrauchs der L\"ander: Nennen Sie die 3 Ihrer Meinung nach interessantesten Beobachtungen.}
+\subparagraph{Implementierung der Funktion \lstinline|topMatches(prefs, person, similarity)|:}
 
-\begin{enumerate}
-\item Durch die wenigen Industriel\"ander mit signifikant h\"oherem Energieverbrauch, wie China oder die USA, wird der Plot so verzerrt, dass die L\"ander mit durchschnittlichem Verbrauch im Plot so gestaucht werden, dass sie kaum zu erkennen sind. Dies k\"onnte behoben werden, wenn die Daten mit den Einwohnerzahlen aller L\"ander normalisiert werden w\"urden. So k\"onnte der Pro-Kopf-Verbrauch berechnet werden, was einen besseren Vergleich der einzelnen L\"ander bietet.
-\item Dieses Prinzip wird klar bei der Betrachtung von China und Indien, die von der Einwohnerzahl her vergleichbar sind (China 1,3 Mrd., Indien 1,2 Mrd.\footnote{Stand 2012, Quelle: Wikipedia}). China zeigt einen weitaus h\"oheren Verbrauch als Indien an den in beiden L\"andern h\"aufigen Energieformen Kohle und \"Ol.
-Zus\"atzlich w\"aren noch andere Normalisierungsfaktoren interessant:
+\begin{lstlisting}[language=Python]
+def topMatches(prefs, person, similarity):
+
+    sim = {}
+    for candidate in prefs:
+        if candidate == person:
+            continue
+        sim[candidate] = similarity(prefs, person, candidate)
+
+    return sorted(sim.iteritems(), key=operator.itemgetter(1), reverse=True)
+\end{lstlisting}
+
+\lstinline{topMatches()} berechnet die \"Ahnlichkeit f\"ur jede in \lstinline{prefs} aufgelistete Person die \"Ahnlichkeit zu \lstinline{person} und schreibt diese in ein Dictionary (Person : \"Ahnlichkeit). Dieses wird in eine absteigend sortierte Liste von Tupeln (Person, \"Ahnlichkeit) geschrieben, welche zur\"uck gegeben wird.  
+
+Bei der Implementierung von \lstinline{topMatches()} fiel uns auf, dass man als Similarity-Funktion nur \lstinline{sim_euclid} und \lstinline{sim_pearson} angeben kann, jedoch so keine Unterscheidung zwischen der normalisierten und der unnormalisierten Version von \lstinline{sim_euclid} gemacht werden kann.
+Deshalb entschieden wir uns eine weitere Similarity-Funktion zur Verf\"ugung zu stellen: 
+
+\begin{lstlisting}[language=Python]
+def sim_euclid_normed(prefs, person1, person2):
+    return sim_euclid(prefs, person1, person2, normed=True)
+\end{lstlisting}
+
+\lstinline{sim_euclid_normed} ruft einfach die urspr\"ungliche Version von \lstinline{sim_euclid} mit \lstinline{normed = True} auf. 
+
+
+
+\subparagraph{Vergleich der \"Ahnlichkeitsma\ss e:}
+
+Die Pearson-\"Ahnlichkeit eignet sich f\"ur pers\"onliche Wertungen besser, da Nutzer unterschiedliche Wertungsgewohnheiten haben. So bewerten einige Nutzer Filme allgemein schlechter, andere geben kontrastreichere Bewertungen f\"ur gute und schlechte Filme ab. Die Pearson-\"Ahnlichkeit gleicht diese pers\"onlichen Pr\"aferenzen aus.
+
+
+\section*{Berechnung von Empfehlungen mit Userbasiertem Collaborative Filtering (UCF)}
+\subparagraph{Implementierung der Funktion \lstinline{getRecommendations(prefs,person,similarity)}:}
 \begin{itemize}
-\item Bruttoinlandsprodukt
-\item Au\ss enhandelsstatistik oder Export der L\"ander in US\$
-\item Technologieindex
-\end{itemize}
-\item Die zwei L\"ander mit dem h\"ochsten Energieverbrauch sind China und die USA. Dies f\"allt bei der Betrachtung des Gesamtenenergieverbrauchs auf. Bei der Betrachtung des Verbrauchs einzelner Energieformen wirkt es als sei China durch seinen hohen Kohleverbrauch weit vor den USA.
-\end{enumerate}
-
-\subparagraph{Abgabe: Relevante Dateien}
-\begin{itemize}
-\item \lstinline{energy_consumption_per_country.py} und \lstinline{energy_consumption_per_country_V2.py} \\- Implementierung Aufgabe 2.1.2: 1) - 2)
-\item \lstinline{energy_consumption_per_country.pdf} \\- Ausgabe des Scripts \lstinline{energy_consumption_per_country.py} 
-\item \lstinline{energy_consumption_per_country_V2.pdf} \\- Ausgabe des Scripts \lstinline{energy_consumption_per_country_V2.py}
-\item \lstinline{appendGeoCoordinates.py} \\- Implementierung Aufgabe 2.1.2: 3) - 5)
-\item \lstinline|EnergyMixGeo.csv|  \\- Ausgabe des Scripts \lstinline{appendGeoCoordinates.py}
-\end{itemize}
-
-\newpage
-\begin{figure}[!h]
-\includegraphics[width=\textwidth]{Plots/energy_consumption_per_country.pdf}
-\caption{\lstinline{energy_consumption_per_country.pdf}: \\Ausgabe des Scripts \lstinline{energy_consumption_per_country.py}}
-\end{figure}
-\begin{figure}[!h]
-\includegraphics[width=\textwidth]{Plots/energy_consupmtion_per_country_V2.pdf}
-\caption{\lstinline{energy_consumption_per_country_V2.pdf}: \\Ausgabe des Scripts \lstinline{energy_consumption_per_country_V2.py}}
-\end{figure}
-
-
-
-
-
-\subsection*{Statistik der Daten}
-
-\subparagraph{Erkl\"aren Sie s\"amtliche Elemente eines Boxplot (allgemein). }
-\begin{figure}[!h]
-\centering
-\includegraphics[width=0.7\textwidth]{Plots/Elements_of_a_boxplot.pdf}
-\end{figure}
-\begin{itemize}
-\item Ausrei\ss er (\grqq Outliers\grqq ), in Python mit 'sym' zu setzen. \\
-Daten die au\ss erhalb der Whisker liegen und somit als Ausrei\ss er deklariert werden.
-\item Whisker, L\"ange in Python mit 'whis' zu setzen.\\
-Standartm\"a\ss ig die 1,5-fache L\"ange des entsprechenden Quartils. 
-\item Quartil\\
-Die Quartile sind Bestandteile der Box, welche 50 \% aller Daten enth\"alt. Dabei enth\"alt das obere Quartil, die 25\%, die \"uber dem Median, das untere Quartil, die 25\%, die unter dem Median liegen.
-\item Median\\
-Der mittlere Wert (nicht Mittelwert oder Durchschnitt), der aus dem gesamten Datensatz ermittelt wird. Er teilt den Boxplot in zwei H\"alften, die wiederum jeweils in Whisker und Quartil unterteilt werden.
-\end{itemize}
-
-\subparagraph{Diskutieren Sie die im Boxplot angezeigte Statistik der Energieverbrauchdaten.}
-\begin{itemize}
-\item Durch den signifikant h\"oheren Verbrauch von China und den USA wird beim Anzeigen der Ausrei\ss er der restliche Boxplot soweit gestaucht, dass vern\"unftigen Daten mehr abgelesen werden k\"onnen. 
-Um die Verteilung innerhalb der verschiedenen Boxplots besser vergleichen zu k\"onnen, entschlossen wir uns au\ss erdem jede Energieform in einem einzelnen Subplot darzustellen. 
-\item Im Gesamtplot lassen sich die einzelnen Energieformen gut miteinander vergleichen, in den einzelnen Plots k\"onnen die Verteilungen innerhalb der Plots besser dargestellt werden.  
-\item Beim Boxplot der nuklearen Energieform f\"allt auf, dass der Median samt unterem Quartil und unterem Whisker auf 0 liegt. Dies liegt daran, dass weniger als die H\"alfte aller L\"ander nukleare Energie verwenden. 
-\item Im Gesamtplot kann man erkennen, dass \"Ol die einzige Energieform ist, deren unterer Whisker nicht auf 0 liegt. Also verwendet jedes in Betracht gezogene Land \"Ol. Jede andere Energieform wird von mindestens einem Land nicht verwendet. 
-\end{itemize}
-
-\subparagraph{Abgabe: Relevante Dateien}
-\begin{itemize}
-\item \lstinline{enegryStatistics.py} \\- Implementierung Aufgabe 2.1.3: 1) - 3)
-\item \lstinline{energyconsumption_by_energyform_in_seperate_subboxplots.pdf} und \\ \lstinline{energyconsumption_by_energyform_in_one_plot.pdf} \\- Ausgabe des Scripts \lstinline{enegryStatistics.py}
-\end{itemize}
-\newpage
-\begin{figure}[!h]
-\includegraphics[width=\textwidth]{Plots/energyconsumption_by_energyform_in_seperate_subboxplots.pdf}
-\caption{\lstinline{energyconsumption_by_energyform_in_seperate_subboxplots.pdf}: \\Ausgabe des Scripts \lstinline{enegryStatistics.py}}
-\end{figure}
-
-\begin{figure}[!h]
-\includegraphics[width=\textwidth]{Plots/energyconsumption_by_energyform_in_one_plot.pdf}
-\caption{\lstinline{energyconsumption_by_energyform_in_one_plot.pdf}: \\Ausgabe des Scripts \lstinline{enegryStatistics.py}}
-\end{figure}
-
-
-\section*{Anwendung von Verfahren des un\"uberwachten Lernens auf Energieverbrauchsdaten}
-
-\subsection*{Hierarchisches Clustering}
-\subparagraph{Was wird beim Standardisieren gemacht? Welcher Effekt k\"onnte ohne Standardisieren beim Clustering eintreten (insbesondere wenn die euklidische Metrik verwendet wird)?}
-Ohne Standardisieren ist die \"Ahnlichkeit des Gesamtverbrauchs ausschlaggebender als die \"Ahnlichkeit des Energiemixes. So werden eher L\"ander mit niedrigem Gesamtverbrauch gruppiert, als sie anhand ihres Energiemixes zu clustern. Dies kommt daher, dass die euklidische Metrik die geometrische Distanz zwischen zwei Punkten im Mehrdimensionalen Raum ber\"ucksichtigt. Zeigen zwei Vektoren in dieselbe Richtung, sind sich demnach vom Energiemix sehr \"ahnlich, haben aber unterschiedliche L\"angen, also einen unterschiedlich hohen Energieverbrauch, dann haben sie auch eine hohe euklidische Distanz und werden nicht demselben Cluster zugeordnet.
-Durch das Standardisieren werden die L\"angen der Vektoren normiert und so ein Vergleich erst m\"oglich.
-
-\subparagraph{Erk\"aren Sie die beim hierarchischen Clustering einstellbaren Parameter \lstinline{linkage-method} und \lstinline{metric}. Welche Metrik ist Ihrer Meinung nach f\"ur diese Anwendung geeignet? Warum?}
-
-\"Uber die \lstinline{linkage-method} wird festgelegt, wie die Cluster hierarchisch angeordnet werden. Dabei kann zwischen verschiedenen Methoden gew\"ahlt werden: Beispielsweise kann die mittlere (average), die kleinste (single) oder die gr\"o\ss te (complete) Distanz zweier Punkte aus beiden Clustern, oder die Distanz der beiden Clusterschwerpunkte (weighted), gemessen werden. 
-Die \lstinline{metric}  bestimmt die \"Ahnlichkeit zwischen zwei Punkten. Hierbei kann zwischen verschiedenen Metriken gew\"ahlt werden, wobei in unserem Fall \"Ahnlichkeitsma\ss e f\"ur boolsche Werte vernachl\"assigt werden k\"onnen. 
-Die \"Ahnlichkeit kann \"uber die euklidische Distanz gemessen werden, allerdings wird hier nur die geometrische Distanz gewertet und nicht die Richtung. Weiterhin kann Cosinus-Distanz angewandt werden, bei der die Richtung der Vektoren mehr ins Gewicht f\"allt als die L\"ange. 
-Bei der Pearson-\"Ahnlichkeit wird zus\"atzlich die Durchschnittsl\"ange miteinbezogen und mit der tats\"achlichen L\"ange verrechnet. Dadurch erweist sich dieser Algorithmus als am besten geeignet. 
-
-
-\subparagraph{Welches Land ist bez\"uglich des Verbrauchs der hier betrachteten Energiequellen Deutschland am \"ahnlichsten, wenn f\"ur die linkage-method \lstinline{average} und die Metrik \lstinline{correlation} konfiguriert wird?}
-\textbf{Antwort:} Belgien
-
-\subparagraph{Charakterisieren Sie die 4 Cluster. Was ist typisch f\"ur die jeweiligen Cluster?}
-\begin{itemize}
-\item Cluster 0 ist einigerma\ss en gleichverteilt, wobei Wasserkraft den geringsten Anteil ausmacht. Im Vergleich zu den anderen Clustern ist der Anteil an aus Atomkraft gewonnener Energie sehr hoch. 
-\item Cluster 1 zeichnet einen gro\ss en Verbrauch an fossilen Brennstoffen aus.
-\item Cluster 2 ist das kleinste Cluster und unterscheidet sich vor allem durch seinen hohen Kohleverbrauch von den anderen Clustern.
-\item Cluster 3 verzeichnet im Gegensatz zu allen anderen Clustern einen relativ hohen Wasserkraftanteil. 
-\end{itemize}
-
-Fasst man den gesamten Energieverbrauch jedes jeweiligen Clusters zusammen\\ (\lstinline{individual_clusters_total.pdf}), erkennt man, dass die Charakteristik des Gesamtverbrauchs eines Clusters sehr stark von einzelnen L\"andern abh\"angt. So diktieren China und die USA den Gesamtverbrauch in ihrem Cluster. Gleichzeitig zeigt sich allerdings auch die Tendenz des gesamten Clusters. 
-
-\subparagraph{Abgabe: Relevante Dateien}
-\begin{itemize}
-\item \lstinline{energyClustering.py} \\- Implementierung Aufgabe 2.2.1: 1) - 5)
-\item \lstinline{dendrogram.pdf}, \lstinline{individual_clusters.pdf} und \lstinline{individual_clusters_total.pdf}\\- Ausgabe des Scripts \lstinline{energyClustering.py}
-\end{itemize}
-
-\newpage
-\begin{figure}[!h]
-\includegraphics[width=\textwidth]{Plots/dendrogram.pdf}
-\caption{\lstinline{dendrogram.pdf}: \\Ausgabe des Scripts \lstinline{energyClustering.py}}
-\end{figure}
-\begin{figure}[!h]
-\includegraphics[width=\textwidth]{Plots/individual_clusters.pdf}
-\caption{\lstinline{individual_clusters.pdf}: \\Ausgabe des Scripts \lstinline{energyClustering.py}}
-\end{figure}
-\begin{figure}[!h]
-\includegraphics[width=\textwidth]{Plots/individual_clusters_total.pdf}
-\caption{\lstinline{individual_clusters_total.pdf}: \\Ausgabe des Scripts \lstinline{energyClustering.py}}
-\end{figure}
-
-\newpage
-
-
-\subsection*{Dimensionalit\"atsreduktion}
-
-\subparagraph*{Welches Land ist nach dieser Darstellung Deutschland am \"ahnlichsten?}
-\textbf{Antwort:} S\"udkorea
-\subparagraph*{Warum entspricht die hier dargestellte \"Ahnlichkeit nicht der im oben erzeugten Dendrogram?}
-\begin{enumerate}
-\item Da wir die Darstellung selbst optisch interpretiert und die Distanz zwischen den Punkten als \"Ahnlichkeitsma\ss verwendet haben, haben wir die \"Ahnlichkeit nach der euklidischen Metrik bestimmt. 
-\item Auch im Dendrogramm waren sich Deutschland und S\"udkorea relativ \"ahnlich. Durch die Reduktion der Dimensionen von f\"unf auf zwei gehen zwangsweise Informationen verloren. 
-\end{enumerate}
-
-\subparagraph{Abgabe: Relevante Dateien}
-\begin{itemize}
-\item \lstinline{energyReduceDim.py} - Implementierung Aufgabe 2.2.2: 1) - 3)
-\item \lstinline{energyReduceDim_total.pdf}- Ausgabe des Scripts \lstinline{energyReduceDim.py}
-\item \lstinline{energyReduceDim_section.}- Ausschnitt aus \lstinline{energyReduceDim_total.pdf}
-\end{itemize}
-
-\begin{figure}[!h]
-\includegraphics[width=\textwidth]{Plots/energyReduceDim_total.pdf}
-\caption{\lstinline{energyReduceDim_total.pdf}: \\Ausgabe des Scripts \lstinline{energyReduceDim.py}}
-\end{figure}
-\begin{figure}[!h]
-\includegraphics[width=\textwidth]{Plots/energyReduceDim_section.pdf}
-\caption{\lstinline{energyReduceDim_section.pdf}: \\Ausschnitt aus \lstinline{energyReduceDim_total.pdf}}
-\end{figure}
-
-
-
-
-\section*{\"Uberwachtes Lernen: Sch\"atzung der CO\textsubscript{2}-Emmission}
-
-\subsection*{Feature Selection}
-
-\subparagraph{Welche 3 Merkmale haben den st\"arksten Einflu{\ss} auf das Ausgabemerkmal CO\textsubscript{2}-Emmission? Wie gro{\ss} sind die vom Programm ausgegebenen Scores?}
-\begin{center}
-\begin{tabular}{l r}
-Kohle & 378.266881\\
-\"Ol & 220.010151\\
-Wasser & 79.045401\\
-Gas & 46.002230\\
-Nuklear & 34.572086
-\end{tabular}
-\end{center}
-
-\subparagraph{Abgabe: Relevante Dateien}
-\begin{itemize}
-\item \lstinline{energyFeatureSelection.py} - Implementierung Aufgabe 2.3.1: 1) - 3)
+\item Anmerkung: Die Erkl\"arung der Funktion bezieht sich auf das Beispiel mit den Filmbewertungen.
 \end{itemize}
 
 
-\subsection*{Regression mit Epsilon-SVR}
-\subparagraph{Optimieren Sie die SVR-Parameter C und Epsilon so dass der Score in der Kreuzvalidierung minimal
-wird. Welche Werte f\"ur C und Epsilon liefern das beste Ergebnis?}
+Wie in \lstinline{topMatches()}  wird zun\"achst ein Dictionary angelegt, dass jeder Person au\ss er der `Zielperson' einen \"Ahnlichkeitswert zuordnet.
 
-Die besten Ergebnisse erhielten wir f\"ur C = 0.01 und $\varepsilon$ = 0.001
-
-\subparagraph{F\"ur das SVR-Objekt k\"onnen die Koeffzienten der linearen Abbildung, welche durch die trainierte
-SVR realisiert wird, ausgegeben werden: \lstinline{meineSVR.coef\_}. Notieren Sie diese Koeffzienten f\"ur die
-beste SVR.}
-
-\begin{center}
-\begin{tabular}{c c c c c}
-\"Ol & Gas & Kohle & Nuklear & Hydro\\
-$-3.0690410$ & $-2.3485549$ & $-3.9608432$ & $4.1970815e-04$ & $4.1138445e-04$
-\end{tabular}
-\end{center}
- 
-\subparagraph{Welchen Aufschluss geben diese Koeffzienten \"uber den Einfluss der einzelnen Eingangsmerkmale
-auf das Ausgangsmerkmal?}
-
-Die Koeffizienten geben an, wie sehr die entsprechende Energieform Einfluss auf die CO\textsubscript{2}-Emmission hat. \"Ol, Kohle und Gas haben demnach einen sehr viel gr\"o\ss eren Einfluss als Energie aus Atom- und Wasserkraft. 
+Nun wird f\"ur jede andere Person festgestellt, welche Filme diese bewertet hat, die die `Zielperson' noch nicht bewertet hat. Die Bewertung jedes Films wird in ein Dictionary geschrieben, dass jedem Film, den die `Zielperson' noch nicht gesehen hat, die Summe aller Bewertungen dieses Films zuordnet.
+Gleichzeitig wird f\"ur jeden Film die Korrelation der Person, die ihn bewertet hat in einem Dictionary \lstinline{kSum} festgehalten. So ordnet \lstinline{kSum} jedem Film die Summe aller relevanten Korrelationen zu.
+Zuletzt wird f\"ur jeden Film die Summe aller Bewertungen durch die Summe aller relevanten Korrelationen geteilt um den tats\"achlichen Empfehlungswert zu erhalten.
+Zur\"uckgegeben wird eine absteigend sortierte Liste von Tupeln(Empfehlungswert, Film).
 
 
-\subparagraph{Wie gro{\ss} ist die mittlere absolute Differenz zwischen Soll- und Ist-Ausgabe f\"ur die beste SVR?
-Diskutieren Sie dieses Ergebnis.}
 
-F\"ur die optimierten Parameter C = 0.01 und $\varepsilon$ = 0.001 ergibt sich ein Mean Absolute Error (MAE) von 0.119259989310.
+Beim Testen unserer Funktionen \lstinline{getRecommendations()} stellten wir fest, dass die Similarity-Funktion \lstinline{sim_pearson} nicht funktioniert, wenn eine Person nur einen Film gesehen hat, da hier die Standartabweichung berechnet wird und dies f\"ur nur einen Wert immer 0 liefert. So werden alle Korrelationen mit 0 angegeben. 
+Um dies zu umgehen bieten sich die Similarity-Funktionen \lstinline{sim_euclid} oder \lstinline{sim_euclid_normed} an.
 
-\begin{center}
-\begin{tabular}{l l r}
- C & $\varepsilon$ & MAE\\ 
-\hline \\
- 1 & 0.01 & 0.119938469138\\
- 1& 0.001 & 0.119995514827\\
- 1& 0.0001 & 0.119986240023 \\
- 1& 0.1 & 0.124915412379\\
- 0.1& 0.01 & 0.119776387503\\
- 0.01& 0.001 & 0.119259989310\\
- 0.001& 0.0001 & 64.902638179800\\
-\end{tabular}
-\end{center}
 
-Der erhaltene Wert f\"ur den MAE ist f\"ur realistische Daten viel zu klein, was ein eindeutiger Hinweis darauf ist, dass die verwendeten Ausgangsdaten selbst mit einem \"ahnlichen Algorithmus berechnet wurden. 
-Im Diagramm (\lstinline{energyPrediction.}) kann deshalb zwischen vorhergesagter und tats\"achlicher Ausgabe nicht unterschieden werden, da beide Kurven genau \"ubereinander liegen. 
+\section*{Berechnung von Empfehlungen mit Itembasiertem Collaborative Filtering (ICF)}
+\subparagraph{Transponieren der \lstinline{prefs}-Matrix:}
+F\"ur die Umsetzung des ICF musste die bisher verwendete Bewertungsmatrix in ihre transponierte Form \"uberf\"uhrt werden. Dazu wurde die Funktion \lstinline{transposeMatrix(prefs) } implementiert. Diese iteriert zun\"achst \"uber alle User und schreibt die bewerteten Filme in ein Dictionary. Danach sind alle Filme die ein User bewertet haben kann im Dictionary vorhanden. Nun werden alle Filmbewertungen aus der urspr\"unglichen Matrix extrahiert und in der neuen Matrix eingef\"ugt.
+Die transponierte Matrix wird zur\"uck gegeben.
 
-\subparagraph{Abgabe: Relevante Dateien}
+Die Transformation ist notwendig, da die Funktionen aus den oberen Aufgaben unver\"andert wiederverwertet werden sollten. 
+
+\subparagraph{Implementierung der Funktion \lstinline{calculateSimilarItems()}:}
+Die Funktion stellt fest wie \"ahnlich sich die Filme untereinander sind und gibt f\"ur jeden Film ein Dictionary zur\"uck in dem die \"Ahnlichkeit zu allen anderen Filmen festgehalten ist.
+
+\subparagraph{Implementierung der Funktion \lstinline{getRecommendedItems(prefs, name, similar_items)}:}
+Diese Funktion soll durch ein ICF, einem User Filme die er noch nicht gesehen hat empfehlen. Diese Empfehlung basiert auf der Bewertung der bisher gesehenen Filme. 
+
+Daf\"ur werden zun\"achst alle Filme, die ein User bewertet hat in eine Liste geschrieben. Danach werden alle Filme die der User nicht bewertet hat ebenfalls in eine Liste geschrieben. 
+Nun wird die \"Ahnlichkeit zwischen allen Filmen mit der Funktion \lstinline{calculateSimilarItems()} berechnet. \"Uber die nicht bewerteten Filme wird nun iteriert und die \"Ahnlichkeit zu jedem vom User bewerteten Film ausgelesen. Diese \"Ahnlichkeit wird nun mit der Bewertung des Users multipliziert um eine userspezifische Gewichtung der \"Ahnlichkeit zu garantieren. Nun wird f\"ur jeden Film die Summe \"uber diese gewichtete \"Ahnlichkeiten durch die Summe der ungewichteten \"Ahnlichkeiten geteilt. Dieser Wert beschreibt wie empfehlenswert der Film f\"ur den aktuellen User ist.
+Die Funktion gibt eine Liste von Tupeln (Film, Empfehlungswert)  zur\"uck. 
+
+\part*{Durchf\"uhrung 2: \\last.fm Musikempfehlungen}
+
+\subsection*{Durchf\"uhrung}
+
+Um die gew\"unschte last.fm Musikempfehlung durchf\"uhren zu k\"onnen wurde im File \lstinline{pylastRecTest.py} der Zugriff auf die last.fm API implementiert.
+Hierf\"ur stand bereits die Datei \lstinline{pylast.py} zur Verf\"ugung. Nach Aufruf des Networkobjekts wurden die 10 Topfans der Band `Soulfly' abgerufen.
+Anschlie\ss end die zur\"uckgelieferten Userobjekte auf deren Usernamen reduziert. 
+
+Die beiden Methoden \lstinline{createLastfmUserDict(fanNames)} und die oben beschriebene\\ \lstinline{getRecommendations(pref, person, similarity)} wurden im File \lstinline{recommendations.py} implementiert und lediglich nach einem entsprechenden Import ausgef\"uhrt.
+
+\lstinline{createLastfmUserDict(fanNames)} liefert dabei eine Matrix von Usernames und Bands, die von mindestens einem User geh\"ort werden, zur\"uck, wobei der Value = 1 ist, falls der einzelne User die Band h\"ort, anderenfalls 0.
+
+Problematiken:
 \begin{itemize}
-\item \lstinline{energyPrediction.py} - Implementierung Aufgabe 2.3.2: 1) - 7)
-\item \lstinline{energyPrediction.pdf} - Ausgabe des Scripts \lstinline{energyPrediction.py}
+\item Bei der Zuweisung aller Bands zu einem bestimmten User muss darauf geachtet werden, dass das Dictionary aller Bands (lstinline{allBands})  als deep-copy \"ubergeben wird. Anderenfalls werden die Zuweisungspaare `User - Band geh\"ort' mit jedem User f\"ur alle User \"uberschrieben, sodass die resultierte Matrix nur 1en enth\"alt.
+\item die Bandnamen sollten nur aus unicode-Zeichen bestehen, da sonst einige Bands doppelt aufgef\"uhrt werden. Allerdings kann es dadurch zu Darstellungsproblemen kommen. 
 \end{itemize}
 
-\begin{figure}[!h]
-\includegraphics[width=\textwidth]{Plots/enegryPredictions.pdf}
-\caption{\lstinline{energyPrediction.pdf}: \\Ausgabe des Scripts \lstinline{energyPrediction.py}}
-\end{figure}
-
-\newpage
-\section*{Visualisierung des Clusterings in Google Maps}
-
-\subparagraph{Abgabe: Relevante Dateien}
+Feststellungen:
 \begin{itemize}
-\item \lstinline{cluster2GoogleMaps.py} - Implementierung Aufgabe 2.4
-\item \lstinline{clusterMap.html} - Ausgabe des Scripts \lstinline{cluster2GoogleMaps.py}
+\item Nur weil ein User in den Top Fans einer Band ist, kann daraus kein R\"uckschluss auf die Platzierung der Band in seinen pers\"onlichen Top Bands gezogen werden.
 \end{itemize}
 
 
-\part*{Vorhersage und Clustering auf Finanzdaten}
-
-\section*{Vorhersage des Aktienkurses}
-
-\subsection*{Datenbeschaffung}
-In der Implementierung von b101\_stockMarketFile.py wie sie im Ergebnis vorliegt wurden die Werte von Kraft Foods (KFT) und News Corporation (NWS) nicht verwendet, da diese  nicht verfügbar waren und durch einen 404-Not Found Error zum Programmabbruch führten. \newline In der im Fragment bereits vorhandenen Schleife wurde f\"ur jedes Symbol eine Pandas Serie angelegt, die \"uber die Datumsangaben der Werte indiziert wird. Diese wurde anschließend als neue Spalte in ein Pandas Dataframe gespeichert, welches anschließend auch über den Funktionsaufruf to\_csv als csv gespeichert werden kann. 
-
-\subparagraph{Abgabe: Relevante Dateien}
-\begin{itemize}
-\item \lstinline{b101_stockMarketFile.py} - Implementierung Aufgabe 3.1.1
-\item \lstinline{effectiveRates.csv} - In 3.1.1 gespeicherte Daten 
-\end{itemize}
-
-\subsection*{Kursvorhersage mit SVR}
-
-\subparagraph{1. Einlesen der Datei effectiveRates.csv}
-Dies geschieht einfach über den Funktionsaufruf from\_csv.
-Erfolgt dieser Aufruf auf einem leeren Pandas Dataframe liegen anschließend
-die Daten wieder im Speicher vor.
-
-\subparagraph{2. Graphische Anzeige von 5 Aktienkursen Ihrer Wahl}
-Es wurden 5 Technologie Unternehmen ausgesucht zum Vergleich. Sony, Canon, Cisco, 
-Hewlett-Packard und Yahoo. Allen gemein ist bei größerer Betrachtung ein Aufwärtstrend, 
-mehr oder weniger  stark bis zum Anfang 2010, dann sind sinkende Kurse bis Herbst 2010 zu beobachten 
-worauf die Kurse zum Teil relativ unterschiedlich verlaufen. Sony und HP stürzen 2011 stark ab, die 
-anderen Unternehmen können von lokalen Ausbrüchen abgesehen ihren Kurs in etwa halten.
-\begin{figure}[!h]
-\includegraphics[width=\textwidth]{Plots/stockCompartment.pdf}
-\caption{\lstinline{stockCompartment.pdf}: \\Ausgabe des Scripts \lstinline{stockMarketPrediction.py}}
-\end{figure}
-
-
-\subparagraph{3. Festlegen des Unternehmens}
-Wie vorgeschlagen wurde Yahoo (YHOO) für die Kursvorhersage ausgewählt.
-
-\subparagraph{4. Umwandlung der seriellen Daten in eine zyklische Form}
-Das geforderte Umwandeln der seriellen Daten in eine zyklische Form wurde
-durch eine getmodel Methode implementiert, der als Parameter der Time-Delay und
-die seriellen Daten übergeben werden können. Als Rückgabewert liefert diese
-daraufhin die zyklischen Daten in einem Pandas Dataframe und die Zieltage
-in einer Pandas Serie.
-Als Spaltenindex dienen hier ebenfalls die im Beispiel verwendeten Tage 
-vor dem Zieltag, also bei 24 Lerntagen, sind die Spalten T-24 bis T-1.
-T-Class entspräche dann den Zieltagen in der Pandas Serie.
-
-\subparagraph{5. Festlegen von Trainingszeitraum und Vorhersagezeitraum}
-Alle Parameter, inklusive Trainingszeitraum und Vorhersagezeitraum werden an
-einer zentralen Stelle des Skripts eingestellt, so dass eine Änderung der
-Parameter leicht möglich ist. Es wurden folgende Variablen definiert:
-
-\begin{enumerate}
-\item TRAININGS\_TIME - Der Trainingszeitraum
-\item PREDICTION\_TIME - Der Der Vorhersagezeitraum
-\item TIME\_DELAY - Der Time-Delay für die zyklischen Daten
-\item C\_VALUE - Der C-Parameter für die SVR
-\item EPSILON\_VALUE - Der Epsilon-Parameter für die SVR
-\end{enumerate}
-
-\subparagraph{6. Anlegen der SVR und Vorhersagenberechnung}
-Die SVR wurde durch den Funktionsaufruf svm.SVR angelegt.
-Anschließend wurde die fit Methode aufgerufen um die SVR mit den Trainingsdaten zu trainieren.
-
-Im zweiten Schritt wurde die SVR angewiesen eine Vorhersage mit den Trainingsdaten auszuführen,
-um diese zum Vergleich mit in die Plotausgabe einfließen lassen zu können.
-Danach wurden die echten Vorhersagewerte berechnet und diese in eine Pandas Serie überführt.
-
-\subparagraph{7. Berechnung und Vergleich des MAE}
-Der Mean Absolute Error wird durch die bereits in Versuchsteil 1 verwendete getmae$\left(\right)$ Methode berechnet.
-In der folgenden Tabelle werden die MAE Werte für verschiedene Parameterkonfigurationen aufgelistet
-
-\begin{center}
-\begin{tabular}{l l l r}
- C & $\varepsilon$ & Time Delay & MAE\\ 
-\hline \\
- 500 & 0.6 & 24 & 0.312024245957\\
- 50 & 0.6 & 24 & 0.312024245957\\
- 5 & 0.6 & 24 & 0.305131498375\\
- .5 & 0.6 & 24 & 0.223760696196\\
- .05 & 0.6 & 24 & 0.341643714938\\
- \hline \\
- .5 & 0.006 & 24 & 0.206443426583\\
- .5 & 0.06 & 24 & 0.206312883609\\
- .5 & 6 & 24 & 0.648\\
- \hline \\
- .5 & 0.06 & 3 & 0.248084638701\\
- .5 & 0.06 & 6 & 0.247563624714\\
- .5 & 0.06 & 12 & 0.258172037051\\
- .5 & 0.06 & 24 & 0.206312883609\\
- .5 & 0.06 & 48 & 0.262666322932\\
-\end{tabular}
-\end{center}
-
-\begin{figure}[!h]
-    \includegraphics[width=\textwidth]{Plots/stockPredict.pdf}
-    \caption{\lstinline{stockPredict.pdf}: \\ Darstellung der Kurswerte im zeitlichen Verlauf}
-\end{figure}
-\subsection*{Beantwortung der Fragen zu Kapitel 3.1 und Relevante Dateien}
-
-\subparagraph*{Überlegung zum notwendigen Aufbau der Datenvektoren des Vorhersagezeitraums}
-\textbf{Antwort:} Die Vorhersage sollte immer nur für einen Tag durchgeführt werden, da hier
-die präzisesten Ergebnisse möglich sind. Anschließend wird der vorhergesagt Wert in die Datenvektoren
-übernommen, wodurch für den nächsten Tag die Datenvektoren bei einem Time-Delay von 24, die Datenvektoren
-aus 23 bekannten Werten und 1 vorhergesagten Wert entsprechen. Selbes Verfahren wird immer weiter fortgeschrieben,
-bis nach 24 Tagen die Vorhersagewerte nur noch auf Basis ebenfalls vorhergesagter Werte berechnet werden können.
-\newpage
-\subparagraph*{Für welche Werte von Time Delay, C und Epsilon wird die beste Vorhersage erreicht?}
-\textbf{Antwort:} Für die Beantwortung dieser Frage kann man sich am MAE und der zugehörigen Tabelle aus Aufgabe 8 dieses
-Kapitels orientieren. Die besten Werte erreicht man bei einem möglichst niedrigen MAE, hier wurde ein Minimum von 0.206312883609
-bei folgenden Werten gefunden: Time Delay = 24, C = 0.5, Epsilon = 0.06.
-
-Interessant ist hierbei dass auch ein sehr niedriger Time Delay von 3 bereits relativ gute Vorhersagen bringt.
-Ein sehr hohes Epsilon sorgt für derart starkes Glätten der Vorhersagewerte dass keinerlei Wertveränderungen
-mehr sichtbar sind. Ein sehr hoher C Wert dagegen sorgt für zu starke Ausschläge in den Kursvorhersagen.
-Allgemein scheint der MAE verhältnismäßig niedrig für eine Vorhersage zu sein. Die Eingabedaten wurden jedoch
-überprüft und sind korrekt. 
-
-\subparagraph{Abgabe: Relevante Dateien}
-\begin{itemize}
-\item \lstinline{b102_stockMarketPrediction.py} - Implementierung aller Aufgaben aus 3.1.2
-\item \lstinline{stockPredict.pdf}- Der Plot mit den berechneten Vorhersagewerten bei minimalem MAE
-\end{itemize}
-
-\section*{Clustering der Aktienkursverläufe}
-Aufgrund der zwei nicht verfügbaren Aktienkurse reduziert sich die Menge der betrachteten Firmen auf 59.
-
-\subparagraph{1. Berechnung der Differenz}
-Für die Differenzberechnung wurde ein Pandas Dataframe angelegt, dessen Spalten den Firmensymbolen
-entsprechen. Jede Reihe wiederum entspricht einem Datum und der Wert der Differenz aus Open und Close.
-
-\subparagraph{2. Berechnung der Ähnlichkeitsmatrix}
-Die Ähnlichkeitsmatrix wird durch die gegebene Funktion corrcoef$\left(\right)$ berechnet. Zu beachten war hier
-dass der Funktion in unserem Fall die transponierte Ähnlichkeitsmatrix übergeben werden mußte, da sonst die
-Relationen zwischen den Tagen und nicht den Unternehmen zurückgeliefert wurde.
-
-\subparagraph{3. Berechnung der AffinityPropagation}
-Im dritten Schritt wurde ein entsprechend vorgegebenes AffinityPropagation Objekt mit dem Parameter \glqq precomputed\grqq\ 
-erzeugt, um somit die Matrix übergeben zu können, ansonsten würde diese vom Objekt selbst berechnet.
-Anschließend wurde die Anzahl der gefundenen Cluster abgefragt.
-
-\subparagraph{4. Plot der zusammengehörenden Kurse}
-Die AffinityPropagation Klasse liefert eine Liste von 59 Werten, wobei jeder Wert der Clusternummer
-eines jeden Unternehmens steht. Über diese konnte iteriert werden um das Unternehmen dem entsprechenden
-Plot zuzuweisen und diese gemeinsam anzeigen zu können. 
-
-\begin{figure}[!h]
-    \includegraphics[width=\textwidth]{Plots/stockCluster10.pdf}
-    \caption{Auszugsweise Darstellung des Clusters 10}
-\end{figure}
-
-\subparagraph*{Analyse der Clusterzuweisungen}
-\textbf{Antwort:} 
-Die Cluster wurden zuerst auf Zugehörigkeit zu Branchen untersucht:
-
-\begin{enumerate}
-\item Cluster 0 umfasst die Lebensmittelfirmen Coca-Cola und Pepsi sowie Kellogs.
-\item Cluster 1 fasst die beiden Drogerieketten Walgreen und CVS zusammen. 
-\item Cluster 2 beinhaltet die drei großen Konzerne Apple, Amazon und Yahoo.
-\item Cluster 3 fasst drei Pharmaziekonzerne zusammen. 
-\item Cluster 4 wird aus drei Multimediakonzernen gebildet.
-\item Cluster 5 besteht ausschließlich aus Energiekonzernen.
-\item Cluster 6 ist ein Mix aus Produzenten aus Motorfabriken, Konsumgüterherstellern und Büroartikelproduzenten.
-\item Cluster 7 beinhaltet die Hersteller von Drogerieartikeln und Pflegeprodukten.
-\item Cluster 8 ist ein Mix aus Banken, Warenhausketten und Fahrzeugherstellern.
-\item Cluster 9 ist das Cluster der IT Technologiekonzerne wie IBM, Cisco, SAP, etc.
-\item Cluster 10 beinhaltet Konzerne die unter anderem in der Rüstungsindustrie aktiv sind.
-\end{enumerate}
-
-Insgesamt ergibt sich ein relativ gutes Clustering nach Branche, allein aufgrund
-der gemeinsamen Kursschwankungen innerhalb der Branchen. Cluster 6 und 8 enthalten jedoch
-verschiedene Märkte, was vermutlich an deren nicht branchenüblichen Kursverläufen liegt. 
-Wenn die Kurswerte zusätzlich direkt verglichen werden, fällt auf dass in den Clustern die immer
-nur eine Branche enthalten oft ähnliche Kursverläufe sichtbar sind, nicht absolut jedoch relativ
-bezogen auf ähnliche lokale Maxima und Minima im zeitlichen Verlauf. 
-Die Kurswerte im Cluster 8 sind größtenteils gleichbleibend auf einem sehr niedrigen Niveau,
-jedoch finden sich hier auch Unternehmen mit Ausreißern. Hier ist nicht ersichtlich wie eine
-Zuordnung zum Cluster erfolgt.
-Eine ähnliche Situation zeigt sich in Cluster 6. Insgesamt ist der größere Teil der Kurse
-ähnlich in seinem Verlauf, jedoch sind Ähnlichkeiten nicht direkt für das gesamte Cluster
-erkennbar sondern immer nur zwischen mehreren Einträgen.
-
-\subparagraph{Abgabe: Relevante Dateien}
-\begin{itemize}
-\item \lstinline{b103_stockMarketClustering.py} - Implementierung aller Aufgaben aus 3.2
-\end{itemize}
 
 \end{document}
