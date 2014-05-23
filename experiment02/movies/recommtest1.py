@@ -4,5 +4,5 @@ import recommendations as rec
     # print ("Euklid Top Match: \t" + person + "\t" + str(rec.topMatches(rec.critics, person, rec.sim_euclid)[0]))
     # print ("Pearson Top Match: \t" + person + "\t" + str(rec.topMatches(rec.critics, person, rec.sim_pearson)[0]))
 
-rec.getRecommendations(rec.critics, 'Toby Segaran', rec.sim_pearson)
+print rec.getRecommendations(rec.critics, 'Toby Segaran', rec.sim_pearson)
 

@@ -106,7 +106,6 @@ def sim_RusselRao(prefs,person1,person2,normed=True):
 def topMatches(prefs, person, similarity):
 
     sim = {}
-    list = []
     for candidate in prefs:
         if candidate == person:
             continue
@@ -150,7 +149,7 @@ def getRecommendations(prefs, person, similarity):
     for media in unknownMedia:
         unknownMedia[media] = unknownMedia[media]/kSums[media]
 
-    # switch keys and values in the dictionary
+    # switch keys and values in the dictionary to get tuples of (recommendation , name) instead of (name , recommendation) later
     # unknownMedia = {y:x for x,y in unknownMedia.iteritems()}
 
     # sort dictionary into list by descending keys (recommendation score)
