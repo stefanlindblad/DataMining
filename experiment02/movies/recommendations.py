@@ -214,6 +214,9 @@ def transposeMatrix(prefs):
 
 
 def calculateSimilarItems(prefs, similarity):
+    '''
+    processes similarity between all movies and returns a dictionary.
+    '''
     similarity_matrix = {}
     for pref in prefs: similarity_matrix[pref] = dict(topMatches(prefs, pref, similarity))
     return similarity_matrix
@@ -225,6 +228,7 @@ def getRecommendedItems(prefs, name, similar_items):
     recommendations = {}
     transCritics = transposeMatrix(prefs)
 
+    # save unrated items in new list unrated_items
     for item in transCritics:
         if item not in rated_items: unrated_items.append(item)
 
