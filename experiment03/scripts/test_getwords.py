@@ -57,3 +57,61 @@ class TestGetwords(TestCase):
         c.incc("Bad")
         c.incc("Good")
         self.assertEqual(c.totalcount(), 3)
+
+    def testTrain(self):
+        c = Classifier(getwords)
+        item = "Hello hello world, my name is Python."
+        cat = "Good"
+        c.train(item, cat)
+        self.assertEqual(c.catcount("Good"), 1)
+        self.assertEqual(c.fcount("hello", "Good"), 1)
+        self.assertFalse(c.fc.has_key("my"))
+
+    def testFProb(self):
+        c = Classifier(getwords)
+        c.incc("Good")
+        c.incf("hello", "Good")
+        c.incc("Good")
+        c.incf("world", "Good")
+        c.incc("Good")
+        c.incf("world", "Good")
+        self.assertEqual(c.fprob("world", "Good"), 2.0/3.0)
+
+    def testWeightedProb(self):
+        c = Classifier(getwords)
+        c.incc("Good")
+        c.incf("hello", "Good")
+        c.incc("Good")
+        c.incf("world", "Good")
+        c.incc("Good")
+        c.incf("world", "Good")
+        c.incc("Bad")
+        c.incf("world", "Bad")
+        self.assertEqual(c.weightedprob("world", "Good"), 5.0/8.0)
+        self.assertEqual(c.weightedprob("wurst", "Good"), 0.5)
+
+    def testProb(self):
+        c = Classifier(getwords)
+
+        # training
+        c.incc("Good")
+        c.incf("hello", "Good")
+        c.incc("Good")
+        c.incf("world", "Good")
+        c.incc("Good")
+        c.incf("world", "Good")
+        c.incc("Bad")
+        c.incf("world", "Bad")
+
+        # classify new document
+        item = "world world wurst Wurst wurst world"
+
+        self.assertEqual(c.prob(item, "Good"), 0.234375)
+        self.assertEqual(c.classify(item), "Good")
+
+
+
+
+
+
+

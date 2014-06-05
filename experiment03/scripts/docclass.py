@@ -47,6 +47,19 @@ class Classifier():
         wprob = (initprob + count * self.fprob(f, cat))/(1 + count)
         return wprob
 
+    def prob(self, item, cat):
+        words = self.getfeatures(item)
+        allProbs = 1.0
+        for w in words:
+            allProbs *= float(self.weightedprob(w, cat))
+        probCat = float(self.catcount(cat))/float(self.totalcount())
+        return allProbs * probCat
+
+    def classify(self, item):
+        good = self.prob(item, "Good")
+        bad = self.prob(item, "Bad")
+
+        return "Good" if (good >= bad) else "Bad"
 
 
 
