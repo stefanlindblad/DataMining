@@ -4,7 +4,6 @@ def getwords(doc, minWordLength = 3, maxWordLength = 20):
     for token in splittedStringList:
         if (len(token) > minWordLength and maxWordLength > len(token)):
             dict[token] = 1
-    print dict
     return dict
 
 class Classifier():
@@ -19,20 +18,26 @@ class Classifier():
             self.fc[f] = {"Good":0, "Bad":0}
         self.fc[f][cat] += 1
 
-    def incc(self,cat):
+    def incc(self, cat):
         self.cc[cat] += 1
 
-    def fcount(self,f,cat):
+    def fcount(self, f, cat):
         if(self.fc.has_key(f)):
             return self.fc[f][cat]
         else:
             return 0
 
-    def catcount(self,cat):
+    def catcount(self, cat):
         return self.cc[cat]
 
     def totalcount(self):
         return self.cc["Good"] + self.cc["Bad"]
+
+    def train(self, item, cat):
+        words = self.getfeatures(item)
+        for w in words:
+            self.incf(w, cat)
+        self.incc(cat)
 
 
 
