@@ -19,6 +19,8 @@ class TestClassifier(TestCase):
         goodProb = c.prob("the money jumps", "Good")
         badProb = c.prob("the money jumps", "Bad")
 
+        print c.classify("the money jumps")
+
 
 
 
