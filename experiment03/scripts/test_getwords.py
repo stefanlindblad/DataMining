@@ -109,6 +109,19 @@ class TestGetwords(TestCase):
         self.assertEqual(c.prob(item, "Good"), 0.234375)
         self.assertEqual(c.classify(item), "Good")
 
+    def testClassifier(self):
+        c = Classifier(getwords)
+        c.train("nobody owns the water", "Good")
+        c.train("the quick rabbit jumps fences", "Good")
+        c.train("buy pharmaceuticals now", "Bad")
+        c.train("make quick money at the online casino", "Bad")
+        c.train("the quick brown fox jumps", "Good")
+        c.train("next meeting is at night", "Good")
+        c.train("meeting with your superstar", "Bad")
+        c.train("money like water", "Bad")
+
+        self.assertEqual(c.classify("the money jumps"), "Good")
+
 
 
 
