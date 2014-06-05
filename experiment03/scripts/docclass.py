@@ -8,14 +8,17 @@ def getwords(doc, minWordLength = 3, maxWordLength = 20):
 
 class Classifier():
 
-    def __init__(self, featureFunction):
+    def __init__(self, featureFunction, a = "Good", b = "Bad",initprob = 0.5):
+        self.initprob = initprob
+        self.cat1 = a
+        self.cat2 = b
         self.fc = {}
-        self.cc = {"Bad" : 0, "Good" : 0}
+        self.cc = {b : 0, a : 0}
         self.getfeatures = featureFunction
 
     def incf(self, f, cat):
         if(not self.fc.has_key(f)):
-            self.fc[f] = {"Good":0, "Bad":0}
+            self.fc[f] = {self.cat1:0, self.cat2:0}
         self.fc[f][cat] += 1
 
     def incc(self, cat):
@@ -31,7 +34,7 @@ class Classifier():
         return self.cc[cat]
 
     def totalcount(self):
-        return self.cc["Good"] + self.cc["Bad"]
+        return self.cc[self.cat1] + self.cc[self.cat2]
 
     def train(self, item, cat):
         words = self.getfeatures(item)
@@ -42,9 +45,9 @@ class Classifier():
     def fprob(self,f,cat):
         return float(self.fcount(f, cat))/float(self.catcount(cat))
 
-    def weightedprob(self, f, cat, initprob = 0.5):
-        count = self.fcount(f, "Good") + self.fcount(f,"Bad")
-        wprob = (initprob + count * self.fprob(f, cat))/(1 + count)
+    def weightedprob(self, f, cat):
+        count = self.fcount(f, self.cat1) + self.fcount(f,self.cat2)
+        wprob = (self.initprob + count * self.fprob(f, cat))/(1 + count)
         return wprob
 
     def prob(self, item, cat):
@@ -56,10 +59,10 @@ class Classifier():
         return allProbs * probCat
 
     def classify(self, item):
-        good = self.prob(item, "Good")
-        bad = self.prob(item, "Bad")
+        good = self.prob(item, self.cat1)
+        bad = self.prob(item, self.cat2)
 
-        return "Good" if (good >= bad) else "Bad"
+        return self.cat1 if (good >= bad) else self.cat2
 
 
 
