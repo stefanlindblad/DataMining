@@ -22,18 +22,11 @@ trainTech=['http://rss.chip.de/c/573/f/7439/index.rss',
            'http://www.computerbild.de/rssfeed_2261.xml?node=13',
            'http://www.heise.de/newsticker/heise-top-atom.xml']
 
-trainNonTechOriginal=['http://newsfeed.zeit.de/index',
+trainNonTech=['http://newsfeed.zeit.de/index',
               'http://newsfeed.zeit.de/wirtschaft/index',
               'http://www.welt.de/politik/?service=Rss',
               'http://www.spiegel.de/schlagzeilen/tops/index.rss',
               'http://www.sueddeutsche.de/app/service/rss/alles/rss.xml'
-              ]
-#Wirtschaftsfeeds
-trainNonTech=[
-              'http://newsfeed.zeit.de/wirtschaft/index',
-              'http://www.handelsblatt.com/contentexport/feed/schlagzeilen',
-              'http://www.manager-magazin.de/news/index.rss',
-              'http://www.wiwo.de/contentexport/feed/rss/schlagzeilen'
               ]
 
 test=["http://rss.golem.de/rss.php?r=sw&feed=RSS0.91",
@@ -47,7 +40,7 @@ countnews['nontech']=0
 countnews['test']=0
 
 
-c = Classifier(getwords, a = "Tech", b = "NonTech", initprob=0.5)
+c = Classifier(getwords, initprob=0.5)
 
 print "--------------------News from trainTech------------------------"
 for feed in trainTech:
