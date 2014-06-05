@@ -39,6 +39,15 @@ class Classifier():
             self.incf(w, cat)
         self.incc(cat)
 
+    def fprob(self,f,cat):
+        return float(self.fcount(f, cat))/float(self.catcount(cat))
+
+    def weightedprob(self, f, cat, initprob = 0.5):
+        count = self.fcount(f, "Good") + self.fcount(f,"Bad")
+        wprob = (initprob + count * self.fprob(f, cat))/(1 + count)
+        return wprob
+
+
 
 
 
