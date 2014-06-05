@@ -22,13 +22,13 @@ trainTech=['http://rss.chip.de/c/573/f/7439/index.rss',
            'http://www.computerbild.de/rssfeed_2261.xml?node=13',
            'http://www.heise.de/newsticker/heise-top-atom.xml']
 
-trainNonTech1=['http://newsfeed.zeit.de/index',
+trainNonTechOriginal=['http://newsfeed.zeit.de/index',
               'http://newsfeed.zeit.de/wirtschaft/index',
               'http://www.welt.de/politik/?service=Rss',
               'http://www.spiegel.de/schlagzeilen/tops/index.rss',
               'http://www.sueddeutsche.de/app/service/rss/alles/rss.xml'
               ]
-
+#Wirtschaftsfeeds
 trainNonTech=[
               'http://newsfeed.zeit.de/wirtschaft/index',
               'http://www.handelsblatt.com/contentexport/feed/schlagzeilen',
