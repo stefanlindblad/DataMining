@@ -1,0 +1,95 @@
+\documentclass[12pt,a4paper]{scrartcl}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{ngerman}
+\usepackage{url}
+\usepackage{amsmath}
+\usepackage{caption}
+\usepackage{wrapfig}
+\usepackage{eurosym}
+\usepackage{biblatex}
+\usepackage{url}
+\usepackage{color}
+\usepackage{listings}
+\usepackage{hyperref}
+\usepackage[table]{xcolor}
+\linespread{1.4}
+
+\definecolor{mygreen}{rgb}{0,0.6,0}
+\definecolor{mygray}{rgb}{0.5,0.5,0.5}
+\definecolor{mylightgray}{rgb}{0.7,0.7,0.7}
+\definecolor{mylightergray}{rgb}{0.9,0.9,0.9}
+\definecolor{mymauve}{rgb}{0.58,0,0.82}
+
+\let\origitemize\itemize
+\def\itemize{\origitemize\itemsep0pt}
+
+\lstset{ 
+  backgroundcolor=\color{white},   
+  basicstyle=\ttfamily\footnotesize,          
+  breakatwhitespace=false,         
+  breaklines=true,  
+  commentstyle=\color{mygreen}, 
+  escapeinside={\%*}{*)}, 
+  extendedchars=true,             
+  keepspaces=true,                 
+  keywordstyle=\color{blue},
+  language=Octave,
+  numbers=left,                   
+  numbersep=15pt,                  
+  numberstyle=\tiny\color{mygray}, 
+  showspaces=false,                
+  showstringspaces=false,          
+  showtabs=false,                  
+  stringstyle=\color{mymauve},
+  tabsize=2,
+  title=\lstname,
+  captionpos=b
+}
+
+\renewcommand*\lstlistingname{Codebeispiel}    %Rename Listings
+
+\renewcommand*\thesection{\arabic{section}}
+
+\makeatletter
+\renewcommand\subparagraph{\@startsection{subparagraph}{5}{\parindent}%
+    {3.25ex \@plus1ex \@minus .2ex}%
+    {0.75ex plus 0.1ex}% space after heading
+    {\normalfont\normalsize\bfseries}}
+\makeatother
+
+\begin{document}
+\title{Praktikum Data Mining}
+\subtitle{Dokument Klassifikation / Spam Filter}
+\author{Oliver Fesseler \and Maria Florus\ss \and Stefan Seibert \and  Daniel Grie\ss haber}
+\maketitle
+\newpage
+
+\part*{ Durchf\"uhrung}
+
+\section*{Implementierung: Dokument Klassifikation}
+\subparagraph{Was wird mit Evidenz bezeichnet und warum muss diese f\"ur die Klassifikation nicht ber\"ucksichtigt werden?}
+
+Die Evidenz p(x) ist im Beispiel die Wahrscheinlichkeit daf\"ur, dass das Wort x \"uberhaupt vorkommt unabh\"angig davon, welcher Klasse die Dokumente, in denen es vorkommt, zugeordnet werden.
+Deshalb ist die Evidenz f\"ur alle Klassen gleich und muss f\"ur die Entscheidung nicht miteinbezogen werden. 
+
+Der eigentliche Wahrscheinlichkeitswert, mit der ein Dokument einer Klasse zugeordnet wird ist nicht relevant. Es ist nur relevant, f\"ur welche Klasse der Wert am gr\"o\ss ten ist. Deshalb ist es nicht wichtig, alle diese Werte noch einmal durch den selben Wert (die Evidenz) zu teilen.
+
+\subparagraph{Wann w\"urden Sie in der Formel f\"ur die gewichtete Wahrscheinlichkeit den Wert von \lstinline{initprob} kleiner, wann gr\"o\ss er als 0.5 w\"ahlen? (Falls Sie die M\"oglichkeit haben diesen Wert f\"ur jedes Feature und jede Kategorie individuell zu konfigurieren)}
+
+\begin{itemize}
+\item{ Wenn viele Dokumente eingelesen werden, die mit hoher Wahrscheinlichkeit viele unbekannte Worte enthalten sollte der Wert von \lstinline{initprob} m\"oglichst klein gew\"ahlt werden. Ansonsten w\"urde ein Dokument eher einer Klasse zugeordnet, die viele seiner Worte nicht kennt, da diese einen relativ gro\ss en Wert zugeschrieben bekommen. }
+\item{ Der Wert sollte auch dann niedirg gew\"ahlt werden, wenn die bekannten Worte relativ kleine Wahrscheinlichkeitswerte aufweisen. Wenn alle Worte im Durchschnitt nur mit einer Wahrscheinlichkeit von 0.1 vorkommen und f\"ur nicht bekannte Worte das \lstinline{initprob} auf 0.5 gesetzt ist, kann dies das Ergebnis erheblich verf\"alschen.}
+\item{ //TODO: wann initprob gr\"o\ss er als 0.5?} 
+\end{itemize} 
+
+\subparagraph{Was k\"onnten Sie mit dem in dieser \"Ubung implementierten Classifier noch klassifizieren? Geben Sie eine f\"ur Sie interessante Anwendung an.}
+
+- Spamfilter o.\"a.
+
+\subparagraph{Das einmal trainierte, sollte eigentlich persistent abgespeichert werden. Beschreiben Sie kurz wie Sie das f\"ur dieses Programm machen w\"urden.}
+
+- Gelernte Daten serialisieren, in File speichern und bei Gebrauch laden.
+
+
+\end{document}
