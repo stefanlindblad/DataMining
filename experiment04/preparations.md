@@ -28,11 +28,11 @@ In der i-ten Zeile und der j-ten Spalte steht, wie oft was Wort wj im Dokument d
 			|a30 a31 a32 a33|			|v4|					|a30*v1 + a31*v2 + a32*v3 +  a33*v4|
 
 ** Was versteht man im Kontext der nnMF unter... **
-	- Merkmalsmatrix?
+	* Merkmalsmatrix? 
 		Die Merkmalsmatrix definiert aus welchen Wörtern die Merkmale gebildet werden.
 		//TODO more
 
-	- Gewichtsmatrix 
+	* Gewichtsmatrix  
 		Die Gewichtsmatrix beschreibt mit welchem Gewicht die einzelnen Merkmale in den Artikeln auftreten. 
 		//TODO more
 
@@ -45,7 +45,7 @@ In der i-ten Zeile und der j-ten Spalte steht, wie oft was Wort wj im Dokument d
 	????????
 
 ** Wie werden in Numpy zwei Arrays (Typ numpy.array) ... ** 
-	- im Sinne der Matrixmultiplikation miteinander multipliziert? ---> a.dot(b)	   or     np.dot(a,b)
+	* im Sinne der Matrixmultiplikation miteinander multipliziert? ---> a.dot(b)	   or     np.dot(a,b)
 		>>> import numpy as np
 		>>> a
 		array([[0, 1],
@@ -60,7 +60,7 @@ In der i-ten Zeile und der j-ten Spalte steht, wie oft was Wort wj im Dokument d
 		array([[ 4,  5],
 			   [16, 21]])
 
-	- elementweise multipliziert?		---> 	np.multiply(a,b)
+	* elementweise multipliziert?		---> 	np.multiply(a,b)
 		>>> import numpy as np
 		>>> a
 		array([[0, 1],
