@@ -28,13 +28,16 @@ In der i-ten Zeile und der j-ten Spalte steht, wie oft was Wort wj im Dokument d
 			|a30 a31 a32 a33|			|v4|					|a30*v1 + a31*v2 + a32*v3 +  a33*v4|
 
 ** Was versteht man im Kontext der nnMF unter... **
-	* Merkmalsmatrix? 
-		Die Merkmalsmatrix definiert aus welchen Wörtern die Merkmale gebildet werden.
-		//TODO more
 
-	* Gewichtsmatrix  
-		Die Gewichtsmatrix beschreibt mit welchem Gewicht die einzelnen Merkmale in den Artikeln auftreten. 
-		//TODO more
+- Merkmalsmatrix? 
+
+Die Merkmalsmatrix definiert aus welchen Wörtern die Merkmale gebildet werden.
+//TODO more
+
+- Gewichtsmatrix 
+
+Die Gewichtsmatrix beschreibt mit welchem Gewicht die einzelnen Merkmale in den Artikeln auftreten. 
+//TODO more
 
 ** Wie definieren die Zeilen der Merkmalsmatrix die einzelnen Merkmale (Topics)? ** 
 
@@ -44,39 +47,47 @@ In der i-ten Zeile und der j-ten Spalte steht, wie oft was Wort wj im Dokument d
 
 	????????
 
-** Wie werden in Numpy zwei Arrays (Typ numpy.array) ... ** 
-	* im Sinne der Matrixmultiplikation miteinander multipliziert? ---> a.dot(b)	   or     np.dot(a,b)
-		>>> import numpy as np
-		>>> a
-		array([[0, 1],
-			  [2, 3]])
-		>>> b
-		array([[2, 3],
-			   [4, 5]])
-		>>> a.dot(b)
-		array([[ 4,  5],
-			   [16, 21]])
-		>>> np.dot(a,b)
-		array([[ 4,  5],
-			   [16, 21]])
+** Wie werden in Numpy zwei Arrays (Typ numpy.array) ... **
 
-	* elementweise multipliziert?		---> 	np.multiply(a,b)
-		>>> import numpy as np
-		>>> a
-		array([[0, 1],
-			   [2, 3]])
-		>>> b
-		array([[2, 3],
-			   [4, 5]])
-		>>> np.multiply(a,b)
-		array([[ 0,  3],
-			   [ 8, 15]])
+- im Sinne der Matrixmultiplikation miteinander multipliziert? 
+
+---> a.dot(b)	   or     np.dot(a,b)
+
+>>> import numpy as np
+>>> a
+array([[0, 1],
+	  [2, 3]])
+>>> b
+array([[2, 3],
+	   [4, 5]])
+>>> a.dot(b)
+array([[ 4,  5],
+	   [16, 21]])
+>>> np.dot(a,b)
+array([[ 4,  5],
+	   [16, 21]])
+
+- elementweise multipliziert?		
+
+---> np.multiply(a,b)
+
+>>> import numpy as np
+>>> a
+array([[0, 1],
+	   [2, 3]])
+>>> b
+array([[2, 3],
+	   [4, 5]])
+>>> np.multiply(a,b)
+array([[ 0,  3],
+	   [ 8, 15]])
 
 ** Wie wird die Transponierte eines Numpy-Arrays berechnet? **
-		>>> x = np.arange(4).reshape((2,2))
-		>>> x
-		array([[0, 1],
-			   [2, 3]])
-		>>> np.transpose(x)
-		array([[0, 2],
-			   [1, 3]])
+
+>>> x = np.arange(4).reshape((2,2))
+>>> x
+array([[0, 1],
+	   [2, 3]])
+>>> np.transpose(x)
+array([[0, 2],
+	   [1, 3]])
