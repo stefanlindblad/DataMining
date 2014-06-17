@@ -68,6 +68,36 @@
 \part*{ Durchf\"uhrung}
 
 \section*{Implementierung: Dokument Klassifikation}
+
+\subparagraph*{Feststellungen}
+Wenn nur zwischen zwei Kategorien unterschieden wird (in diesem Fall 'Tech' und 'Non-Tech'), dann werden zwar die meisten tats"achlich Technik bezogenen Artikel der Technik zugeordnet, jedoch gilt selbes auch f\"ur viele nicht technische Artikel. Dies liegt zum Teil daran, dass in Technik bezogenen Artikeln auch viele W\"orter vorkommen, die in nicht Technik bezogenen Artikeln vorkommen. Anders herum ist dies eher weniger der Fall, da 'Non-Tech' ein sehr weiter Bereich ist. So k\"onnen dort Artikel aus Politik, Sport, Wirtschaft und Kunst auftauchen. Im Non-Tech bereich sind so sehr viel mehr verschiedene Worte aufgef\"urt, von denen jedoch jedes ein relativ kleines Gewicht tr\"agt. Kommt nun in einem nicht Technik bezogenen Artikel das Wort 'Computer' vor, aber auch die Worte 'DAX', 'Bank' und 'Eurorettungsschirm', wird Computer m\"oglicherweise mit einem Wert von 0.9 f\'ur Tech bewertet, w\"ahrend die drei anderen Worte jeweils nur mit 0.1 f\"ur Non-Tech bewertet werden. So w\"urde dieses Dokument Tech zugeordnet werden, obwohl es viel mehr Worte aus anderen Bereichen enth\"alt, die jedoch nur gering gewertet werden.
+
+Zu einem weiteren Teil liegt die falsche Einteilung der Non-Tech Artikel daran, dass in einem eigentlich Technik bezogenen RSS-Feed wie beispielsweise Heise durchaus auch nicht technische Artikel vorkommen k\"onnen. Man sollte also sehr genau darauf achten, welche Artikel man zum Training verwendet. 
+
+Zudem kommen in Technik bezogenen Artikeln weniger Worte vor, die noch nicht bekannt sind, als in Non-Tech-Artikeln. Hier entsteht eine Verzerrung durch die Variable \lstinline|initprob|, egal ob diese nun hoch oder niedig angesetzt wird. Wird sie niedig angesetzt schlagen bekannte Worte mehr ins Gewicht, also haupts\"achlich Technik bezogene, wird sie hoch angesetzt wird ein Text, der viele Unbekannte Worte enth\"alt komplett durch die hohen Werte verf\"alscht. 
+
+Dieser Effekt der falschen Klassifikation ist jedoch nur relevant, wenn es wichtig ist, dass beide Klassen richtig kategorisiert werden. Wenn man beispielsweise aus einer Masse an Dokumenten nur Technik bezogene Artikel filtern will, dann ist es nicht schlimm, dass zus\"atzlich einige nicht Technik bezogene Artikel in der resultierenden Auswahl vorhanden sind, solange alle Technik bezogenen Artikel auf jeden Fall darin vorkommen. 
+
+Nur wenn beide auf jeden Fall richtig klassifiziert werden sollen, beispielsweise wenn eine Masse an Dokumenten in traurige und fr\"ohliche Texte klassifiziert werden soll, dann ist ein solcher Effekt nicht w\"unschenswert. 
+
+Der Effekt des falschen Klassifizierens bei nur einer genau spezifizierten Klasse (Tech vs. Non-Tech) ist sehr deutlich an einem Experiment erkennbar, das wir zus\"atzlich durchgef\"uhrt haben: 
+
+Neben Technik haben wir noch weitere Klassen eingef\"uhrt, wie Sport, Politik, Wirtschaft und Wissenschaft. Die Technik bezogenen Artikel wurden weiterhin weitestgehend korrekt als Tech-Artikel klassifiziert, von den Non-Tech-Artikeln, die zuvor Tech zugeordnet wurden, wurden nun jedoch viele in ihre jeweils korrekte Kategorie eingeordnet.
+
+Weiterhin haben wir festgestellt, dass es extrem ausschlaggebend ist, mit wie vielen Testdokumenten man trainiert. W\"ahrend bei nur 3 RSS-Feeds, beziehungsweise etwa 75 Dokumente pro Kategorie noch die meisten Dokumente falsch klassifiziert wurden, zeigte sich bereits bei 5 RSS-Feeds, beziehungsweise etwa 150 Dokumente pro Kategorie ein deutlicher Anstieg der richtig klassifizierten Dokumente.
+
+Dennoch werden weiterhin etliche Dokumente falsch klassifiziert. Dies k\"onnte folgende Ursachen haben: Beispielsweise ist die Kategorie Wissenschaft sehr viel breit gef\"acherter, was vorkommende Worte angeht, als beispielsweise Sport. In die Wissenschaftskategorie fallen verschiedene Artikel aus den Bereichen Neurowissenschaft, Astronomie, Anthropologie oder Physik, die alle ein sehr unterschiedliches Feld an Begriffen aufweisen, w\"ahrend sich in der Kategorie Sport erstens die meisten Artikel um Fu\ss ball drehten und selbst wenn nicht viele der Worte trotzdem auch in anderen Sportarten vorkommen. 
+
+So stellten wir fest, dass die meisten Sport bezogenen Artikel richtig klassifiziert wurden, w\"ahrend kaum ein Wissenschaftsartikel richtig eingeordnet wurde. (Allerdings k\"onnte das auch daran gelegen haben, dass in den allgemeinen RSS-Feeds, die wir als Test nutzten, kaum wissenschaftsbezogene Artikel vorkamen, jedoch aufgrund der Fu\ss ballweltmeisterschaft entsprechend viele Sportartikel.)
+
+Abschlie\ss end kan also festgehalten werden, dass bei der Dokumenten-Klassifikation auf folgende Dinge zu achten ist:
+\begin{itemize}
+\item{ Es sollten f\"ur jede Kategorie gen\"ugend Testdaten zur Verf\"ugung stehen}
+\item{ Die Kategorien sollten falls m\"oglich von ihrem Wortumfang (also die Anzahl der signifikanten Worte f\"ur diese Kategorie) in etwa vergleichbar sein.}
+
+\end{itemize}
+
+\section*{Beantwortung der Fragen zum Versuch}
 \subparagraph{Was wird mit Evidenz bezeichnet und warum muss diese f\"ur die Klassifikation nicht ber\"ucksichtigt werden?}
 
 Die Evidenz p(x) ist im Beispiel die Wahrscheinlichkeit daf\"ur, dass das Wort x \"uberhaupt vorkommt unabh\"angig davon, welcher Klasse die Dokumente, in denen es vorkommt, zugeordnet werden.
