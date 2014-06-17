@@ -69,17 +69,17 @@
 
 \section*{Implementierung: Dokument Klassifikation}
 
-\subparagraph*{Feststellungen}
+\paragraph*{Feststellungen}
 Wenn nur zwischen zwei Kategorien unterschieden wird (in diesem Fall 'Tech' und 'Non-Tech'), dann werden zwar die meisten tats"achlich Technik bezogenen Artikel der Technik zugeordnet, jedoch gilt selbes auch f\"ur viele nicht technische Artikel. Dies liegt zum Teil daran, dass in Technik bezogenen Artikeln auch viele W\"orter vorkommen, die in nicht Technik bezogenen Artikeln vorkommen. Anders herum ist dies eher weniger der Fall, da 'Non-Tech' ein sehr weiter Bereich ist. So k\"onnen dort Artikel aus Politik, Sport, Wirtschaft und Kunst auftauchen. Im Non-Tech bereich sind so sehr viel mehr verschiedene Worte aufgef\"urt, von denen jedoch jedes ein relativ kleines Gewicht tr\"agt. Kommt nun in einem nicht Technik bezogenen Artikel das Wort 'Computer' vor, aber auch die Worte 'DAX', 'Bank' und 'Eurorettungsschirm', wird Computer m\"oglicherweise mit einem Wert von 0.9 f\'ur Tech bewertet, w\"ahrend die drei anderen Worte jeweils nur mit 0.1 f\"ur Non-Tech bewertet werden. So w\"urde dieses Dokument Tech zugeordnet werden, obwohl es viel mehr Worte aus anderen Bereichen enth\"alt, die jedoch nur gering gewertet werden.
 
 Zu einem weiteren Teil liegt die falsche Einteilung der Non-Tech Artikel daran, dass in einem eigentlich Technik bezogenen RSS-Feed wie beispielsweise Heise durchaus auch nicht technische Artikel vorkommen k\"onnen. Man sollte also sehr genau darauf achten, welche Artikel man zum Training verwendet. 
 
 Zudem kommen in Technik bezogenen Artikeln weniger Worte vor, die noch nicht bekannt sind, als in Non-Tech-Artikeln. Hier entsteht eine Verzerrung durch die Variable \lstinline|initprob|, egal ob diese nun hoch oder niedig angesetzt wird. Wird sie niedig angesetzt schlagen bekannte Worte mehr ins Gewicht, also haupts\"achlich Technik bezogene, wird sie hoch angesetzt wird ein Text, der viele Unbekannte Worte enth\"alt komplett durch die hohen Werte verf\"alscht. 
 
-Dieser Effekt der falschen Klassifikation ist jedoch nur relevant, wenn es wichtig ist, dass beide Klassen richtig kategorisiert werden. Wenn man beispielsweise aus einer Masse an Dokumenten nur Technik bezogene Artikel filtern will, dann ist es nicht schlimm, dass zus\"atzlich einige nicht Technik bezogene Artikel in der resultierenden Auswahl vorhanden sind, solange alle Technik bezogenen Artikel auf jeden Fall darin vorkommen. 
+Um diesen Effekt des falsch Klassifizierens muss sich jedoch nur Gedanken gemacht werden, wenn es wichtig ist, dass beide Klassen richtig kategorisiert werden. Wenn man beispielsweise aus einer Masse an Dokumenten nur Technik bezogene Artikel filtern will, dann ist es nicht schlimm, dass zus\"atzlich einige nicht Technik bezogene Artikel in der resultierenden Auswahl vorhanden sind, solange alle Technik bezogenen Artikel auf jeden Fall darin vorkommen. 
 
 Nur wenn beide auf jeden Fall richtig klassifiziert werden sollen, beispielsweise wenn eine Masse an Dokumenten in traurige und fr\"ohliche Texte klassifiziert werden soll, dann ist ein solcher Effekt nicht w\"unschenswert. 
-
+\\\\
 Der Effekt des falschen Klassifizierens bei nur einer genau spezifizierten Klasse (Tech vs. Non-Tech) ist sehr deutlich an einem Experiment erkennbar, das wir zus\"atzlich durchgef\"uhrt haben: 
 
 Neben Technik haben wir noch weitere Klassen eingef\"uhrt, wie Sport, Politik, Wirtschaft und Wissenschaft. Die Technik bezogenen Artikel wurden weiterhin weitestgehend korrekt als Tech-Artikel klassifiziert, von den Non-Tech-Artikeln, die zuvor Tech zugeordnet wurden, wurden nun jedoch viele in ihre jeweils korrekte Kategorie eingeordnet.
