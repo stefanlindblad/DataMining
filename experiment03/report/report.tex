@@ -70,11 +70,9 @@
 \section*{Implementierung: Dokument Klassifikation}
 
 \paragraph*{Feststellungen}
-Wenn nur zwischen zwei Kategorien unterschieden wird (in diesem Fall 'Tech' und 'Non-Tech'), dann werden zwar die meisten tats"achlich Technik bezogenen Artikel der Technik zugeordnet, jedoch gilt selbes auch f\"ur viele nicht technische Artikel. Dies liegt zum Teil daran, dass in Technik bezogenen Artikeln auch viele W\"orter vorkommen, die in nicht Technik bezogenen Artikeln vorkommen. Anders herum ist dies eher weniger der Fall, da 'Non-Tech' ein sehr weiter Bereich ist. So k\"onnen dort Artikel aus Politik, Sport, Wirtschaft und Kunst auftauchen. Im Non-Tech bereich sind so sehr viel mehr verschiedene Worte aufgef\"urt, von denen jedoch jedes ein relativ kleines Gewicht tr\"agt. Kommt nun in einem nicht Technik bezogenen Artikel das Wort 'Computer' vor, aber auch die Worte 'DAX', 'Bank' und 'Eurorettungsschirm', wird Computer m\"oglicherweise mit einem Wert von 0.9 f\'ur Tech bewertet, w\"ahrend die drei anderen Worte jeweils nur mit 0.1 f\"ur Non-Tech bewertet werden. So w\"urde dieses Dokument Tech zugeordnet werden, obwohl es viel mehr Worte aus anderen Bereichen enth\"alt, die jedoch nur gering gewertet werden.
+Wenn nur zwischen zwei Kategorien unterschieden wird (in diesem Fall 'Tech' und 'Non-Tech'), dann werden zwar die meisten tats"achlich Technik bezogenen Artikel der Technik zugeordnet, jedoch gilt selbes auch f\"ur viele nicht technische Artikel. Dies liegt zum Teil daran, dass in Technik bezogenen Artikeln auch viele W\"orter vorkommen, die in nicht Technik bezogenen Artikeln vorkommen. Anders herum ist dies eher weniger der Fall, da 'Non-Tech' ein sehr weiter Bereich ist. So k\"onnen dort Artikel aus Politik, Sport, Wirtschaft und Kunst auftauchen. Im Non-Tech-Bereich sind sehr viel mehr verschiedene Worte aufgef\"urt, von denen jedoch jedes ein relativ kleines Gewicht tr\"agt. Kommt nun in einem nicht Technik bezogenen Artikel das Wort 'Computer' vor, jedoch auch die Worte 'DAX', 'Bank' und 'Eurorettungsschirm', wird Computer m\"oglicherweise mit einem Wert von 0.9 f\"ur Tech bewertet, w\"ahrend die drei anderen Worte jeweils nur mit 0.1 f\"ur Non-Tech bewertet werden. So w\"urde dieses Dokument Tech zugeordnet werden, obwohl es viel mehr Worte aus anderen Bereichen enth\"alt, die jedoch nur gering gewertet werden. Es sollte also darauf geachtet werden, dass die beiden Zielgruppen eine etwa gleich m\"achtige Wortmenge aufweisen. 
 
-Zu einem weiteren Teil liegt die falsche Einteilung der Non-Tech Artikel daran, dass in einem eigentlich Technik bezogenen RSS-Feed wie beispielsweise Heise durchaus auch nicht technische Artikel vorkommen k\"onnen. Man sollte also sehr genau darauf achten, welche Artikel man zum Training verwendet. 
-
-Zudem kommen in Technik bezogenen Artikeln weniger Worte vor, die noch nicht bekannt sind, als in Non-Tech-Artikeln. Hier entsteht eine Verzerrung durch die Variable \lstinline|initprob|, egal ob diese nun hoch oder niedig angesetzt wird. Wird sie niedig angesetzt schlagen bekannte Worte mehr ins Gewicht, also haupts\"achlich Technik bezogene, wird sie hoch angesetzt wird ein Text, der viele Unbekannte Worte enth\"alt komplett durch die hohen Werte verf\"alscht. 
+Zu einem weiteren Teil liegt die falsche Einteilung der Non-Tech Artikel daran, dass in einem eigentlich Technik bezogenen RSS-Feed wie etwa Heise, durchaus auch nicht technische Artikel vorkommen k\"onnen, beispielsweise Artikel /"uber Edward Snowden oder die NSA-Aff\"are, die f\"ur die technisch interessierte Zielgruppe zwar interessant sind, jedoch eher Politik zugeordnet werden w\"urden. Dies kann dann dazu f\"uhren, dass andere Politik bezogene Artikel ebenfalls Technik zugeordnet werden, obwohl sie damit nur sehr wenig oder nichts zu tun haben. Man sollte also sehr genau darauf achten, welche Artikel man zum Training verwendet. 
 
 Um diesen Effekt des falsch Klassifizierens muss sich jedoch nur Gedanken gemacht werden, wenn es wichtig ist, dass beide Klassen richtig kategorisiert werden. Wenn man beispielsweise aus einer Masse an Dokumenten nur Technik bezogene Artikel filtern will, dann ist es nicht schlimm, dass zus\"atzlich einige nicht Technik bezogene Artikel in der resultierenden Auswahl vorhanden sind, solange alle Technik bezogenen Artikel auf jeden Fall darin vorkommen. 
 
@@ -86,9 +84,9 @@ Neben Technik haben wir noch weitere Klassen eingef\"uhrt, wie Sport, Politik, W
 
 Weiterhin haben wir festgestellt, dass es extrem ausschlaggebend ist, mit wie vielen Testdokumenten man trainiert. W\"ahrend bei nur 3 RSS-Feeds, beziehungsweise etwa 75 Dokumente pro Kategorie noch die meisten Dokumente falsch klassifiziert wurden, zeigte sich bereits bei 5 RSS-Feeds, beziehungsweise etwa 150 Dokumente pro Kategorie ein deutlicher Anstieg der richtig klassifizierten Dokumente.
 
-Dennoch werden weiterhin etliche Dokumente falsch klassifiziert. Dies k\"onnte folgende Ursachen haben: Beispielsweise ist die Kategorie Wissenschaft sehr viel breit gef\"acherter, was vorkommende Worte angeht, als beispielsweise Sport. In die Wissenschaftskategorie fallen verschiedene Artikel aus den Bereichen Neurowissenschaft, Astronomie, Anthropologie oder Physik, die alle ein sehr unterschiedliches Feld an Begriffen aufweisen, w\"ahrend sich in der Kategorie Sport erstens die meisten Artikel um Fu\ss ball drehten und selbst wenn nicht viele der Worte trotzdem auch in anderen Sportarten vorkommen. 
+Dennoch werden weiterhin etliche Dokumente falsch klassifiziert. Dies k\"onnte folgende Ursachen haben: Beispielsweise ist die Kategorie Wissenschaft sehr viel breit gef\"acherter, was vorkommende Worte angeht, als beispielsweise Sport. In die Wissenschaftskategorie fallen verschiedene Artikel aus den Bereichen Neurowissenschaft, Astronomie, Anthropologie oder Physik, die alle ein sehr unterschiedliches Feld an Begriffen aufweisen, w\"ahrend sich in der Kategorie Sport erstens die meisten Artikel um Fu\ss ball drehten und selbst wenn nicht, viele der Worte trotzdem auch in anderen Sportarten vorkommen. 
 
-So stellten wir fest, dass die meisten Sport bezogenen Artikel richtig klassifiziert wurden, w\"ahrend kaum ein Wissenschaftsartikel richtig eingeordnet wurde. (Allerdings k\"onnte das auch daran gelegen haben, dass in den allgemeinen RSS-Feeds, die wir als Test nutzten, kaum wissenschaftsbezogene Artikel vorkamen, jedoch aufgrund der Fu\ss ballweltmeisterschaft entsprechend viele Sportartikel.)
+So stellten wir fest, dass die meisten Sport bezogenen Artikel richtig klassifiziert wurden, w\"ahrend kaum ein Wissenschaftsartikel richtig eingeordnet wurde. (Allerdings k\"onnte das auch zu einem gewissen Teil daran gelegen haben, dass in den allgemeinen RSS-Feeds, die wir als Test nutzten, kaum wissenschaftsbezogene Artikel vorkamen, jedoch aufgrund der Fu\ss ballweltmeisterschaft entsprechend viele Sportartikel.)
 
 Als weitere Kategorie, die eingef\"uhrt werden k\"onnte, bietet sich eine Art Feuilleton-Kategorie an, in die Artikel \"uber Prominente und \"ahnliches fallen. Allerdings ist es schwierig hier geeignete Feeds zu finden, da diese Kategorie wiederum sehr breit gef\"achert ist. Artikel die dieser Klasse zugeordnet werden w\"urden, kommen h\"aufig nur in allgemeinen Nachrichten-Feeds vor, die sich f\"ur das Training nicht eignen. 
 Allerdings gibt es in den Test-Feeds einige Artikel, die in diese Kategorie fallen w\"urden, und aufgrund der fehlenden Kategorie falsch Klassifiziert werden. 
@@ -119,11 +117,61 @@ Der eigentliche Wahrscheinlichkeitswert, mit der ein Dokument einer Klasse zugeo
 
 \subparagraph{Was k\"onnten Sie mit dem in dieser \"Ubung implementierten Classifier noch klassifizieren? Geben Sie eine f\"ur Sie interessante Anwendung an.}
 
-- Spamfilter o.\"a.
+\begin{itemize}
+\item Spamfilter - Das Einteilen von E-Mails in nicht sch\"adliche und potentiell sch\"adliche oder Werbung. 
+\item Klassifikation von Webseiten - \"Ahnlich wie die im Versuch behandelte Dokumentenklassifikation, nur bezogen auf Webseiten. 
+\item Diagnose, beispielsweise von Krankheiten - F\"ur verschiedene 'Trainings'-Patienten, die an verschiedenen Krankheiten leiden, k\"onnten die Symptome erfasst und der jeweiligen Krankheit zugeordnet werden. F\"ur einen neuen Patienten kann dann anhand seiner Symptome festgestellt werden, an welcher der Krankheiten im System er mit der gr\"o\ss ten Wahrscheinlichkeit leidet. Schwierig ist hier allerdings, dass einige Symptome m\"oglicherweise abh\"angig voneinander sind oder mit anderen Krankheiten zusammenh\"angen k\"onnen. 
+\end{itemize}
+
 
 \subparagraph{Das einmal trainierte, sollte eigentlich persistent abgespeichert werden. Beschreiben Sie kurz wie Sie das f\"ur dieses Programm machen w\"urden.}
 
-- Gelernte Daten serialisieren, in File speichern und bei Gebrauch laden.
+Die Instanzvariablen fc und cc der Classifier-Instanz  m\"ussen serialisiert werden, beispielsweise im JSON-Format. Die resultierende, tabellarische Struktur kann in ein File abgespeichert und bei Gebrauch geladen werden. 
+\\\\
+Beispiel aus unseren Unittests:
+\\\\
+Trainiert wurden folgende S\"atze:
+\begin{lstlisting}
+"nobody owns the water" - "Good"
+"the quick rabbit jumps fences" - "Good"
+"buy pharmaceuticals now" -	"Bad"
+"make quick money at the online casino" - "Bad"
+"the quick brown fox jumps" - "Good"
+"next meeting is at night" - "Good"
+"meeting with your superstar" - "Bad"
+"money like water" - "Bad"
+\end{lstlisting}
+
+Daraus resultieren fc und cc in bereits serialisierter Form:
+
+\begin{lstlisting}
+{
+'fc':
+	{
+		'brown': {'Good': 1}, 
+		'casino': {'Bad': 1}, 
+		'your': {'Bad': 1}, 
+		'meeting': {'Bad': 1, 'Good': 1}, 
+		'night': {'Good': 1}, 
+		'with': {'Bad': 1}, 
+		'money': {'Bad': 2}, 
+		'jumps': {'Good': 2}, 
+		'nobody': {'Good': 1}, 
+		'next': {'Good': 1}, 
+		'water': {'Bad': 1, 'Good': 1}, 
+		'pharmaceuticals': {'Bad': 1}, 
+		'online': {'Bad': 1}, 
+		'rabbit': {'Good': 1}, 
+		'owns': {'Good': 1}, 
+		'quick': {'Bad': 1, 'Good': 2}, 
+		'superstar': {'Bad': 1}, 
+		'fences': {'Good': 1}, 
+		'make': {'Bad': 1}, 
+		'like': {'Bad': 1}	
+	}, 
+'cc': {'Bad': 4, 'Good': 4}
+}
+\end{lstlisting}
 
 
 \end{document}
