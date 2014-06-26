@@ -1,5 +1,7 @@
 import feedparser
 import re
+import numpy as np
+import pandas
 from nltk.corpus import stopwords
 
 FEEDLIST = ['http://feeds.reuters.com/reuters/topNews',
@@ -80,9 +82,49 @@ def getarticlewords():
 
 # functions makes a matrix!
 def makematrix(allwords, articlewords):
-    pass
+    reasonableWords = [word for word in allwords if allwords[word] >= 4]
+
+    articles = len(articlewords)
+    wordAppearsInArticle = 0
+    for word in reasonableWords:
+        for article in articlewords:
+            if word in article:
+                wordAppearsInArticle += 1
+
+        if (wordAppearsInArticle / articles) > 0.6:
+            reasonableWords.remove(word)
+
+    np.set_printoptions(threshold=np.nan)
+    wordInArtArray = np.zeros((len(articlewords), len(reasonableWords)));
+    for i, word in enumerate(reasonableWords):
+        for j, article in enumerate(articlewords):
+            if word in (article):
+                wordInArtArray[j][i] = article[word]
+
+    return reasonableWords, wordInArtArray
+
+#Removes all articles that contain no reasonable words
+def removeAllNullArticles(wordInArt, articletitles):
+    for index, article in enumerate(wordInArt.T):
+        articleHasWord = False
+        for word in article:
+             if word > 0:
+                 articleHasWord = True
+
+        if articleHasWord == False:
+            np.delete(wordInArt, index, 0)
+            articletitles.pop(index)
+
+    return wordInArt, articletitles
+
 
 # execution
 allwords, articlewords, articletitles = getarticlewords()
-print articlewords
+reasonableWords, wordInArt = makematrix(allwords, articlewords)
+wordInArt, articletitles = removeAllNullArticles(wordInArt, articletitles)
+
+wordInArt = pandas.DataFrame(wordInArt, columns=reasonableWords)
+wordInArt.to_csv("wordInArt.csv")
+
+print(wordInArt)
 
