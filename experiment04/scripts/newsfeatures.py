@@ -1,4 +1,5 @@
 import feedparser
+import numpy as np
 
 FEEDLIST = ['http://feeds.reuters.com/reuters/topNews',
             'http://feeds.reuters.com/reuters/businessNews',
@@ -39,4 +40,12 @@ def parseFeeds(feeds):
     return  parsedFeeds
 
 
-parseFeeds(FEEDLIST)
+# parseFeeds(FEEDLIST)
+
+
+def cost(A, B):
+    c = 0
+    for i in xrange(0,len(A)):
+        for j in xrange(0,len(A[i])):
+            c += (A[i][j] - B[i][j])**2
+    return c
