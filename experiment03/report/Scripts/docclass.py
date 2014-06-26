@@ -103,7 +103,7 @@ class Classifier():
         for cat in self.cc.iterkeys():
             cats[cat] = self.prob(item, cat)
 
-        # the highest probability is determined and returned.
+        # the highest probability is determined and returned. 
         key = None
         val = 0
         for cat in cats.iterkeys():
