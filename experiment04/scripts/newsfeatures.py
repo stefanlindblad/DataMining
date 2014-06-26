@@ -100,8 +100,6 @@ def cost(A, B):
     return k
 
 
-A = np.arange(12).reshape((4,3))
-
 def nnmf(A, m, it):
     c = A.shape[1]      # number of words
     r = A.shape[0]      # number of articles
@@ -111,23 +109,15 @@ def nnmf(A, m, it):
     for i in range(it):
         B = W.dot(H)
         k = cost(A,B)
-        print k
         if(k <= 5):
-            print H, W
-            print W.dot(H)
+
             return (H, W)
         else:
-            for i in range(len(H)):
-                for j in range(len(H[i])):
-                    nom = (np.transpose(W).dot(A))[i][j]
-                    den = (np.transpose(W).dot(W).dot(H))[i][j]
-                    H[i][j] = H[i][j] * (nom/den)
+            H = np.array(H)*((np.array(W.T.dot(A)))/np.array(W.T.dot(W).dot(H)))
+            W = np.array(W) *((np.array(A.dot(H.T)))/(np.array(W.dot(H).dot(H.T))))
 
-            for i in range(len(W)):
-                for j in range(len(W[i])):
-                    nom = A.dot(np.transpose(H))[i][j]
-                    den =(W.dot(H).dot(np.transpose(H)))[i][j]
-                    W[i][j] = W[i][j] * (nom/den)
 
 
     return (H, W)
+
+nnmf(A, 5, 10)
