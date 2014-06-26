@@ -45,13 +45,13 @@ def parseFeeds(feeds):
     parsedFeeds = []
     for feed in feeds:
         parsedFeed = feedparser.parse(feed)
-        print "--- News from " + feed + " ---"
+        # print "--- News from " + feed + " ---"
         for e in parsedFeed.entries:
-            print "-" * 50
+            # print "-" * 50
             fulltext=stripHTML(e.title+' '+e.description)
-            print fulltext
+            # print fulltext
             parsedFeeds.append({'title': stripHTML(e.title), 'description': stripHTML(e.description)})
-        print "-" * 50 + "\n"
+       # print "-" * 50 + "\n"
     return  parsedFeeds
 
 
