@@ -164,7 +164,7 @@ wordInArt, articletitles = removeAllNullArticles(wordInArt, articletitles)
 print(wordInArt)
 H, W = nnmf(wordInArt, 5, 5)
 
-wordInArt = pandas.DataFrame(wordInArt, columns=reasonableWords)
-wordInArt.to_csv("wordInArt.csv")
+#wordInArt = pandas.DataFrame(wordInArt, columns=reasonableWords)
+#wordInArt.to_csv("wordInArt.csv")
 
 print(W)
