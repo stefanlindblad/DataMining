@@ -3,6 +3,7 @@ import re
 import numpy as np
 import pandas
 from nltk.corpus import stopwords
+import itertools as iter
 
 FEEDLIST = ['http://feeds.reuters.com/reuters/topNews',
             'http://feeds.reuters.com/reuters/businessNews',
@@ -30,6 +31,9 @@ def stripHTML(h):
       p+=c
   return p
 
+def reverse_enumerate(iterable):
+    return iter.izip(reversed(xrange(len(iterable))), reversed(iterable))
+
 # word separator helper function
 sw=stopwords.words('english')
 def separatewords(text):
@@ -49,6 +53,7 @@ def parseFeeds(feeds):
             parsedFeeds.append({'title': stripHTML(e.title), 'description': stripHTML(e.description)})
         print "-" * 50 + "\n"
     return  parsedFeeds
+
 
 
 # function returns all words in all feeds, all words in one feed each and all article themes
@@ -94,7 +99,6 @@ def makematrix(allwords, articlewords):
         if (wordAppearsInArticle / articles) > 0.6:
             reasonableWords.remove(word)
 
-    np.set_printoptions(threshold=np.nan)
     wordInArtArray = np.zeros((len(articlewords), len(reasonableWords)));
     for i, word in enumerate(reasonableWords):
         for j, article in enumerate(articlewords):
@@ -105,26 +109,62 @@ def makematrix(allwords, articlewords):
 
 #Removes all articles that contain no reasonable words
 def removeAllNullArticles(wordInArt, articletitles):
-    for index, article in enumerate(wordInArt.T):
+    for index, article in reverse_enumerate(wordInArt):
         articleHasWord = False
         for word in article:
              if word > 0:
                  articleHasWord = True
 
         if articleHasWord == False:
-            np.delete(wordInArt, index, 0)
+            wordInArt = np.delete(wordInArt, index, 0)
             articletitles.pop(index)
 
     return wordInArt, articletitles
 
 
+# parseFeeds(FEEDLIST)
+
+
+def cost(A, B):
+    k = 0
+    for i in xrange(0,len(A)):
+        for j in xrange(0,len(A[i])):
+            k += (A[i][j] - B[i][j])**2
+    return k
+
+
+def nnmf(A, m, it):
+    c = A.shape[1]      # number of words
+    r = A.shape[0]      # number of articles
+    H = np.random.random(m * c).reshape((m, c))
+    W = np.random.random(r * m).reshape((r, m))
+
+    for i in range(it):
+        B = W.dot(H)
+        k = cost(A,B)
+        if(k <= 5):
+
+            return (H, W)
+        else:
+            H = np.array(H)*((np.array(W.T.dot(A)))/np.array(W.T.dot(W).dot(H)))
+            W = np.array(W) *((np.array(A.dot(H.T)))/(np.array(W.dot(H).dot(H.T))))
+
+
+
+    return (H, W)
+
+
 # execution
+np.set_printoptions(threshold = np.nan)
 allwords, articlewords, articletitles = getarticlewords()
 reasonableWords, wordInArt = makematrix(allwords, articlewords)
+
 wordInArt, articletitles = removeAllNullArticles(wordInArt, articletitles)
+
+print(wordInArt)
+H, W = nnmf(wordInArt, 5, 5)
 
 wordInArt = pandas.DataFrame(wordInArt, columns=reasonableWords)
 wordInArt.to_csv("wordInArt.csv")
 
-print(wordInArt)
-
+print(W)
