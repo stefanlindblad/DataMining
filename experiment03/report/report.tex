@@ -112,7 +112,7 @@ Der eigentliche Wahrscheinlichkeitswert, mit der ein Dokument einer Klasse zugeo
 \begin{itemize}
 \item{ Wenn viele Dokumente eingelesen werden, die mit hoher Wahrscheinlichkeit viele unbekannte Worte enthalten sollte der Wert von \lstinline{initprob} m\"oglichst klein gew\"ahlt werden. Ansonsten w\"urde ein Dokument eher einer Klasse zugeordnet, die viele seiner Worte nicht kennt, da diese einen relativ gro\ss en Wert zugeschrieben bekommen. }
 \item{ Der Wert sollte auch dann niedirg gew\"ahlt werden, wenn die bekannten Worte relativ kleine Wahrscheinlichkeitswerte aufweisen. Wenn alle Worte im Durchschnitt nur mit einer Wahrscheinlichkeit von 0.1 vorkommen und f\"ur nicht bekannte Worte das \lstinline{initprob} auf 0.5 gesetzt ist, kann dies das Ergebnis erheblich verf\"alschen.}
-\item{ //TODO: wann initprob gr\"o\ss er als 0.5?} 
+\item{ Wenn der Wortschatz hingegen relativ klein ist und somit alle W\"orter relativ gro\ss e Wahrscheinlichkeitswerte aufweisen, dann kann auch \lstinline|initprob| gr\"o\ss er gew\"ahlt werden.} 
 \end{itemize} 
 
 \subparagraph{Was k\"onnten Sie mit dem in dieser \"Ubung implementierten Classifier noch klassifizieren? Geben Sie eine f\"ur Sie interessante Anwendung an.}
