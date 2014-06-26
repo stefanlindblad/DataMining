@@ -125,6 +125,30 @@ def removeAllNullArticles(wordInArt, articletitles):
 # parseFeeds(FEEDLIST)
 
 
+def getWichtigsteMerkmale(matrix, wordvec, i, feature, count):
+    wordlist = []
+    for j,word in enumerate(wordvec):
+        wordlist.append((matrix[i][j], wordvec[j]))
+    return sorted(wordlist, reverse=True)[:count]
+
+# task 2.3 from experiment 4
+# weightmatrix w
+# featurematrix h
+# list of all articles: titles
+# list of all words: wordvec
+def showfeatures(w, h, titles, wordvec):
+    # printing most common features per article
+    for i,article in enumerate(w):
+        featurelist = []
+        for j,feature in enumerate(article):
+            wichtigsteMerkmale = getWichtigsteMerkmale(h, wordvec, j, feature, 6)
+            wichtigsteMerkmale = [str(merkmal[1]) for merkmal in wichtigsteMerkmale]
+            featurelist.append((w[i][j], wichtigsteMerkmale))
+        print titles[i]
+        print sorted(featurelist, reverse=True)[:3]
+        print '-' * 30
+
+
 def cost(A, B):
     k = 0
     for i in xrange(0,len(A)):
@@ -167,4 +191,8 @@ H, W = nnmf(wordInArt, 5, 5)
 #wordInArt = pandas.DataFrame(wordInArt, columns=reasonableWords)
 #wordInArt.to_csv("wordInArt.csv")
 
-print(W)
+#print(W)
+showfeatures(W, H, articletitles, reasonableWords)
+
+
+
