@@ -13,13 +13,6 @@ In der i-ten Zeile und der j-ten Spalte steht, wie oft was Wort wj im Dokument d
   			[	 2,		0,		2,		3,		0,		8	 ]]		Artikel 2
 
 
-	v = {wort1, wort2, wort3, wort4, wort5, wort6}
-
-	a = A * v
-	a =	[[titel 1]	   = [[{ 1*wort1,  5*wort2,  1*wort5		   }]
-		 [titel 2]]       [{ 2*wort1,  2*wort3,  3*wort4,  8*wort6 }]]
-
-
 ** Wie multipliziert man die Matrix A mit dem Vector v? **
 
 	A = 	|a00 a01 a02 a03|	v = 	|v1|		A * v =  	|a00*v1 + a01*v2 + a02*v3 +  a03*v4|	(zeile * spalte)
@@ -31,21 +24,21 @@ In der i-ten Zeile und der j-ten Spalte steht, wie oft was Wort wj im Dokument d
 
 - Merkmalsmatrix? 
 
-Die Merkmalsmatrix definiert aus welchen Wörtern die Merkmale gebildet werden.
-//TODO more
+Die Merkmalsmatrix H definiert aus welchen Wörtern die Merkmale gebildet werden.
+Es wird eine Anzahl m an Merkmalen festgelegt. H ist dann eine m*c Matrix. ( m = Anzahl der Merkmale,  c = Anzahl aller Wörter)
 
-- Gewichtsmatrix 
+- Gewichtungsmatrix 
 
-Die Gewichtsmatrix beschreibt mit welchem Gewicht die einzelnen Merkmale in den Artikeln auftreten. 
-//TODO more
+Die Gewichtungsmatrix beschreibt mit welchem Gewicht die einzelnen Merkmale in den Artikeln auftreten. 
+W ist eine r*m Matrix (r = Anzahl aller Artikel, m = Anzahl der Merkmale)
 
 ** Wie definieren die Zeilen der Merkmalsmatrix die einzelnen Merkmale (Topics)? ** 
 
-	????????
+	Jede Zeile entspricht einem Merkmalsvektor, der angibt, welche Worte im Merkmal enthalten sind. (1 = enthalten, 0 = nicht enthalten. )
 
 ** Was definieren die Zeilen der Gewichtungsmatrix? ** 
 
-	????????
+	Jede Zeile beschreibt mit welchem Gewicht die einzelnen Merkmale in den Artikeln auftreten. 
 
 ** Wie werden in Numpy zwei Arrays (Typ numpy.array) ... **
 
