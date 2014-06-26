@@ -1,5 +1,6 @@
 import feedparser
 import re
+import numpy as np
 from nltk.corpus import stopwords
 
 FEEDLIST = ['http://feeds.reuters.com/reuters/topNews',
@@ -92,9 +93,41 @@ print articlewords
 
 
 def cost(A, B):
-    c = 0
+    k = 0
     for i in xrange(0,len(A)):
         for j in xrange(0,len(A[i])):
-            c += (A[i][j] - B[i][j])**2
-    return c
+            k += (A[i][j] - B[i][j])**2
+    return k
 
+
+A = np.arange(12).reshape((4,3))
+
+def nnmf(A, m, it):
+    c = A.shape[1]      # number of words
+    r = A.shape[0]      # number of articles
+    H = np.random.random(m * c).reshape((m, c))
+    W = np.random.random(r * m).reshape((r, m))
+
+    for i in range(it):
+        B = W.dot(H)
+        k = cost(A,B)
+        print k
+        if(k <= 5):
+            print H, W
+            print W.dot(H)
+            return (H, W)
+        else:
+            for i in range(len(H)):
+                for j in range(len(H[i])):
+                    nom = (np.transpose(W).dot(A))[i][j]
+                    den = (np.transpose(W).dot(W).dot(H))[i][j]
+                    H[i][j] = H[i][j] * (nom/den)
+
+            for i in range(len(W)):
+                for j in range(len(W[i])):
+                    nom = A.dot(np.transpose(H))[i][j]
+                    den =(W.dot(H).dot(np.transpose(H)))[i][j]
+                    W[i][j] = W[i][j] * (nom/den)
+
+
+    return (H, W)
