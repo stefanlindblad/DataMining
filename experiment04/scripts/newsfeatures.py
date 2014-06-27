@@ -41,7 +41,7 @@ def separatewords(text):
     return [s.lower() for s in splitter.split(text) if len(s) > 4 and s not in sw]
 
 # function parses RSS feed entries, prints them and adds them to one big list
-def parseFeeds(feeds):
+def parsefeeds(feeds):
     parsedFeeds = []
     for feed in feeds:
         parsedFeed = feedparser.parse(feed)
@@ -58,7 +58,7 @@ def parseFeeds(feeds):
 
 # function returns all words in all feeds, all words in one feed each and all article themes
 def getarticlewords():
-    feeds = parseFeeds(FEEDLIST)
+    feeds = parsefeeds(FEEDLIST)
     allwords = {}
     articlewords = []
     articletitles = []
@@ -108,7 +108,7 @@ def makematrix(allwords, articlewords):
     return reasonableWords, wordInArtArray
 
 #Removes all articles that contain no reasonable words
-def removeAllNullArticles(wordInArt, articletitles):
+def removeallnullarticles(wordInArt, articletitles):
     for index, article in reverse_enumerate(wordInArt):
         articleHasWord = False
         for word in article:
@@ -122,10 +122,7 @@ def removeAllNullArticles(wordInArt, articletitles):
     return wordInArt, articletitles
 
 
-# parseFeeds(FEEDLIST)
-
-
-def getWichtigsteMerkmale(matrix, wordvec, i, feature, count):
+def gethighestfeatures(matrix, wordvec, i, feature, count):
     wordlist = []
     for j,word in enumerate(wordvec):
         wordlist.append((matrix[i][j], wordvec[j]))
@@ -136,18 +133,45 @@ def getWichtigsteMerkmale(matrix, wordvec, i, feature, count):
 # featurematrix h
 # list of all articles: titles
 # list of all words: wordvec
-def showfeatures(w, h, titles, wordvec):
+def getfeatures(w, h, titles, wordvec):
     # printing most common features per article
+    correlation = []
     for i,article in enumerate(w):
         featurelist = []
         for j,feature in enumerate(article):
-            wichtigsteMerkmale = getWichtigsteMerkmale(h, wordvec, j, feature, 6)
+            wichtigsteMerkmale = gethighestfeatures(h, wordvec, j, feature, 6)
             wichtigsteMerkmale = [str(merkmal[1]) for merkmal in wichtigsteMerkmale]
             featurelist.append((w[i][j], wichtigsteMerkmale))
-        print titles[i]
-        print sorted(featurelist, reverse=True)[:3]
+        articleFeatures = sorted(featurelist, reverse=True)[:3]
+        correlation.append({'title': titles[i], 'features': articleFeatures})
+    return correlation
+
+def showfeatures(features):
+    for article in features:
+        print article['title']
+        print article['features'][:3]
         print '-' * 30
 
+# will print a list of titles grouped by the most important feature
+# weightmatrix w
+# featurematrix h
+# list of all articles: titles
+# list of all words: wordvec
+def getcorrelation(features):
+    highestFeatures = {}
+    for article in features:
+        highestFeature = str(article['features'][0][1])
+        if highestFeature not in highestFeatures:
+            highestFeatures[highestFeature] = []
+        highestFeatures[highestFeature].append(article['title'])
+    return highestFeatures
+
+def showcorrelation(correlation):
+    for key in correlation.keys():
+        print 'all articles with feature: ' + key + ':'
+        for title in correlation[key]:
+            print title
+        print '-' * 30
 
 def cost(A, B):
     k = 0
@@ -183,16 +207,16 @@ np.set_printoptions(threshold = np.nan)
 allwords, articlewords, articletitles = getarticlewords()
 reasonableWords, wordInArt = makematrix(allwords, articlewords)
 
-wordInArt, articletitles = removeAllNullArticles(wordInArt, articletitles)
+wordInArt, articletitles = removeallnullarticles(wordInArt, articletitles)
 
 print(wordInArt)
 H, W = nnmf(wordInArt, 5, 5)
 
-#wordInArt = pandas.DataFrame(wordInArt, columns=reasonableWords)
-#wordInArt.to_csv("wordInArt.csv")
+wordInArtDataFrame = pandas.DataFrame(wordInArt, columns=reasonableWords)
+wordInArtDataFrame.to_csv("wordInArt.csv")
 
-#print(W)
-showfeatures(W, H, articletitles, reasonableWords)
+features = getfeatures(W, H, articletitles, reasonableWords)
+correlation = getcorrelation(features)
 
-
-
+showfeatures(features)
+showcorrelation(correlation)
