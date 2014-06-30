@@ -68,14 +68,59 @@
 \part*{Durchf\"uhrung des Versuchs}
 
 \section*{RSS Nachrichten Feeds einbinden und parsen}
-\subparagraph{Was f\"ur eine Datenstruktur liefert die Funktion zur\"uck?}
-adsfhuial asdjfiown fjnisond fjsio jfoe sfjioa posieng 
+\subparagraph{Was f\"ur eine Datenstruktur liefert die Funktion \lstinline|feedparser.parse()| zur\"uck?}
+Die Funktion \lstinline|feedparser.parse()| liefert ein FeedParserDict zur\"uck, welches ein verschteltes Python Dictionary ist. Eingabe ist ein XML-, bzw. HTML-Dokument, das in ein Python Dictionary gewandelt wird, welches das eingegebene XML-/HTML Dokument strukturiert abbildet. Innerhalb der FeedParserDict Klasse wird ein Dictionary an keys angelegt, welche vom zur\"uckgelieferten FeedParserDict Objekt aus aufgerufen werden k\"onnen. 
+Ruft man beispielsweise auf ein solches Objekt \lstinline|description| auf, so erh\"alt man den die Werte von \lstinline|subtitle| und \lstinline|summary|. 
+Man kann demnach sehr einfach auf verschiedene Elemente des urspr\"unglichen XML-/HTML-Dokuments zugreifen. 
+
+Hier ein Ausschnitt aus dem resultierenden FeedParserDict:
+
+\begin{lstlisting}
+{'feed': {
+	'lastbuilddate': u'Mon, 30 Jun 2014 12:19:07 GMT', 
+	'subtitle': u'The latest stories from the Europe section of the BBC News web site.', 
+	'language': u'en-gb', 
+	'links': [
+		{'href': u'http://www.bbc.co.uk/news/world/europe/#sa-ns_mchannel=rss&ns_source=PublicRSS20-sa', 'type': 'text/html', 'rel': 'alternate'}, 
+		{'type': 'text/html', 'rel': 'alternate'}, 
+		{'href': u'http://feeds.bbci.co.uk/news/world/europe/rss.xml', 'type': u'application/rss+xml', 'rel': u'self'}
+	],
+	'title': u'BBC News - Europe', 
+	'image': {
+		'height': 60, 
+		'width': 120, 
+		'href': u'http://news.bbcimg.co.uk/nol/shared/img/bbc_news_120x60.gif', 
+		'link': u'http://www.bbc.co.uk/news/world/europe/#sa-ns_mchannel=rss&ns_source=PublicRSS20-sa', 
+		'title': u'BBC News - Europe'
+	},
+	...
+\end{lstlisting}
 
 \subparagraph{Wie kann auf den Titel und die Beschreibung des RSS-Feeds zugegriffen werden?}
-\subparagraph{Wie kann auf den Titel und die Beschreibung des RSS-Feeds zugegriffen werden?}
+\"Uber den Key \lstinline{entries} erh\"alt man von einem geparsten Feed dessen einzelne Artikel. Jeder Artikel ist wiederum ein Dictionary in dem \"uber die Keys \lstinline|title| und \lstinline|description| auf Titel und Beschreibung zugegriffen werden.
 
+\subparagraph{Lassen Sie sich die Titel und Inhalte der aktuellen Artikel der von Ihnen ausgew\"ahlten Nachrichten-Feeds anzeigen.}
+
+Der Code-Ausschnitt \lstinline|stripHTML(article.title + ' ++++ ' + article.description)| liefert so zum Beispiel folgendes Ergebnis:
+
+\begin{quote}
+As caliphate declared, Iraqi troops battle for Tikrit ++++ BAGHDAD (Reuters) - Iraqi troops battled to dislodge an al Qaeda splinter group from the city of Tikrit on Monday after its leader was declared caliph of a new Islamic state in lands seized this month across a swathe of Iraq and Syria.  
+\end{quote}
+        
 \section*{Sammeln und speichern aller Worte der aktuellen Artikel aller eingebundenen Feeds}
 \subparagraph{Erkl\"aren Sie den Ablauf und die R\"uckgabewerte der Funktionen \lstinline|stripHtml(h)| und \lstinline|separatewords(text)| und nehmen Sie diese in das File \lstinline|newsfeatures.py| auf.}
+
+\lstinline|stripHtml(h)|:\\
+Die Funktion \lstinline|stripHtml(h)| iteriert \"uber alle Character eines eingegebenen Strings und pr\"uft ob es sich um einen validen Character an einer validen Position handelt. Es werden alle Character aus dem String eliminiert, die sich innerhalb von spitzen Klammern befinden, inklusive der spitzen Klammern selbst. 
+Dieser bereinigte String wird letztendlich zur\"uckgegeben.
+
+Die fiktive Eingabe \\\lstinline|'Dies it ein <strong>fiktiver</strong> Testtext'| \\w\"urde zu folgendem R\"uckgabewert f\"uhren:\\ \lstinline{'Dies ist ein  fiktiver  Testtext.'}
+\\\\
+\lstinline|separatewords(text)|:\\
+Die Funktion \lstinline|separatewords(text)| extrahiert aus dem Eingabetext zun\"achst alle W\"orter als einzelne Strings. Diese werden daraufhin auf ihre L"ange gepr\"uft - W\"orter mit einer L\"ange kleiner 4 werden ignoriert - und mit einer Liste von 'stopwords' abgeglichen. Diese Liste enth\"alt Worte wie 'mine', 'yours', 'there', 'their' und 'and', also Worte, die f\"ur unsere Zwecke als irrelevant angesehen werden. F\"ur englischsprachige Feeds wird hier selbstverst\"anglich eine Liste an englischen stopwords verwendet. 
+Zur\"uckgegeben wird eine Liste an Worten, die l\"anger als 4 Zeichen und nicht in der Liste der 'stopwords' enthalten sind.
+
+Die fiktive Eingabe \\\lstinline|'This is a fictitious testtext, with a few important words and many words contained in the stopwords list.'| \\liefert als R\"uckgabe: \\\lstinline|['fictitious', 'testtext', 'important', 'words', 'words', 'contained', 'stopwords']| 
 
 \section*{Anzeige der Merkmale und der Gewichte}
 \subparagraph{Geben Sie mindestens 3 Merkmale an und zu jedem Merkmal mindestens 3 Artikel, die das jeweilige Merkmal behandeln.}
