@@ -1,0 +1,143 @@
+\documentclass[12pt,a4paper]{scrartcl}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{ngerman}
+\usepackage{url}
+\usepackage{amsmath}
+\usepackage{caption}
+\usepackage{wrapfig}
+\usepackage{eurosym}
+\usepackage{biblatex}
+\usepackage{url}
+\usepackage{color}
+\usepackage{listings}
+\usepackage{hyperref}
+\usepackage[table]{xcolor}
+\linespread{1.4}
+
+\definecolor{mygreen}{rgb}{0,0.6,0}
+\definecolor{mygray}{rgb}{0.5,0.5,0.5}
+\definecolor{mylightgray}{rgb}{0.7,0.7,0.7}
+\definecolor{mylightergray}{rgb}{0.9,0.9,0.9}
+\definecolor{mymauve}{rgb}{0.58,0,0.82}
+
+\let\origitemize\itemize
+\def\itemize{\origitemize\itemsep0pt}
+
+\lstset{ 
+  backgroundcolor=\color{white},   
+  basicstyle=\ttfamily\footnotesize,          
+  breakatwhitespace=false,         
+  breaklines=true,  
+  commentstyle=\color{mygreen}, 
+  escapeinside={\%*}{*)}, 
+  extendedchars=true,             
+  keepspaces=true,                 
+  keywordstyle=\color{blue},
+  language=Octave,
+  numbers=left,                   
+  numbersep=15pt,                  
+  numberstyle=\tiny\color{mygray}, 
+  showspaces=false,                
+  showstringspaces=false,          
+  showtabs=false,                  
+  stringstyle=\color{mymauve},
+  tabsize=2,
+  title=\lstname,
+  captionpos=b
+}
+
+\renewcommand*\lstlistingname{Codebeispiel}    %Rename Listings
+
+\renewcommand*\thesection{\arabic{section}}
+
+\makeatletter
+\renewcommand\subparagraph{\@startsection{subparagraph}{5}{\parindent}%
+    {3.25ex \@plus1ex \@minus .2ex}%
+    {0.75ex plus 0.1ex}% space after heading
+    {\normalfont\normalsize\bfseries}}
+\makeatother
+
+\begin{document}
+\title{Praktikum Data Mining}
+\subtitle{Merkmalsextraktion mit der Nicht-Negativen Matrixfaktorisierung}
+\author{Oliver Fesseler \and Maria Florus\ss \and Stefan Seibert \and  Daniel Grie\ss haber}
+\maketitle
+\newpage
+
+\part*{Durchf\"uhrung des Versuchs}
+
+\section*{RSS Nachrichten Feeds einbinden und parsen}
+\subparagraph{Was f\"ur eine Datenstruktur liefert die Funktion zur\"uck?}
+adsfhuial asdjfiown fjnisond fjsio jfoe sfjioa posieng 
+
+\subparagraph{Wie kann auf den Titel und die Beschreibung des RSS-Feeds zugegriffen werden?}
+\subparagraph{Wie kann auf den Titel und die Beschreibung des RSS-Feeds zugegriffen werden?}
+
+\section*{Sammeln und speichern aller Worte der aktuellen Artikel aller eingebundenen Feeds}
+\subparagraph{Erkl\"aren Sie den Ablauf und die R\"uckgabewerte der Funktionen \lstinline|stripHtml(h)| und \lstinline|separatewords(text)| und nehmen Sie diese in das File \lstinline|newsfeatures.py| auf.}
+
+\section*{Anzeige der Merkmale und der Gewichte}
+\subparagraph{Geben Sie mindestens 3 Merkmale an und zu jedem Merkmal mindestens 3 Artikel, die das jeweilige Merkmal behandeln.}
+
+Mit den Parametern \lstinline|m = 5| und \lstinline|it = 10| ergeben sich folgende Merkmale:
+
+\begin{enumerate}
+\item {\{'obama', 'former', 'mcdonald', 'secretary', 'president', 'chief'\} unter anderem mit den Artikeln
+	\begin{itemize}
+	\item{Obama to nominate former P\&G CEO Bob McDonald as veterans secretary}
+	\item{From Big House to White House: Ex-Convicts To Be Honored By Obama Administration}
+	\item{Biden, Clinton, you're rich. Own it}
+	\item{UK leaving EU 'would be bad news'}
+	\item{What Obama discovered about Iraq}
+	\end{itemize}}
+\item{\{'european', 'including', 'tikrit', 'iraqi', 'inflation', 'across'\} unter anderem mit den Artikeln
+	\begin{itemize}
+	\item{... as Iraq's Shiites answer call to arms}
+	\item{Iraqi army presses Tikrit assault as lawmakers scramble to fill posts}
+	\item{ISIS declares Islamic State amid battle for Tikrit ...}
+	\item{Group: ISIS 'crucifies' men in Syria}
+	\item{What are Namibia's 'fairy circles'?}
+	\end{itemize}}
+\item{\{'korea', 'south', 'monday', 'hostile', 'american', 'military'\} unter anderem mit den Artikeln
+	\begin{itemize}
+	\item{North Korea says to try two detained U.S. citizens}
+	\item{Boeing, Airbus enter bids for \$1.38 billion South Korean refueling plane order: sources}
+	\item{N. Korea Preparing to Indict 2 American Tourists}
+	\item{Can North Korea take this Hollywood joke?}
+	\item{VIDEO: Italy finds 30 bodies in migrant boat}
+	\end{itemize}}
+\item{\{'ukraine', 'ukrainian', 'separatists', 'russian', 'president', 'poroshenko'\} unter anderem mit den Artikeln
+	\begin{itemize}
+	\item{Ukraine's Poroshenko urges Putin to tighten borders after violence}
+	\item{Israel bombs Gaza after rocket attacks, Hamas gunman killed}
+	\item{Russia protests over shooting of cameraman in Ukraine}
+	\item{Separatists attack Ukraine base}
+	\item{By Numbers: Where Are the Hardest Places to Live in the U.S.?}
+	\end{itemize}}
+\item{\{'family', 'honor', 'police', 'reports', 'young', 'saturday'\} unter anderem mit den Artikeln
+	\begin{itemize}
+	\item{Syria fighters hail declaration of Islamic 'caliphate'}
+	\item{Islamist rebels in Somalia kill three as Ramadan starts}
+	\item{Two police officers killed in bomb blasts near Cairo palace}
+	\item{Is a Vast Marine Sanctuary Any Use if You Can’t Police It?}
+	\item{Gay Pride Parades From Around the World}
+	\end{itemize}}
+\item{\{'first', 'india', 'economy', 'years', 'decades', 'minister'\} unter anderem mit den Artikeln
+	\begin{itemize}
+	\item{Exclusive: Facebook scores record 1 billion interactions for World Cup}
+	\item{India's Modi eyes first labor overhaul in decades to create jobs}
+	\item{Israel cranks up media campaign ahead of Iran nuclear deal deadline}
+	\item{Eyes on defense deals, Western powers rush to court India's Modi}
+	\item{Stocks set for quarterly gains, yen at five-week high}
+	\end{itemize}}
+\end{enumerate}
+
+
+
+
+
+
+
+
+\end{document}
