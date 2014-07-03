@@ -165,7 +165,7 @@ def nnmf(A, m, it):
     r = A.shape[0]      # number of articles
     H = np.random.random(m * c).reshape((m, c))
     W = np.random.random(r * m).reshape((r, m))
-
+    print W
     for i in range(it):
         B = W.dot(H)
         # calculate the costs k
@@ -230,12 +230,6 @@ def showfeatures(w, h, titles, wordvec, quantity = 3):
 
 # will print a list of titles grouped by the most important feature
 def getcorrelation(features):
-    print "\n\n"
-    print "=" * 50
-    print '\nArticles and their 3 most important features:\n'
-    print "=" * 50
-    print "\n\n"
-
     highestFeatures = {}
     for article in features:
         # get the most important feature (at index 0) for the article
@@ -249,11 +243,11 @@ def getcorrelation(features):
     return highestFeatures
 
 
-# prints all features and for each feature a list of articles, for which the feature is the most important
+# prints a list of articles grouped by their highest rated feature
 def showcorrelation(w, h, titles, wordvec, quantity = 3):
     print "\n\n"
     print "=" * 50
-    print '\nFeatures and articles for which the feature is the most important:\n'
+    print '\nList of articles grouped by their highest rated feature:\n'
     print "=" * 50
     print "\n\n"
 
@@ -262,7 +256,6 @@ def showcorrelation(w, h, titles, wordvec, quantity = 3):
 
     # for each feature in the correlation list...
     for key in correlation.keys():
-        # print the 6 most important words in this feature
         print '\n\nall articles with feature: ' + key + ':\n'
         # print all titles, that have this feature as the most important.
         for title in correlation[key]:

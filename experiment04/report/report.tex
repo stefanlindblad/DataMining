@@ -178,7 +178,12 @@ Mit den Parametern \lstinline|m = 5| und \lstinline|it = 10| ergeben sich folgen
 	\end{itemize}}
 \end{enumerate}
 
+\section*{Implementierung eines primitiven Clusterings}
+Um eine Gruppierung nach den gefundenen Merkmalen und deren Gewichtung zu testen, wurde ein primitiver Gruppierungsalgorithmus implementiert. Dieser Iteriert über alle Artikel und gruppiert diese nach ihren höchst bewerteten Merkmalen. Im Versuch wurden so alle Artikel in nur 5 Cluster gegliedert.
 
+\section*{Ungeklärte Fragen}
+\paragraph{Auffällig hohe Kosten nach $N=10$ Iterationen}
+Bei der Nacharbeitung der Aufgaben fiel uns auf, dass die Kosten nach $N=10$ Iterationen zu einem Wert deutlich über der Abbruchbedingung von $k=5$ konvergieren. Das bedeutet dass die Abbruchbedingung nie auch nur annähernd ausgeführt wird.
 
 
 
