@@ -20,3 +20,8 @@ In einem NxM  dimensionalen Raum sind alle Bilder beschrieben. Um ähnliche Bild
 
 
 ## Wie werden mit dem Python Modul Image Bilder in ein Python-Programm geladen?
+
+from PIL import Image
+
+im = Image.open("cat.jpg") # laden des Bildes aus dem aktuellen Verzeichnis
+im.show() # anzeigen des Bildes
