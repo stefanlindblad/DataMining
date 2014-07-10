@@ -108,18 +108,13 @@ Extension='png'
 imageFileNames = parseDirectory(TrainDir, Extension)
 images = convertImgListToNumpyData(generateListOfImgs(imageFileNames))
 
-
 avgImage = calculateAverageImg(copy(images))
 normedArrayOfFaces = removeAverageImage(copy(images), avgImage)
-
-#imageFromNormalizedArray(avgImage).show()
 
 eigenfaces = calculateEigenfaces(normedArrayOfFaces.T, len(images[0]), len(images))
 transposedFaces = []
 for face in normedArrayOfFaces:
     transposedFaces.append(transformToEigenfaceSpace(eigenfaces, face, NUMFEATURES))
-
-#Image.fromarray(avgImage.reshape((220, 150))*250).show()
 
 #Choose the image which shall be recognized
 testImageDirAndFilename=tkFileDialog.askopenfilename(title="Choose Image to detect")
@@ -132,16 +127,20 @@ testface = transformToEigenfaceSpace(eigenfaces, testface, NUMFEATURES)
 
 closestMatchIndex, distance = calculateDistance(transposedFaces, testface, imageFileNames)
 print "closest distance: " + str(distance) + " image: " + imageFileNames[closestMatchIndex]
-#imageFromNormalizedArray(images[closestMatchIndex]).show()
-#testImage.show()
 
 testImageArray = normalize(convertImgListToNumpyData([testImage])[0])
 closestMatchArray = normalize(images[closestMatchIndex])
 diffToTestArray = absolute(normalize(closestMatchArray - testImageArray))
+
+# Ausgabe der Differenz als schwarz/weiss Bild.
 imageFromNormalizedArray(diffToTestArray).show()
 
-#mergeImage(normalize(images[closestMatchIndex]), avgImage, normalize(testImageArray)).show()
-mergeImage(closestMatchArray + diffToTestArray, normalize(closestMatchArray), normalize(closestMatchArray)).show()
+# Ausgabe des Bildes zur Anzeige der Differenz zwischen dem Test- und dem gefundenen Trainingsbild
+mergeImage(closestMatchArray + diffToTestArray, closestMatchArray, closestMatchArray).show()
+
+# Ausgabe des Durchschnittsbildes
+imageFromNormalizedArray(avgImage).show()
+
 
 
 
