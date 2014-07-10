@@ -52,7 +52,7 @@
 \renewcommand*\thesection{\arabic{section}}
 
 \makeatletter
-\renewcommand\subparagraph{\@startsection{subparagraph}{5}{\parindent}%
+\renewcommand\paragraph{\@startsection{subparagraph}{5}{\parindent}%
     {3.25ex \@plus1ex \@minus .2ex}%
     {0.75ex plus 0.1ex}% space after heading
     {\normalfont\normalsize\bfseries}}
@@ -60,134 +60,57 @@
 
 \begin{document}
 \title{Praktikum Data Mining}
-\subtitle{Merkmalsextraktion mit der Nicht-Negativen Matrixfaktorisierung}
+\subtitle{Gesichtserkennung}
 \author{Oliver Fesseler \and Maria Florus\ss \and Stefan Seibert \and  Daniel Grie\ss haber}
 \maketitle
 \newpage
 
 \part*{Durchf\"uhrung des Versuchs}
 
-\section*{RSS Nachrichten Feeds einbinden und parsen}
-\subparagraph{Was f\"ur eine Datenstruktur liefert die Funktion \lstinline|feedparser.parse()| zur\"uck?}
-Die Funktion \lstinline|feedparser.parse()| liefert ein FeedParserDict zur\"uck, welches ein verschteltes Python Dictionary ist. Eingabe ist ein XML-, bzw. HTML-Dokument, das in ein Python Dictionary gewandelt wird, welches das eingegebene XML-/HTML Dokument strukturiert abbildet. Innerhalb der FeedParserDict Klasse wird ein Dictionary an keys angelegt, welche vom zur\"uckgelieferten FeedParserDict Objekt aus aufgerufen werden k\"onnen. 
-Ruft man beispielsweise auf ein solches Objekt \lstinline|description| auf, so erh\"alt man den die Werte von \lstinline|subtitle| und \lstinline|summary|. 
-Man kann demnach sehr einfach auf verschiedene Elemente des urspr\"unglichen XML-/HTML-Dokuments zugreifen. 
+\section*{Ab welcher Anzahl K von verwendeten Eigenvektoren treten Fehlklassifikationen ein?}
+Im empirischen Versuch haben wir herausgefunden, dass ab einer Merkmalsanzahl von $K < 6$ bei der Erkennung des Bildes 1-1.png aus dem Testdatensatz die erste Fehlklassifikation auftritt.
 
-Hier ein Ausschnitt aus dem resultierenden FeedParserDict:
+\section*{Wie gro{\ss} ist dann die Mindestdistanz zwischen Test- und nächstliegendem Trainingsbild?}
+Die niedrigste Distanz mit $K=6$ bei Klassifizierung des Bildes 1-1.png beträgt $841.01688805$.
 
-\begin{lstlisting}
-{'feed': {
-	'lastbuilddate': u'Mon, 30 Jun 2014 12:19:07 GMT', 
-	'subtitle': u'The latest stories from the Europe section of the BBC News web site.', 
-	'language': u'en-gb', 
-	'links': [
-		{'href': u'http://www.bbc.co.uk/news/world/europe/#sa-ns_mchannel=rss&ns_source=PublicRSS20-sa', 'type': 'text/html', 'rel': 'alternate'}, 
-		{'type': 'text/html', 'rel': 'alternate'}, 
-		{'href': u'http://feeds.bbci.co.uk/news/world/europe/rss.xml', 'type': u'application/rss+xml', 'rel': u'self'}
-	],
-	'title': u'BBC News - Europe', 
-	'image': {
-		'height': 60, 
-		'width': 120, 
-		'href': u'http://news.bbcimg.co.uk/nol/shared/img/bbc_news_120x60.gif', 
-		'link': u'http://www.bbc.co.uk/news/world/europe/#sa-ns_mchannel=rss&ns_source=PublicRSS20-sa', 
-		'title': u'BBC News - Europe'
-	},
-	...
-\end{lstlisting}
+\section*{Wie ändert sich die Distanz zwischen Bildern, wenn die Anzahl der Eigenvektoren reduziert wird?}
 
-\subparagraph{Wie kann auf den Titel und die Beschreibung des RSS-Feeds zugegriffen werden?}
-\"Uber den Key \lstinline{entries} erh\"alt man von einem geparsten Feed dessen einzelne Artikel. Jeder Artikel ist wiederum ein Dictionary in dem \"uber die Keys \lstinline|title| und \lstinline|description| auf Titel und Beschreibung zugegriffen werden.
+Distanzen werden mit einer höheren Anzahl von Merkmalen $K$ größer, da die Anzahl an Dimensionen in denen die Distanz berechnet wird steigt.
 
-\subparagraph{Lassen Sie sich die Titel und Inhalte der aktuellen Artikel der von Ihnen ausgew\"ahlten Nachrichten-Feeds anzeigen.}
+ \begin{table}[h!]
 
-Der Code-Ausschnitt \lstinline|stripHTML(article.title + ' ++++ ' + article.description)| liefert so zum Beispiel folgendes Ergebnis:
+ \centering
+ 
+ \begin{tabular}{l r r}
+ & $K=5$ & $K=6$ \\
+ 1-2.png & 758.3467758 & 841.01688805 \\
+ 3-3.png & 549.501226082 & 1226.39019008 \\
+ \end{tabular}
+ \caption*{Distanzen der kritischen Bilder bei unterschiedlicher Merkmalsanzahl}
+ \end{table} 
 
-\begin{quote}
-As caliphate declared, Iraqi troops battle for Tikrit ++++ BAGHDAD (Reuters) - Iraqi troops battled to dislodge an al Qaeda splinter group from the city of Tikrit on Monday after its leader was declared caliph of a new Islamic state in lands seized this month across a swathe of Iraq and Syria.  
-\end{quote}
-        
-\section*{Sammeln und speichern aller Worte der aktuellen Artikel aller eingebundenen Feeds}
-\subparagraph{Erkl\"aren Sie den Ablauf und die R\"uckgabewerte der Funktionen \lstinline|stripHtml(h)| und \lstinline|separatewords(text)| und nehmen Sie diese in das File \lstinline|newsfeatures.py| auf.}
+\section*{Wie könnte dieser Einfuss der Eigenvektor-Anzahl auf die Mindestdistanz reduziert werden?}
+Um die Abhängigkeit aufzulösen kann die Distanz mit der Eigenvektor-Anzahl normiert werden.
 
-\lstinline|stripHtml(h)|:\\
-Die Funktion \lstinline|stripHtml(h)| iteriert \"uber alle Character eines eingegebenen Strings und pr\"uft ob es sich um einen validen Character an einer validen Position handelt. Es werden alle Character aus dem String eliminiert, die sich innerhalb von spitzen Klammern befinden, inklusive der spitzen Klammern selbst. 
-Dieser bereinigte String wird letztendlich zur\"uckgegeben.
+\begin{equation*}
+d_N = \frac{d}{K}
+\end{equation*}
 
-Die fiktive Eingabe \\\lstinline|'Dies it ein <strong>fiktiver</strong> Testtext'| \\w\"urde zu folgendem R\"uckgabewert f\"uhren:\\ \lstinline{'Dies ist ein  fiktiver  Testtext.'}
-\\\\
-\lstinline|separatewords(text)|:\\
-Die Funktion \lstinline|separatewords(text)| extrahiert aus dem Eingabetext zun\"achst alle W\"orter als einzelne Strings. Diese werden daraufhin auf ihre L"ange gepr\"uft - W\"orter mit einer L\"ange kleiner 4 werden ignoriert - und mit einer Liste von 'stopwords' abgeglichen. Diese Liste enth\"alt Worte wie 'mine', 'yours', 'there', 'their' und 'and', also Worte, die f\"ur unsere Zwecke als irrelevant angesehen werden. F\"ur englischsprachige Feeds wird hier selbstverst\"anglich eine Liste an englischen stopwords verwendet. 
-Zur\"uckgegeben wird eine Liste an Worten, die l\"anger als 4 Zeichen und nicht in der Liste der 'stopwords' enthalten sind.
+\section*{Nennen Sie zwei Algorithmus-unabhängige Parameter, die starken Einfluss auf die Rate korrekter Gesichtserkennungen haben}
 
-Die fiktive Eingabe \\\lstinline|'This is a fictitious testtext, with a few important words and many words contained in the stopwords list.'| \\liefert als R\"uckgabe: \\\lstinline|['fictitious', 'testtext', 'important', 'words', 'words', 'contained', 'stopwords']| 
+\paragraph{Eigenschaften der Bilder}
+\begin{itemize}
+\item Gleicher Bildmodus, wie zum Beispiel RGB oder L (Grayscale)
+\item Aufnahmewinkel
+\item gleicher Hintergrund
+\item Beleuchtung
+\item Bildschärfe
+\item Gesicht klar erkennbar (Brillen, Haare im Gesicht, etc.)
+\end{itemize}
 
-\section*{Anzeige der Merkmale und der Gewichte}
-\subparagraph{Geben Sie mindestens 3 Merkmale an und zu jedem Merkmal mindestens 3 Artikel, die das jeweilige Merkmal behandeln.}
-
-Mit den Parametern \lstinline|m = 5| und \lstinline|it = 10| ergeben sich folgende Merkmale:
-
-\begin{enumerate}
-\item {\{'obama', 'former', 'mcdonald', 'secretary', 'president', 'chief'\} unter anderem mit den Artikeln
-	\begin{itemize}
-	\item{Obama to nominate former P\&G CEO Bob McDonald as veterans secretary}
-	\item{From Big House to White House: Ex-Convicts To Be Honored By Obama Administration}
-	\item{Biden, Clinton, you're rich. Own it}
-	\item{UK leaving EU 'would be bad news'}
-	\item{What Obama discovered about Iraq}
-	\end{itemize}}
-\item{\{'european', 'including', 'tikrit', 'iraqi', 'inflation', 'across'\} unter anderem mit den Artikeln
-	\begin{itemize}
-	\item{... as Iraq's Shiites answer call to arms}
-	\item{Iraqi army presses Tikrit assault as lawmakers scramble to fill posts}
-	\item{ISIS declares Islamic State amid battle for Tikrit ...}
-	\item{Group: ISIS 'crucifies' men in Syria}
-	\item{What are Namibia's 'fairy circles'?}
-	\end{itemize}}
-\item{\{'korea', 'south', 'monday', 'hostile', 'american', 'military'\} unter anderem mit den Artikeln
-	\begin{itemize}
-	\item{North Korea says to try two detained U.S. citizens}
-	\item{Boeing, Airbus enter bids for \$1.38 billion South Korean refueling plane order: sources}
-	\item{N. Korea Preparing to Indict 2 American Tourists}
-	\item{Can North Korea take this Hollywood joke?}
-	\item{VIDEO: Italy finds 30 bodies in migrant boat}
-	\end{itemize}}
-\item{\{'ukraine', 'ukrainian', 'separatists', 'russian', 'president', 'poroshenko'\} unter anderem mit den Artikeln
-	\begin{itemize}
-	\item{Ukraine's Poroshenko urges Putin to tighten borders after violence}
-	\item{Israel bombs Gaza after rocket attacks, Hamas gunman killed}
-	\item{Russia protests over shooting of cameraman in Ukraine}
-	\item{Separatists attack Ukraine base}
-	\item{By Numbers: Where Are the Hardest Places to Live in the U.S.?}
-	\end{itemize}}
-\item{\{'family', 'honor', 'police', 'reports', 'young', 'saturday'\} unter anderem mit den Artikeln
-	\begin{itemize}
-	\item{Syria fighters hail declaration of Islamic 'caliphate'}
-	\item{Islamist rebels in Somalia kill three as Ramadan starts}
-	\item{Two police officers killed in bomb blasts near Cairo palace}
-	\item{Is a Vast Marine Sanctuary Any Use if You Can’t Police It?}
-	\item{Gay Pride Parades From Around the World}
-	\end{itemize}}
-\item{\{'first', 'india', 'economy', 'years', 'decades', 'minister'\} unter anderem mit den Artikeln
-	\begin{itemize}
-	\item{Exclusive: Facebook scores record 1 billion interactions for World Cup}
-	\item{India's Modi eyes first labor overhaul in decades to create jobs}
-	\item{Israel cranks up media campaign ahead of Iran nuclear deal deadline}
-	\item{Eyes on defense deals, Western powers rush to court India's Modi}
-	\item{Stocks set for quarterly gains, yen at five-week high}
-	\end{itemize}}
-\end{enumerate}
-
-\section*{Implementierung eines primitiven Clusterings}
-Um eine Gruppierung nach den gefundenen Merkmalen und deren Gewichtung zu testen, wurde ein primitiver Gruppierungsalgorithmus implementiert. Dieser Iteriert über alle Artikel und gruppiert diese nach ihren höchst bewerteten Merkmalen. Im Versuch wurden so alle Artikel in nur 5 Cluster gegliedert.
-
-\section*{Ungeklärte Fragen}
-\paragraph{Auffällig hohe Kosten nach $N=10$ Iterationen}
-Bei der Nacharbeitung der Aufgaben fiel uns auf, dass die Kosten nach $N=10$ Iterationen zu einem Wert deutlich über der Abbruchbedingung von $k=5$ konvergieren. Das bedeutet dass die Abbruchbedingung nie auch nur annähernd ausgeführt wird.
-
-
-
-
-
+\paragraph{Anzahl der Trainingsbildern}
+Mit steigender Anzahl an Trainingsbildern pro Person steigt die Erkennungsrate.
 
 \end{document}
+
+
