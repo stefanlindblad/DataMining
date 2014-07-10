@@ -2,7 +2,7 @@ from os.path import isdir,join,normpath
 from os import listdir
 
 from PIL import Image
-from numpy import asfarray,dot,argmin,zeros, array, asarray
+from numpy import asfarray,dot,argmin,zeros, array, asarray, absolute
 from numpy import average,sort,trace,copy
 from numpy.linalg import svd,eigh,norm
 from numpy import concatenate, reshape
@@ -13,6 +13,8 @@ import tkFileDialog
 from patsy.util import wide_dtype_for
 
 NUMFEATURES = 4
+IMG_WIDTH = 150
+IMG_HEIGHT = 220
 
 
 def parseDirectory(directoryName,extension):
@@ -45,11 +47,13 @@ def convertImgListToNumpyData(imgList):
     imgArrays = []
     for img in imgList:
         imgArray = asfarray(img).reshape((1, -1))[0]
-        max = imgArray.max()
-        imgArray /= max
-        imgArrays.append(imgArray)
-
+        normalizedImgArray = normalize(imgArray)
+        imgArrays.append(normalizedImgArray)
     return asarray(imgArrays)
+
+def normalize(array):
+    max = array.max()
+    return array / max
 
 def calculateAverageImg(images):
     return average(images, axis=0)
@@ -74,6 +78,15 @@ def transformToEigenfaceSpace(eigenfaces, face, numFeatures):
         pointToEigenspace[i] = dot((eigenfaces[:,i:i+1].T), face)
     return pointToEigenspace
 
+def imageFromNormalizedArray(array, width=IMG_WIDTH, height=IMG_HEIGHT):
+    return Image.fromarray(array.reshape((height, width))*250)
+
+def mergeImage(rArray, gArray, bArray, width=IMG_WIDTH, height=IMG_HEIGHT):
+    rChannel = imageFromNormalizedArray(rArray).convert('RGB').split()[0]
+    gChannel = imageFromNormalizedArray(gArray).convert('RGB').split()[1]
+    bChannel = imageFromNormalizedArray(bArray).convert('RGB').split()[2]
+    return Image.merge('RGB', (rChannel, gChannel, bChannel))
+
 
 
 ####################################################################################
@@ -90,7 +103,7 @@ images = convertImgListToNumpyData(generateListOfImgs(parseDirectory(TrainDir, E
 avgImage = calculateAverageImg(copy(images))
 normedArrayOfFaces = removeAverageImage(copy(images), avgImage)
 
-Image.fromarray(avgImage.reshape((220, 150))*250).show()
+#imageFromNormalizedArray(avgImage).show()
 
 eigenfaces = calculateEigenfaces(normedArrayOfFaces.T, len(images[0]), len(images))
 transposedFaces = []
@@ -106,7 +119,6 @@ testImageDirAndFilename=tkFileDialog.askopenfilename(title="Choose Image to dete
 testImage = Image.open(testImageDirAndFilename)
 testface = convertImgListToNumpyData([testImage])[0]
 testface -= avgImage
-Image.fromarray(testface.reshape((220, 150))*250).show()
 
 testface = transformToEigenfaceSpace(eigenfaces, testface, NUMFEATURES)
 
@@ -118,8 +130,13 @@ for index, face in enumerate(transposedFaces):
         closestMatchIndex = index
         distance = newdistance
 
-Image.fromarray(images[closestMatchIndex].reshape((220, 150))*250).show()
-testImage.show()
+#imageFromNormalizedArray(images[closestMatchIndex]).show()
+#testImage.show()
+
+testImageArray = normalize(convertImgListToNumpyData([testImage])[0])
+
+#mergeImage(normalize(images[closestMatchIndex]), avgImage, normalize(testImageArray)).show()
+imageFromNormalizedArray(absolute(normalize(images[closestMatchIndex] - testImageArray))).show()
 
 ####################################################################################
 # Implement required functionality of the main programm here
