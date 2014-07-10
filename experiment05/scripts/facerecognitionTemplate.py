@@ -1,18 +1,15 @@
-from os.path import isdir,join,normpath
+from os.path import isdir, join, normpath
 from os import listdir
 
 from PIL import Image
-from numpy import asfarray,dot,argmin,zeros, array, asarray, absolute
-from numpy import average,sort,trace,copy
-from numpy.linalg import svd,eigh,norm
-from numpy import concatenate, reshape
-from math import sqrt
+from numpy import asfarray, dot, zeros, asarray, absolute
+from numpy import average, copy
+from numpy.linalg import eigh, norm
 import sys
 
 import tkFileDialog
-from patsy.util import wide_dtype_for
 
-NUMFEATURES = 4
+NUMFEATURES = 6
 IMG_WIDTH = 150
 IMG_HEIGHT = 220
 
@@ -87,7 +84,16 @@ def mergeImage(rArray, gArray, bArray, width=IMG_WIDTH, height=IMG_HEIGHT):
     bChannel = imageFromNormalizedArray(bArray).convert('RGB').split()[2]
     return Image.merge('RGB', (rChannel, gChannel, bChannel))
 
-
+def calculateDistance(transposedFaces, testface, imageFileNames):
+    distance = sys.float_info.max
+    closestMatchIndex = 0
+    for index, face in enumerate(transposedFaces):
+        newdistance = norm(testface - face)
+        print str(newdistance) + " image: " + imageFileNames[index]
+        if distance > newdistance:
+            closestMatchIndex = index
+            distance = newdistance
+    return (closestMatchIndex, distance)
 
 ####################################################################################
 #Start of main programm
@@ -97,7 +103,10 @@ TrainDir=tkFileDialog.askdirectory(title="Choose Directory of training images")
 #Choose the file extension of the image files
 Extension='png'
 
-images = convertImgListToNumpyData(generateListOfImgs(parseDirectory(TrainDir, Extension)))
+####################################################################################
+# Implement required functionality of the main programm here
+imageFileNames = parseDirectory(TrainDir, Extension)
+images = convertImgListToNumpyData(generateListOfImgs(imageFileNames))
 
 
 avgImage = calculateAverageImg(copy(images))
@@ -110,7 +119,6 @@ transposedFaces = []
 for face in normedArrayOfFaces:
     transposedFaces.append(transformToEigenfaceSpace(eigenfaces, face, NUMFEATURES))
 
-
 #Image.fromarray(avgImage.reshape((220, 150))*250).show()
 
 #Choose the image which shall be recognized
@@ -122,23 +130,18 @@ testface -= avgImage
 
 testface = transformToEigenfaceSpace(eigenfaces, testface, NUMFEATURES)
 
-distance = sys.float_info.max
-closestMatchIndex = 0
-for index, face in enumerate(transposedFaces):
-    newdistance = norm(testface - face)
-    if distance > newdistance:
-        closestMatchIndex = index
-        distance = newdistance
-
+closestMatchIndex, distance = calculateDistance(transposedFaces, testface, imageFileNames)
+print "closest distance: " + str(distance) + " image: " + imageFileNames[closestMatchIndex]
 #imageFromNormalizedArray(images[closestMatchIndex]).show()
 #testImage.show()
 
 testImageArray = normalize(convertImgListToNumpyData([testImage])[0])
+closestMatchArray = normalize(images[closestMatchIndex])
+diffToTestArray = absolute(normalize(closestMatchArray - testImageArray))
+imageFromNormalizedArray(diffToTestArray).show()
 
 #mergeImage(normalize(images[closestMatchIndex]), avgImage, normalize(testImageArray)).show()
-imageFromNormalizedArray(absolute(normalize(images[closestMatchIndex] - testImageArray))).show()
+mergeImage(closestMatchArray + diffToTestArray, normalize(closestMatchArray), normalize(closestMatchArray)).show()
 
-####################################################################################
-# Implement required functionality of the main programm here
 
 
