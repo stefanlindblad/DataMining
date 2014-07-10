@@ -1,13 +1,16 @@
-## 2.1.2 RSS Nachrichten Feeds einbinden und parsen
+## 3.4 Aufgaben
 
-### Was für eine Datenstruktur liefert die Funktion zurück?
-Dictionary. Eingabe ist ein XML-Dokument das in ein Python Dict gewandelt wird.
+## 1. Ab welcher Anzahl K von verwendeten Eigenvektoren treten Fehlklassifikationen ein?
+bla bla bla
 
-### Wie kann auf den Titel und die Beschreibung des RSS-Feeds zugegrien werden?
-Über das Element feed kommt man auf das Element entries, das ein Array von Artikeln zu einem Feed enthält.
+## 2. Wie groß ist dann die Mindestdistanz zwischen Test- und nächstliegendem Trainingsbild?
+bla bla bla
 
-### Lassen Sie sich die Titel und Inhalte der aktuellen Artikel der von Ihnen ausgewählten Nachrichten-Feeds anzeigen.
+## 3. Wie ändert sich die Distanz zwischen Bildern, wenn die Anzahl der Eigenvektoren reduziert wird?
+bla bla bla
 
-siehe code.
+## 4. Wie könnte dieser Einfluss der Eigenvektor-Anzahl auf die Mindestdistanz reduziert werden?
+bla bla bla
 
-## Sammeln und speichern aller Worte der aktuellen Artikel aller eingebundenen Feeds
+## 5. Nennen Sie zwei Algorithmus-unabhängige Parameter, die starken Einfluss auf die Rate korrekter Erkennungen haben
+bla bla bla
